@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}My accreditation · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium">
+<div class="eyebrow">My account</div>
+{% if not row %}
+<h1>Apply for Accredited membership</h1>
+<p class="lead" style="margin-top:12px">Upgrade your membership. We assess your portfolio and training, then confirm your Accredited status or send you feedback.</p>
+<div class="card sage" style="margin-top:20px"><strong>€500 a year.</strong> An upgrade is a full new application at the full fee. Nothing is credited from your current membership, you do not pay just the difference, and the fee is non-refundable. After you submit, you go straight to payment.</div>
+{% if errors %}<div class="errors" role="alert" style="margin-top:20px"><strong>Please check the following:</strong><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+<form method="post" class="card" style="margin-top:24px">
+<input type="hidden" name="csrf" value="{{ csrf() }}">
+{% include '_acc_fields.html' %}
+<label class="check"><input type="checkbox" name="agree_accreditation" value="1" {% if form.get('agree_accreditation') %}checked{% endif %}>
+<span>I agree to the <a href="/accreditation-terms" target="_blank" rel="noopener">Accreditation Terms</a>.</span></label>
+<div style="margin-top:20px"><button class="btn" type="submit">Submit and continue to payment</button></div>
+</form>
+{% else %}
+<h1>My accreditation application</h1>
+<p style="margin-top:12px"><span class="badge dark">{{ label }}</span>{% if not paid %} <span class="badge warn">Payment not completed</span>{% endif %}</p>
+{% if row.status == 'accredited' %}
+<div class="card sage" style="margin-top:20px"><strong>Your company is GAPHS Accredited.</strong> Your Accredited logo is in <a href="{{ url_for('auth.dashboard') }}">My account</a>.</div>
+{% else %}
+{% if not paid %}<div class="card sage" style="margin-top:20px">Your review starts once your membership payment is complete. <a href="{{ url_for('auth.dashboard') }}">Complete payment from My account</a>.</div>{% endif %}
+{% if row.status == 'feedback' and row.feedback %}
+<div class="card" style="margin-top:20px"><h3 style="margin-top:0">Our feedback</h3><p class="prewrap" style="margin:0">{{ row.feedback }}</p>
+<p class="small muted" style="margin:12px 0 0">You have 90 days from our feedback to update your application below, at no extra cost.</p></div>
+{% elif row.status in ('applied', 'review') %}
+<p class="muted" style="margin-top:16px">We aim to review applications within 10 days. You can still update yours below.</p>
+{% endif %}
+{% if errors %}<div class="errors" role="alert" style="margin-top:20px"><strong>Please check the following:</strong><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+<form method="post" class="card" style="margin-top:24px">
+<input type="hidden" name="csrf" value="{{ csrf() }}">
+{% include '_acc_fields.html' %}
+<button class="btn" type="submit">{{ 'Resubmit my application' if row.status == 'feedback' else 'Update my application' }}</button>
+</form>
+{% endif %}
+{% endif %}
+<p class="small muted" style="margin-top:20px"><a href="/accreditation-terms">Accreditation Terms</a></p>
+</div></div>
+{% endblock %}

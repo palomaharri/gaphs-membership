@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}{{ l.title }} · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium">
+  <p class="small">{% if tk %}<a href="{{ url_for('members.purchase', token=tk) }}">&larr; {{ c.title }}</a>{% else %}<a href="{{ url_for('members.item', item_id=c.id) }}">&larr; {{ c.title }}</a>{% endif %}</p>
+  <h1>{{ l.title.split(': ', 1)[1] if l.title.startswith('Download') and ': ' in l.title else l.title }}</h1>
+  {% if not ok %}<div class="card sage">New course content opens up regularly throughout your membership. This opens in {{ days }} day{{ '' if days == 1 else 's' }}.</div>
+  {% else %}{% if media or not l.body %}{% include '_media.html' %}{% endif %}
+  {% if l.body %}<div class="lesson-body">{{ l.body|lesson_text }}</div>{% endif %}
+  {% set mods = [] %}{% set dls = [] %}
+  {% for s in siblings %}{% if s.title.startswith('Download') %}{% set _ = dls.append(s) %}{% else %}{% set _ = mods.append(s) %}{% endif %}{% endfor %}
+  {% if mods %}
+  <h3 class="section-label">Course modules</h3>
+  <ul class="lessons">{% for s in mods %}<li><span>{{ s.title }}</span>
+    {% if s.id == l.id %}<span class="small muted">Now viewing</span>{% else %}<a href="{{ url_for('members.lesson', item_id=c.id, lesson_id=s.id, t=tk) }}">Open</a>{% endif %}</li>{% endfor %}</ul>
+  {% endif %}
+  {% if dls %}
+  <h3 class="section-label">Downloadable resources</h3>
+  <ul class="lessons">{% for s in dls %}<li><span>{{ s.title.split(': ', 1)[1] if ': ' in s.title else s.title }} <span class="badge">PDF</span></span>
+    {% if s.id == l.id %}<span class="small muted">Now viewing</span>{% else %}<a href="{{ url_for('members.lesson', item_id=c.id, lesson_id=s.id, t=tk) }}">Open</a>{% endif %}</li>{% endfor %}</ul>
+  {% endif %}
+  {% endif %}
+</div></div>
+{% endblock %}

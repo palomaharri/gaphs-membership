@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}1:1 Coaching with Paloma Harrington · {% endblock %}
+{% block body %}
+<div class="page"><div class="wrap">
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;align-items:center">
+<div>
+<div class="eyebrow">Coaching · For members</div>
+<h1 style="margin-top:8px">One-to-one coaching with Paloma Harrington</h1>
+<p class="lead" style="margin-top:12px">Personal guidance for your home staging business, from the founder of GAPHS.</p>
+<p class="muted">One to one · Private sessions · For GAPHS members</p>
+<div class="row" style="gap:10px;margin-top:20px;flex-wrap:wrap">
+<a class="btn" href="#interest">Register your interest</a>
+</div>
+<p class="small muted" style="margin-top:12px">Leave your email and Paloma will be in touch with details and availability.</p>
+</div>
+<div style="position:relative;aspect-ratio:4/3;overflow:hidden;background:#EDE7D9;border-radius:4px;container-type:inline-size">{% include '_coaching_cover.html' %}</div>
+</div>
+
+<section style="margin-top:64px;max-width:760px">
+<h2>About coaching</h2>
+<p style="font-size:18px;line-height:1.7">Courses teach you the method. Coaching looks at your business. In a one-to-one session with Paloma, you bring the question that is in front of you right now and work through it with someone who has built, grown and led home staging businesses, and the association itself.</p>
+<p style="font-size:18px;line-height:1.7">It is practical and specific to you: your market, your clients, your numbers and your next step.</p>
+</section>
+
+<section style="margin-top:48px">
+<h2>What you can work on</h2>
+<ul style="line-height:1.9;font-size:17px;max-width:760px;padding-left:22px">
+<li>Starting out: your services, your first clients and what to charge</li>
+<li>Pricing and proposals that protect your margin</li>
+<li>Winning work from estate agents, developers and property investors</li>
+<li>Growing: stock, a team and the systems behind a busy staging company</li>
+<li>Your brand, your portfolio and how you present your work</li>
+<li>A project, pitch or decision you would like a second opinion on</li>
+</ul>
+</section>
+
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-top:48px">
+<div class="card"><h3 style="margin-top:0">Who it is for</h3>
+<ul style="line-height:1.8;padding-left:20px;margin:0">
+<li>New home stagers who want a clear plan</li>
+<li>Established stagers ready to grow or reposition</li>
+<li>Interior designers adding staging to their services</li>
+</ul></div>
+<div class="card sage"><h3 style="margin-top:0">What to expect</h3>
+<ul style="line-height:1.8;padding-left:20px;margin:0">
+<li>A private session, one to one with Paloma</li>
+<li>Your business and your questions set the agenda</li>
+<li>Clear, practical next steps to take away</li>
+<li>Available to GAPHS members</li>
+</ul></div>
+</div>
+
+<section style="margin-top:56px;max-width:760px">
+<h2>Your coach</h2>
+<p style="line-height:1.7">Paloma Harrington is the founder of GAPHS, an award-winning interior designer and home staging specialist. She is Vice President of GAPHS, the Global Association of Professional Home Stagers, and a former Global Director of the International Association of Home Staging Professionals®. She has run her own businesses since the age of 25, across staging, interior design and renovation, and has spoken to audiences of more than 5,000 people across the UK, USA, Spain, Brazil and Dubai.</p>
+</section>
+
+<section id="interest" style="margin-top:56px;scroll-margin-top:90px">
+<div class="card sage" style="padding:32px;max-width:760px">
+<h2 style="margin-top:0">Register your interest</h2>
+{% if sent %}
+<p><strong>Thank you, your interest is registered.</strong> Paloma will be in touch by email.</p>
+{% else %}
+<p>Leave your details and Paloma will be in touch with how it works and when sessions are available. There is no commitment.</p>
+<form method="post" action="/coaching">
+<input type="hidden" name="csrf" value="{{ csrf() }}">
+<input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+<div class="two">
+<div class="field"><label for="c_name">Name</label><input id="c_name" name="name" type="text" value="{{ user.name if user else '' }}"></div>
+<div class="field"><label for="c_email">Email</label><input id="c_email" name="email" type="email" required value="{{ user.email if user else '' }}"></div>
+</div>
+<div class="field"><label for="c_note">What would you like help with? (optional)</label><textarea id="c_note" name="note" rows="3"></textarea></div>
+<button class="btn" type="submit">Register my interest</button>
+</form>
+{% endif %}
+</div>
+</section>
+</div></div>
+{% endblock %}

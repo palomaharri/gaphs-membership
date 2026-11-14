@@ -1,0 +1,18 @@
+{% set ep = request.endpoint %}
+<nav class="admin-nav" aria-label="Admin">
+  <a href="{{ url_for('admin.index') }}" class="{{ 'on' if ep == 'admin.index' }}">Overview</a>
+  <a href="{{ url_for('admin.members') }}" class="{{ 'on' if ep == 'admin.members' }}">Members</a>
+  <a href="{{ url_for('admin.invites') }}" class="{{ 'on' if ep == 'admin.invites' }}">Invite codes</a>
+  <a href="{{ url_for('admin.member_invites') }}" class="{{ 'on' if ep == 'admin.member_invites' }}">Member invites</a>
+  <a href="{{ url_for('admin.enquiries') }}" class="{{ 'on' if ep == 'admin.enquiries' }}">Enquiries</a>
+  <a href="{{ url_for('admin_blocked') }}" class="{{ 'on' if ep == 'admin_blocked' }}">Blocked list</a>
+  <a href="{{ url_for('admin.renewals') }}" class="{{ 'on' if ep == 'admin.renewals' }}">Renewals</a>
+  <a href="{{ url_for('admin.content') }}" class="{{ 'on' if ep and ep.startswith('admin.content') }}">Content</a>
+  <a href="{{ url_for('admin.messages') }}" class="{{ 'on' if ep == 'admin.messages' }}">Messages</a>
+  <a href="{{ url_for('admin.subscribers') }}" class="{{ 'on' if ep == 'admin.subscribers' }}">Subscribers</a>
+  <a href="{{ url_for('admin.orders') }}" class="{{ 'on' if ep == 'admin.orders' }}">Orders</a>
+  <a href="{{ url_for('admin.forum') }}" class="{{ 'on' if ep == 'admin.forum' }}">Forum</a>
+  <a href="{{ url_for('admin.settings') }}" class="{{ 'on' if ep == 'admin.settings' }}">Prices</a>
+  <a href="{{ url_for('admin.texts') }}" class="{{ 'on' if ep == 'admin.texts' }}">Terms and wording</a>
+  <a href="{{ url_for('admin.images') }}" class="{{ 'on' if ep == 'admin.images' }}">Home page photos</a>
+</nav>

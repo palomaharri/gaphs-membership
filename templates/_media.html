@@ -1,0 +1,8 @@
+{% if media %}
+  {% if media.type == 'iframe' %}<div class="player"><iframe src="{{ media.src }}" title="Video" allow="fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+  {% elif media.type == 'video' %}<div class="player"><video src="{{ media.src }}" controls controlsList="nodownload" preload="metadata"></video></div>
+  {% elif media.type == 'pdf' %}
+    <div class="row"><a class="btn" href="{{ media.src }}" target="_blank" rel="noopener">Open the PDF</a>
+    <a class="btn outline" href="{{ media.src }}{{ '&' if '?' in media.src else '?' }}download=1">Download</a></div>
+  {% elif media.type == 'link' %}<p><a class="btn" href="{{ media.src }}" target="_blank" rel="noopener">Open the video</a></p>{% endif %}
+{% else %}<p class="muted">The file for this has not been added yet.</p>{% endif %}

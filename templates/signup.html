@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %}Join · {% endblock %}
+{% block body %}
+{% set acc = false %}
+<div class="page"><div class="medium">
+  <div class="eyebrow">Join the community</div>
+  <h1>{% if invite %}Welcome to the new GAPHS{% else %}{{ 'Accredited' if acc else plan_label(plan) }} membership{% endif %}</h1>
+  {% if invite %}<p class="lead" style="margin-top:12px">Your membership is free. Create your account and tell us about your business. Your details become your page in the directory, and you can change them any time.</p>{% else %}
+  <p class="lead" style="margin-top:12px">
+    Tell us about you and your business. After you pay, your details become your business page{% if plan != 'professional' %} (where your plan includes one){% endif %}, and you can change them any time.
+  </p>{% endif %}
+
+  {% if not invite %}<div class="card sage" style="margin-bottom:32px">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <strong>{{ 'Accredited' if acc else plan_label(plan) }}, {{ billing }}</strong><br>
+        {% if founding %}
+          <span class="small">Founding rate: {{ money(founding_price) }} for your first year, then {{ money(then_amount) }} a year.</span>
+        {% else %}
+          {% if acc %}<span class="small">€500 a year, renewing automatically. The fee covers your assessment and your membership, and is non-refundable.</span>{% else %}<span class="small">{{ money(amount) }} {{ 'a year' if billing == 'annual' else 'a month' }}, renewing automatically. Cancel any time.</span>{% endif %}
+        {% endif %}
+      </div>
+      <a class="small" href="{{ url_for('auth.join', plan=plan, billing=billing) }}">Change plan</a>
+    </div>
+  </div>{% endif %}
+
+  {% if errors %}
+  <div class="errors" role="alert"><strong>Please check the following:</strong>
+    <ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" novalidate>
+    <input type="hidden" name="csrf" value="{{ csrf() }}">
+    <input type="hidden" name="plan" value="{{ plan }}">{% if acc %}<input type="hidden" name="accredited" value="1">{% endif %}
+    <input type="hidden" name="billing" value="{{ billing }}">
+    {% if founding %}<input type="hidden" name="founding" value="1">{% endif %}
+    {% if invite %}<input type="hidden" name="invite" value="{{ invite.code }}">{% endif %}
+    {% if code %}<input type="hidden" name="code" value="{{ code }}">{% endif %}
+
+    <h2 style="margin-bottom:20px">Your account</h2>
+    <div class="two">
+      <div class="field"><label for="name">Your name</label><input id="name" name="name" type="text" required value="{{ form.get('name', me.name if me else '') }}"></div>
+      <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required value="{{ form.get('email', me.email if me else '') }}" {% if me %}readonly{% endif %}></div>
+    </div>
+    {% if not me %}
+    <div class="two">
+      <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" minlength="8" autocomplete="new-password" required><div class="hint">At least 8 characters.</div></div>
+      <div class="field"><label for="password2">Repeat password</label><input id="password2" name="password2" type="password" minlength="8" autocomplete="new-password" required></div>
+    </div>
+    {% endif %}
+
+    {% if plan == 'professional' and not invite %}
+    <div class="field">
+      <label for="qualifying_course">Home staging training course completed</label>
+      <input id="qualifying_course" name="qualifying_course" type="text" value="{{ form.get('qualifying_course', '') }}" placeholder="Course name, provider and year">
+      <div class="hint">GAPHS membership is open to professionals who have completed a home staging training course. We check this before your directory listing goes live.</div>
+    </div>
+    {% endif %}
+
+    <hr class="rule">
+    <h2 style="margin-bottom:20px">Your business page</h2>
+    {% if invite %}<p class="muted" style="margin-top:-8px">Add as much as you like now. Your page appears in the directory once the details are complete.</p>{% elif gets_page %}<p class="muted" style="margin-top:-8px">Your page goes live automatically once your payment is received. Please fill in everything below.</p>{% endif %}
+    <div class="field"><label for="business_name">Business name</label><input id="business_name" name="business_name" type="text" required value="{{ form.get('business_name', '') }}"></div>
+    <div class="field"><label for="tagline">One-line description</label><input id="tagline" name="tagline" type="text" maxlength="160" value="{{ form.get('tagline', '') }}"></div>
+    <div class="field"><label for="bio">About your business</label><textarea id="bio" name="bio" {% if gets_page and not invite %}required{% endif %}>{{ form.get('bio', '') }}</textarea></div>
+    <div class="two">
+      <div class="field"><label for="location">Where you work</label><input id="location" name="location" type="text" {% if gets_page and not invite %}required{% endif %} value="{{ form.get('location', '') }}" placeholder="Town, region or country"></div>
+      <div class="field"><label for="address">Business address</label><input id="address" name="address" type="text" required value="{{ form.get('address', '') }}" placeholder="Street, town, postcode"><div class="small muted" style="margin-top:4px">For our records only. It is never shown on the public directory.</div></div>
+      <div class="field"><label for="country">Country</label><select id="country" name="country" required><option value="">Choose your country</option>{% for c in country_names %}<option value="{{ c }}" {% if form.get('country', '') == c %}selected{% endif %}>{{ c }}</option>{% endfor %}</select></div>
+      <div class="field"><label for="logo">Logo</label><input id="logo" name="logo" type="file" {% if gets_page and not invite %}required{% endif %} accept="image/png,image/jpeg,image/webp"></div>
+    </div>
+    <div class="field"><label for="services">Services</label><textarea id="services" name="services" style="min-height:90px" {% if gets_page and not invite %}required{% endif %}>{{ form.get('services', '') }}</textarea></div>
+    <div class="two">
+      <div class="field"><label for="contact_email">Contact email on your page</label><input id="contact_email" name="contact_email" type="email" value="{{ form.get('contact_email', '') }}"></div>
+      <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" value="{{ form.get('phone', '') }}"></div>
+      <div class="field"><label for="website">Website</label><input id="website" name="website" type="text" value="{{ form.get('website', '') }}"></div>
+      <div class="field"><label for="instagram">Instagram</label><input id="instagram" name="instagram" type="text" value="{{ form.get('instagram', '') }}" placeholder="@yourbusiness"></div>
+      <div class="field"><label for="facebook">Facebook</label><input id="facebook" name="facebook" type="text" value="{{ form.get('facebook', '') }}"></div>
+      <div class="field"><label for="linkedin">LinkedIn</label><input id="linkedin" name="linkedin" type="text" value="{{ form.get('linkedin', '') }}"></div>
+    </div>
+    <p class="small muted">You can add your photo gallery from your account once you have joined.</p>
+
+    {% if acc %}
+    <hr class="rule">
+    <h2 style="margin-bottom:8px">Your accreditation application</h2>
+    <p class="muted" style="margin:0 0 20px">This is what we assess. Your review starts once your payment is complete, and we aim to reply within 10 days.</p>
+    {% include '_acc_fields.html' %}
+    {% endif %}
+
+    <hr class="rule">
+    <h2 style="margin-bottom:20px">Agreements</h2>
+    <label class="check"><input type="checkbox" name="agree_terms" value="1" {% if form.get('agree_terms') %}checked{% endif %}>
+      <span>I agree to the <a href="{{ url_for('auth.terms') }}" target="_blank" rel="noopener">Terms and Conditions</a>.</span></label>
+    <label class="check"><input type="checkbox" name="agree_code" value="1" {% if form.get('agree_code') %}checked{% endif %}>
+      <span>I agree to follow the <a href="{{ url_for('auth.code_of_conduct') }}" target="_blank" rel="noopener">Code of Ethics and Conduct</a>.</span></label>
+    {% if acc %}<label class="check"><input type="checkbox" name="agree_accreditation" value="1" {% if form.get('agree_accreditation') %}checked{% endif %}>
+      <span>I agree to the <a href="/accreditation-terms" target="_blank" rel="noopener">Accreditation Terms</a>.</span></label>{% endif %}
+    <label class="check"><input type="checkbox" name="agree_privacy" value="1" {% if form.get('agree_privacy') %}checked{% endif %}>
+      <span>I have read the <a href="{{ url_for('auth.privacy') }}" target="_blank" rel="noopener">Privacy Policy</a>.</span></label>
+
+    <div style="margin-top:28px"><button class="btn" type="submit">{{ 'Create my free account' if invite else 'Continue to payment' }}</button></div>
+    {% if not invite %}<p class="small muted" style="margin-top:12px">Payment is taken on a secure page. Your membership renews automatically and you can cancel from your account.</p>{% endif %}
+  </form>
+</div></div>
+{% endblock %}

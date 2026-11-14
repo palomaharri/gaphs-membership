@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Renewals · {% endblock %}
+{% block body %}
+<div class="page"><div class="wrap">
+  <div class="eyebrow">Admin</div><h1>Renewals</h1>
+  {% include 'admin/_nav.html' %}
+  <p class="lead" style="margin:0 0 20px">Members are emailed automatically before their membership renews. Cards renew by themselves; the reminder is a friendly heads-up.</p>
+  {% if not smtp %}<div class="flash" style="margin-bottom:20px">Email sending is not set up yet, so reminders will start going out once it is.</div>{% endif %}
+  <form method="post" class="row" style="margin-bottom:24px">
+    <input type="hidden" name="csrf" value="{{ csrf() }}"><input type="hidden" name="action" value="days">
+    <label for="reminder_days">Send reminders this many days before renewal (for example 30,7)</label>
+    <input id="reminder_days" name="reminder_days" type="text" value="{{ days }}" style="max-width:140px">
+    <button class="btn outline" type="submit">Save</button>
+  </form>
+  <div class="table-wrap"><table class="t"><thead><tr><th>Member</th><th>Plan</th><th>Renews</th><th>In</th><th>Reminders sent</th><th></th></tr></thead>
+  <tbody>{% for r in rows %}<tr>
+    <td>{{ r.u.name }}<div class="small muted">{{ r.u.email }}</div></td>
+    <td>{{ plan_label(r.u.plan) }} · {{ r.u.billing }}{% if r.u.founding %} · founding rate{% endif %}</td>
+    <td>{{ fmt_date(r.u.period_end) }}</td><td>{{ r.left }} days</td>
+    <td>{{ r.sent|join(', ')|replace('r', '')|replace(',', ' days,') ~ (' days' if r.sent else '–') if r.sent else '–' }}</td>
+    <td><form method="post"><input type="hidden" name="csrf" value="{{ csrf() }}"><input type="hidden" name="action" value="send_one"><input type="hidden" name="user_id" value="{{ r.u.id }}"><button class="btn small light" type="submit">Send reminder now</button></form></td>
+  </tr>{% else %}<tr><td colspan="6" class="muted">No renewals in the next 90 days.</td></tr>{% endfor %}</tbody></table></div>
+  <form method="post" style="margin-top:20px"><input type="hidden" name="csrf" value="{{ csrf() }}"><input type="hidden" name="action" value="send_due"><button class="btn" type="submit">Send all due reminders now</button></form>
+</div></div>
+{% endblock %}

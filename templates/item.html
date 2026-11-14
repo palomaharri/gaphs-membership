@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}{{ c.title }} · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium">
+  <p class="small"><a href="{{ url_for('members.library') }}">&larr; Library</a></p>
+  <h1>{{ c.title }}</h1>
+  {% if c.description %}<p class="lead prewrap">{{ c.description }}</p>{% endif %}
+  {% if not ok %}
+    <div class="card sage">New course content opens up regularly throughout your membership. This opens in {{ days }} day{{ '' if days == 1 else 's' }}.</div>
+  {% elif c.kind == 'course' %}
+    {% set mods = [] %}{% set dls = [] %}
+    {% for r in lessons %}{% if r.l.title.startswith('Download') %}{% set _ = dls.append(r) %}{% else %}{% set _ = mods.append(r) %}{% endif %}{% endfor %}
+    {% if not lessons %}<p class="muted">Lessons will appear here.</p>{% endif %}
+    {% if mods %}
+    <h3 class="section-label">Course modules</h3>
+    <ul class="lessons">
+    {% for r in mods %}
+      <li class="{{ '' if r.ok else 'locked' }}"><span>{{ r.l.title }} <span class="badge">{{ 'PDF' if r.l.kind == 'pdf' else ('Video' if (r.l.video_url or r.l.file_private) else 'Lesson') }}</span></span>
+        {% if r.ok %}<a href="{{ url_for('members.lesson', item_id=c.id, lesson_id=r.l.id) }}" class="btn small{{ ' outline' if r.l.kind == 'pdf' else '' }}" style="border-radius:999px;white-space:nowrap">{% if r.l.kind == 'video' and (r.l.video_url or r.l.file_private) %}&#9654;&nbsp;Watch{% else %}Open{% endif %}</a>
+        {% else %}<span class="small">Opens in {{ r.days }} day{{ '' if r.days == 1 else 's' }}</span>{% endif %}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    {% if dls %}
+    <h3 class="section-label">Downloadable resources</h3>
+    <ul class="lessons">
+    {% for r in dls %}
+      <li class="{{ '' if r.ok else 'locked' }}"><span>{{ r.l.title.split(': ', 1)[1] if ': ' in r.l.title else r.l.title }} <span class="badge">PDF</span></span>
+        {% if r.ok %}<a href="{{ url_for('members.lesson', item_id=c.id, lesson_id=r.l.id) }}" class="btn small{{ ' outline' if r.l.kind == 'pdf' else '' }}" style="border-radius:999px;white-space:nowrap">{% if r.l.kind == 'video' and (r.l.video_url or r.l.file_private) %}&#9654;&nbsp;Watch{% else %}Open{% endif %}</a>
+        {% else %}<span class="small">Opens in {{ r.days }} day{{ '' if r.days == 1 else 's' }}</span>{% endif %}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+  {% else %}{% include '_media.html' %}{% endif %}
+</div></div>
+{% endblock %}

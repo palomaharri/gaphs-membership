@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}{{ c.title }} · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium">
+  <div class="eyebrow">Your purchase</div>
+  <h1>{{ c.title }}</h1>
+  <p class="muted">This is yours to keep. Log in any time with the email you bought with and you will find it under Your courses.</p>
+  {% if lessons %}
+  {% set mods = [] %}{% set dls = [] %}
+  {% for l in lessons %}{% if l.title.startswith('Download') %}{% set _ = dls.append(l) %}{% else %}{% set _ = mods.append(l) %}{% endif %}{% endfor %}
+  {% if mods %}
+  <h3 class="section-label">Course modules</h3>
+  <ul class="lessons">{% for l in mods %}<li><span>{{ l.title }}</span><a href="{{ url_for('members.lesson', item_id=c.id, lesson_id=l.id, t=tk) }}" class="btn small{{ ' outline' if l.kind == 'pdf' else '' }}" style="border-radius:999px;white-space:nowrap">{% if l.kind == 'video' and (l.video_url or l.file_private) %}&#9654;&nbsp;Watch{% else %}Open{% endif %}</a></li>{% endfor %}</ul>
+  {% endif %}
+  {% if dls %}
+  <h3 class="section-label">Downloadable resources</h3>
+  <ul class="lessons">{% for l in dls %}<li><span>{{ l.title.split(': ', 1)[1] if ': ' in l.title else l.title }} <span class="badge">PDF</span></span><a href="{{ url_for('members.lesson', item_id=c.id, lesson_id=l.id, t=tk) }}" class="btn small{{ ' outline' if l.kind == 'pdf' else '' }}" style="border-radius:999px;white-space:nowrap">{% if l.kind == 'video' and (l.video_url or l.file_private) %}&#9654;&nbsp;Watch{% else %}Open{% endif %}</a></li>{% endfor %}</ul>
+  {% endif %}
+  {% else %}{% include '_media.html' %}{% endif %}
+</div></div>
+{% endblock %}

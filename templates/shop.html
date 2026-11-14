@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Content library · {% endblock %}
+{% block body %}
+<div class="page"><div class="wrap">
+  <div class="eyebrow">Content library</div>
+  <h1>Courses, templates and classes</h1>
+  <p class="lead">{% if member_free %}Everything here is yours to open.{% else %}Everything here is included in the membership. Or buy what you need, one at a time, with no account.{% endif %}</p>
+  <div class="card sage" style="margin-top:24px;padding:18px 24px">
+    {% if member_free %}Everything here is included with your membership. <a href="{{ url_for('members.library') }}">Go to your library</a>
+    {% elif user %}Everything here is included in the membership. Not a member yet? <a href="{{ url_for('auth.join') }}"><strong>Join now</strong></a> and unlock access.
+    {% else %}Everything here is included in the membership. Not a member yet? <a href="{{ url_for('auth.join') }}"><strong>Join now</strong></a> and unlock access. Already a member? <a href="{{ url_for('auth.login') }}">Log in</a>.{% endif %}
+  </div>
+  <div class="row" style="margin-top:28px;gap:8px;flex-wrap:wrap">
+    {% for k, l in [('', 'All'), ('course', 'Courses'), ('pdf', 'Guides and templates'), ('video', 'Classes')] %}
+    <a class="btn small {{ '' if kind == k else 'outline' }}" href="{{ url_for('members.shop', type=k) if k else url_for('members.shop') }}">{{ l }}</a>{% endfor %}
+  </div>
+  {% if items %}
+  <div class="grid cols-3" style="margin-top:32px">
+    {% for c in items %}
+    <a class="item-card" href="{{ url_for('members.shop_item', item_id=c.id) }}">
+      <div class="cover">{% if c.cover %}<img src="{{ media_url(c.cover) }}" alt="">{% endif %}</div>
+      <h3 style="margin:0">{{ c.title }}</h3>
+      <span>{{ money(c.price) }}</span>
+    </a>{% endfor %}
+  </div>
+  {% else %}<p class="muted" style="margin-top:32px">{{ 'Nothing in this category yet.' if kind else 'New content is on its way.' }}</p>{% endif %}
+</div></div>
+{% endblock %}

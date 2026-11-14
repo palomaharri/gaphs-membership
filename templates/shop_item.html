@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}{{ c.title }} · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium">
+  <p class="small"><a href="{{ url_for('members.library') }}">&larr; Library</a></p>
+  <h1>{{ c.title }}</h1>
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;margin-top:24px">
+    <div>{% if c.cover %}<img src="{{ media_url(c.cover) }}" alt="" style="width:100%;border-radius:4px">{% endif %}
+      {% if c.description %}<p class="prewrap">{{ c.description }}</p>{% endif %}
+      {% if lessons %}<h3>Lessons</h3><ul>{% for l in lessons %}<li>{{ l.title }}</li>{% endfor %}</ul>{% endif %}</div>
+    <div class="card">
+      {% if c.price %}<p class="amount" style="font-family:'Montserrat',sans-serif;font-size:32px;color:var(--brown);margin:0 0 12px">{{ money(c.price) }}</p>{% endif %}
+      {% if c.category == 'report' %}
+        <p><strong>Free for everyone.</strong> No account needed.</p>
+        {% if c.file_private %}<a class="btn" href="{{ url_for('members.private_file', scope='content', item_id=c.id) }}" target="_blank" rel="noopener">Read the report</a>
+        <a class="btn outline" href="{{ url_for('members.private_file', scope='content', item_id=c.id, download=1) }}">Download PDF</a>{% else %}<p class="muted">Coming soon.</p>{% endif %}
+      {% elif member_free or owned %}
+        <p>{{ 'You own this.' if owned else 'Included with your membership.' }}</p>
+        <a class="btn" href="{{ url_for('members.item', item_id=c.id) }}">Open</a>
+      {% elif not c.price %}
+        <p><strong>Included with GAPHS membership.</strong></p>
+        <a class="btn" href="{{ url_for('auth.join') }}">See membership</a>
+        {% if not user %}<p class="small muted" style="margin-bottom:0">Already a member? <a href="{{ url_for('auth.login', next=url_for('members.item', item_id=c.id)) }}">Log in</a></p>{% endif %}
+      {% else %}
+      <form method="post" action="{{ url_for('members.shop_buy', item_id=c.id) }}">
+        <input type="hidden" name="csrf" value="{{ csrf() }}">
+        {% if not user %}<div class="field"><label for="email">Your email</label><input id="email" name="email" type="email" required>
+          <div class="hint">We send your link here. No account needed.</div></div>{% endif %}
+        <button class="btn" type="submit">Buy now</button>
+      </form>
+
+      {% endif %}
+    </div>
+  </div>
+  {% if more %}
+  <h2 style="margin-top:64px">You may also like</h2>
+  <div class="grid cols-4" style="margin-top:20px">
+    {% for x in more %}
+    <a class="item-card" href="{{ url_for('members.shop_item', item_id=x.id) }}">
+      <div class="cover">{% if x.cover %}<img src="{{ media_url(x.cover) }}" alt="">{% endif %}</div>
+      <h3 style="margin:0;font-size:18px">{{ x.title }}</h3>
+      <span>{{ money(x.price) }}</span>
+    </a>{% endfor %}
+  </div>
+  <p style="margin-top:24px"><a class="btn outline" href="{{ url_for('members.library') }}">See the full library</a></p>
+  {% endif %}
+</div></div>
+{% endblock %}

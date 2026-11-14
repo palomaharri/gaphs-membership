@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block title %}{{ c.title }} · Online Course · {% endblock %}
+{% block body %}
+{% set row = course_row(c) if course_row is defined else none %}
+{% set cost = row.price if (row and row.price) else c.price %}
+<div class="page"><div class="wrap">
+<p class="small muted" style="margin:0 0 16px"><a href="{{ url_for('members.courses') }}">All courses</a></p>
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;align-items:center">
+<div>
+<div class="eyebrow">{{ c.label }}{% if not row and not c.external %} · Coming soon{% endif %}</div>
+{% if c.external %}<p class="offered" style="margin:0 0 6px">Offered by the {{ c.provider }}</p>{% endif %}
+<h1 style="margin-top:8px">{{ c.title }}</h1>
+<p class="lead" style="margin-top:12px">{{ c.sub }}</p>
+<p class="muted">{{ c.meta }}</p>
+{% set member_here = (not is_edu) and user and can_access(user) and not c.external %}
+{% if c.external %}
+<div class="row" style="gap:10px;margin-top:20px;flex-wrap:wrap">
+<a class="btn" href="{{ c.external }}" target="_blank" rel="noopener">{{ 'Start' if not c.price else 'Buy' }} at the Education Centre</a>
+</div>
+{% elif row and member_here %}
+<div class="row" style="gap:10px;margin-top:20px;flex-wrap:wrap">
+<a class="btn" href="{{ url_for('members.item', item_id=row.id) }}">Open the course</a>
+</div>
+{% elif row and row.price %}
+<form method="post" action="{{ url_for('members.shop_buy', item_id=row.id) }}" class="row" style="gap:10px;margin-top:20px;flex-wrap:wrap">
+<input type="hidden" name="csrf" value="{{ csrf() }}">
+{% if not user %}<input type="email" name="email" required placeholder="Your email" aria-label="Your email" style="flex:1 1 220px;max-width:300px">{% endif %}
+<button class="btn" type="submit">Buy for €{{ (row.price/100)|int }}</button>
+
+</form>
+{% elif row %}
+<div class="row" style="gap:10px;margin-top:20px;flex-wrap:wrap">
+<a class="btn" href="{{ url_for('members.shop_item', item_id=row.id) }}">Start the course</a>
+
+</div>
+{% else %}
+<div class="row" style="gap:10px;margin-top:20px;flex-wrap:wrap">
+<a class="btn outline" href="#notify">Be the first to know</a>
+
+</div>
+{% endif %}
+<p style="margin-top:16px;font-size:20px">{% include '_price.html' %} {% if not member_here %}<span class="small muted">{% if cost %}one-off{% else %}with your email{% endif %}</span>{% endif %}</p>
+
+<p class="small muted" style="margin-top:12px">Online · self-paced · any device · workbooks and templates included</p>
+</div>
+<img src="{{ url_for('static', filename='img/courses/' + c.img) }}" alt="{{ c.title }}" style="width:100%;border-radius:4px">
+</div>
+
+<section style="margin-top:64px;max-width:760px">
+<h2>About this course</h2>
+<p style="font-size:18px;line-height:1.7">{{ c.overview }}</p>
+</section>
+
+<section style="margin-top:48px">
+<h2>What you will learn</h2>
+<ul style="line-height:1.9;font-size:17px;max-width:760px;padding-left:22px">
+{% for x in c.learn %}<li>{{ x }}</li>{% endfor %}
+</ul>
+</section>
+
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-top:48px">
+<div class="card"><h3 style="margin-top:0">Who it is for</h3>
+<ul style="line-height:1.8;padding-left:20px;margin:0">{% for x in c.who %}<li>{{ x }}</li>{% endfor %}</ul></div>
+<div class="card sage"><h3 style="margin-top:0">What is included</h3>
+<ul style="line-height:1.8;padding-left:20px;margin:0">{% for x in c.included %}<li>{{ x }}</li>{% endfor %}</ul></div>
+</div>
+
+<section style="margin-top:56px;max-width:760px">
+<h2>{{ 'About the ' ~ c.provider if c.external else 'About GAPHS' }}</h2>
+<p style="line-height:1.7">{{ about_hsec if c.external else about }}</p>
+</section>
+
+{% if not row and not c.external %}
+<section id="notify" style="margin-top:56px;scroll-margin-top:90px">
+<div class="card sage" style="padding:32px;max-width:760px">
+<h2 style="margin-top:0">Coming soon</h2>
+{% if sent %}
+<p><strong>Thank you, you are on the list.</strong> We will email you when this course opens.</p>
+{% else %}
+<p>Leave your email and we will let you know when it opens.</p>
+<form method="post" action="{{ url_for('members.course_notify', slug=c.slug) }}" class="row" style="gap:10px">
+<input type="hidden" name="csrf" value="{{ csrf() }}">
+<input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+<input type="email" name="email" required placeholder="Your email" aria-label="Your email" style="flex:1 1 240px">
+<button class="btn outline" type="submit">Keep me posted</button>
+</form>
+{% endif %}
+
+</div>
+</section>
+{% endif %}
+
+<section style="margin-top:56px;max-width:760px">
+<h2>Frequently asked questions</h2>
+{% for q, a in faq %}
+<details style="border-top:1px solid #DDD6C6;padding:14px 0"><summary style="cursor:pointer;font-weight:600">{{ q }}</summary><p style="margin:10px 0 0">{{ a }}</p></details>
+{% endfor %}
+</section>
+
+{% if others %}<section style="margin-top:56px">
+<h2>More courses</h2>
+<div class="grid cols-3" style="margin-top:16px">
+{% for o in others %}
+<a class="item-card" href="{{ url_for('members.course_page', slug=o.slug) }}">
+<div class="cover"><img src="{{ url_for('static', filename='img/courses/' + o.img) }}" alt="{{ o.title }}"></div>
+<h3 style="margin:0">{{ o.title }}</h3><span class="small muted">{{ o.label }}</span>
+</a>{% endfor %}
+</div>
+</section>{% endif %}
+</div></div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Join · {% endblock %}
+{% block body %}
+{% set billing = 'annual' %}{# monthly plans are hidden from public view for now; the backend still supports them #}
+<div class="page"><div class="wrap">
+  <div class="eyebrow">Membership</div>
+  <h1>Two ways to belong.</h1>
+  <p class="lead" style="margin-top:12px">For trained home stagers, and for the industry partners who work alongside them. Full access to the Library from day one.</p>
+
+  <div class="grid" style="margin-top:12px;align-items:stretch;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));max-width:980px">
+    <div class="card plan" style="background:#1A1A1A;color:#F5F1E8;border-color:#1A1A1A;border-top:2px solid #B8963E">
+      <div class="eyebrow" style="margin:0">For home stagers</div>
+      <h3 style="color:#FFFFFF;font-size:30px;font-weight:200;letter-spacing:.04em">Member</h3>
+      <div><span class="amount" style="color:#FFFFFF">{{ money(prices.pro_annual) }}</span> <span class="small" style="color:#D8D2C4">a year</span></div>
+      <div class="small" style="color:#D8D2C4">For professionals who have completed a home staging training course.</div>
+      <ul style="color:#E8E2D4"><li>Your page in the GAPHS global directory</li><li>The GAPHS member logo</li><li>The Library: courses, guides and video guides</li><li>Members' forum and webinars</li><li>Local chapters and events</li></ul>
+      <div style="flex:1"></div>
+      <a class="btn" href="{{ url_for('auth.signup', plan='professional', billing=billing) }}">Join as a Member</a>
+    </div>
+
+    <div class="card plan">
+      <div class="eyebrow" style="margin:0">For industry partners</div>
+      <h3 style="font-size:30px;font-weight:200;letter-spacing:.04em">Associate</h3>
+      <div><span class="amount">{{ money(prices.member_annual) }}</span> <span class="small">a year</span></div>
+      <div class="small">For real estate agents and brokers, property developers, photographers, interior designers, furniture and accessory suppliers, and other professionals who work with home stagers.</div>
+      <ul><li>The Library, including the course for real estate agents</li><li>Members' forum and webinars</li><li>A network of trained stagers in every country</li><li>Events with stagers and real estate partners</li></ul>
+      <div style="flex:1"></div>
+      <a class="btn outline" href="{{ url_for('auth.signup', plan='member', billing=billing) }}">Join as an Associate</a>
+    </div>
+  </div>
+  <p class="small muted" style="margin-top:24px">Already a member? <a href="{{ url_for('auth.login') }}">Log in</a>.</p>
+  <form method="get" action="{{ url_for('auth.invite') }}" style="margin-top:28px;max-width:420px"><label for="havecode" class="small muted">Have a code?</label><div style="display:flex;gap:8px;margin-top:6px"><input id="havecode" name="code" type="text" placeholder="Enter your code" autocomplete="off" required style="flex:1"><button class="btn" type="submit">Use code</button></div></form>
+</div></div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Content · {% endblock %}
+{% block body %}
+<div class="page"><div class="wrap">
+  <div class="eyebrow">Admin</div><h1>Content</h1>
+  {% include 'admin/_nav.html' %}
+  {% set _drive = drive_state() %}
+  {% if _drive.running %}
+  <div class="flash">Copying files from Google Drive: {{ _drive.done }} of {{ _drive.total }} done{% if _drive.current %} · now: {{ _drive.current }}{% endif %}. <a href="{{ url_for('admin.content') }}">Refresh</a></div>
+  {% elif _drive.pending %}
+  <div class="card sage" style="margin-bottom:24px">
+    <strong>{{ _drive.pending }} file{{ '' if _drive.pending == 1 else 's' }} still to copy from Google Drive.</strong>
+    <p class="small" style="margin:6px 0 12px">First open the GAPHS content folder in Google Drive and set Share &rsaquo; General access to <em>Anyone with the link, Viewer</em>. When the copy has finished, set it back to Restricted: the site keeps its own copies and shows them to members and buyers only.</p>
+    {% if _drive.errors %}<p class="small" style="color:var(--danger)">Last try: {{ _drive.errors|length }} could not be copied. {{ _drive.errors[0] }}</p>{% endif %}
+    <form method="post" action="{{ url_for('admin.import_drive') }}" style="margin:0"><input type="hidden" name="csrf" value="{{ csrf() }}"><button class="btn small" type="submit">Import files from Google Drive</button></form>
+  </div>
+  {% endif %}
+  <p><a class="btn" href="{{ url_for('admin.content_edit') }}">Add new</a></p>
+  <div class="table-wrap"><table class="t">
+    <thead><tr><th>Title</th><th>Type</th><th>Opens after</th><th>Shop price</th><th>Sold</th><th>Status</th><th></th></tr></thead>
+    <tbody>{% for c in rows %}<tr>
+      <td><strong>{{ c.title }}</strong>{% if c.kind == 'course' %}<br><span class="muted small">{{ c.n_lessons }} lessons</span>{% endif %}</td>
+      <td>{{ c.kind }}</td><td>{{ c.drip_days }} days</td><td>{{ money(c.price) if c.price else '–' }}</td><td>{{ c.n_sold }}</td>
+      <td>{{ 'Published' if c.published else 'Hidden' }}</td>
+      <td><a href="{{ url_for('admin.content_edit', item_id=c.id) }}">Edit</a></td></tr>
+    {% else %}<tr><td colspan="7" class="muted">Nothing yet.</td></tr>{% endfor %}</tbody></table></div>
+</div></div>
+{% endblock %}

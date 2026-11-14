@@ -1,0 +1,15 @@
+{%- if c.external -%}
+{%- set _was = c.was if (c.was and c.price and c.was > c.price) else none -%}
+{%- if c.price -%}{%- if _was %}<s style="color:#8C877F;font-weight:400;margin-right:6px">{{ c.currency }}{{ (_was/100)|int }}</s>{% endif -%}<strong>{{ c.currency }}{{ (c.price/100)|int }}</strong>{%- else -%}<strong>Free taster</strong>{%- endif -%}
+{%- else -%}
+{%- set _row = course_row(c) if course_row is defined else none -%}
+{%- set _cost = _row.price if (_row and _row.price) else c.price -%}
+{%- set _was = c.was if (c.was and _cost and c.was > _cost) else none -%}
+{%- if (not is_edu) and user and can_access(user) -%}<strong>Included in your membership</strong>
+{%- elif _cost -%}
+{%- if _was %}<s style="color:#8C877F;font-weight:400;margin-right:6px">€{{ (_was/100)|int }}</s>{% endif -%}
+<strong>€{{ (_cost/100)|int }}</strong>
+{%- if _was %} <span style="display:inline-block;background:#EDE7D9;color:#1A1A1A;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:999px;margin-left:6px;vertical-align:middle">On offer</span>{% endif -%}
+{%- else -%}<strong>Free</strong>{%- endif -%}
+
+{%- endif -%}

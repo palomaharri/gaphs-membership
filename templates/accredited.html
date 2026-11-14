@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Accredited membership · {% endblock %}
+{% block body %}
+{% set apply_url = '/accreditation' if (user and can_access(user)) else url_for('auth.signup', plan='professional', billing='annual', accredited=1) %}
+<div class="page"><div class="wrap">
+<div style="max-width:780px">
+<div class="eyebrow">Membership · Accredited</div>
+<h1 style="margin-top:8px">GAPHS Accredited membership</h1>
+<p class="lead" style="margin-top:12px">For established home staging companies who want their experience recognised, and seen.</p>
+<p class="muted">€500 a year · Assessed by GAPHS</p>
+<div class="row" style="gap:10px;margin-top:20px;flex-wrap:wrap">
+<a class="btn" href="{{ apply_url }}">Apply for Accredited</a>
+<a class="btn outline" href="#how">How it works</a>
+</div>
+</div>
+
+<section style="margin-top:56px;max-width:780px">
+<h2>Stand out</h2>
+<p style="font-size:18px;line-height:1.7">Anyone can call themselves a home stager. Accredited status tells clients, estate agents and developers that your company has been looked at closely by the industry's association: your portfolio, your training and your track record.</p>
+<p style="font-size:18px;line-height:1.7">It is the highest level of GAPHS membership, designed to set experienced companies apart from the rest of the market.</p>
+</section>
+
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-top:40px">
+<div class="card"><h3 style="margin-top:0">Who it is for</h3>
+<ul style="line-height:1.8;padding-left:20px;margin:0">
+<li>Home staging companies that are already trading</li>
+<li>With a portfolio of completed projects to show</li>
+<li>And formal home staging training behind them</li>
+<li>Who want a mark that sets them apart when clients compare</li>
+</ul></div>
+<div class="card sage"><h3 style="margin-top:0">What you get</h3>
+<ul style="line-height:1.8;padding-left:20px;margin:0">
+<li>Everything in Professional membership</li>
+<li>GAPHS Accredited status, awarded after assessment</li>
+<li>The GAPHS Accredited logo for your website and marketing</li>
+<li>An Accredited mark on your directory page</li>
+</ul></div>
+</div>
+
+<section style="margin-top:56px;max-width:780px">
+<h2>What you need to apply</h2>
+<p style="line-height:1.7">Have these ready before you start. Everything is sent as links, so there are no large files to upload.</p>
+<ul style="line-height:1.9;font-size:17px;padding-left:22px">
+<li><strong>Portfolio.</strong> Links to at least three completed projects: pages on your website, or a shared folder (Google Drive, Dropbox). Before and after photos are ideal.</li>
+<li><strong>Course certificates.</strong> A shared link to each home staging course certificate you hold.</li>
+<li><strong>Your experience.</strong> How long your company has been trading and roughly how many projects you have completed.</li>
+<li><strong>Your business details.</strong> The same details as any Professional member: they become your directory page.</li>
+<li><strong>Anything else that supports your application</strong> (optional): awards, press, insurance, team, areas covered.</li>
+</ul>
+</section>
+
+<section id="how" style="margin-top:56px;max-width:780px;scroll-margin-top:90px">
+<h2>How it works</h2>
+<ol style="line-height:1.9;font-size:17px;padding-left:22px">
+<li><strong>Apply.</strong> Fill in the application, agree to the Accreditation Terms and pay the yearly fee.</li>
+<li><strong>You are a member straight away.</strong> Your Professional membership and directory page are active from the day you pay.</li>
+<li><strong>We review.</strong> Your application goes under review once payment is received. We aim to reply within 10 days.</li>
+<li><strong>The outcome.</strong> We confirm your Accredited status, or we send you feedback on what we would like to see, with the aim of getting you there.</li>
+<li><strong>If we send feedback.</strong> You have 90 days to update your application from your account, at no extra cost, and we review it again.</li>
+<li><strong>Once accredited.</strong> Your account shows Accredited, the mark appears on your directory page, and your Accredited logo is ready to download.</li>
+</ol>
+</section>
+
+<section style="margin-top:56px;max-width:780px">
+<h2>Fee and renewal</h2>
+<ul style="line-height:1.9;font-size:17px;padding-left:22px">
+<li>€500 a year, paid when you apply and on each renewal.</li>
+<li>The fee covers your assessment and your membership for the year.</li>
+<li>It is non-refundable, including while an application is being revised.</li>
+<li>Accredited status runs with your membership year and renews with it.</li>
+</ul>
+<p style="line-height:1.7"><strong>Already a member?</strong> You can upgrade at any time. It is a full new application at the full €500 fee: nothing is credited from your current membership, and you do not pay just the difference.</p>
+</section>
+
+<section style="margin-top:56px;max-width:780px">
+<h2>Questions</h2>
+<details style="border-top:1px solid #DDD6C6;padding:14px 0"><summary style="cursor:pointer;font-weight:600">What happens if my application is not accepted straight away?</summary><p style="margin:10px 0 0;line-height:1.7">We send you written feedback and you have 90 days to update your application at no extra cost. In the meantime you keep your Professional membership and directory page.</p></details>
+<details style="border-top:1px solid #DDD6C6;padding:14px 0"><summary style="cursor:pointer;font-weight:600">Can I say I am Accredited while my application is under review?</summary><p style="margin:10px 0 0;line-height:1.7">No. You can use the Accredited name and logo only once your status has been confirmed, and while it is current.</p></details>
+<details style="border-top:1px solid #DDD6C6;padding:14px 0"><summary style="cursor:pointer;font-weight:600">Do I have to send my photos?</summary><p style="margin:10px 0 0;line-height:1.7">No files, just links: to your website portfolio or to a shared folder.</p></details>
+<details style="border-top:1px solid #DDD6C6;padding:14px 0"><summary style="cursor:pointer;font-weight:600">Is the fee refundable if I change my mind?</summary><p style="margin:10px 0 0;line-height:1.7">No. The fee covers the assessment and your membership year, and is non-refundable in all cases.</p></details>
+<details style="border-top:1px solid #DDD6C6;border-bottom:1px solid #DDD6C6;padding:14px 0"><summary style="cursor:pointer;font-weight:600">Where are the full terms?</summary><p style="margin:10px 0 0;line-height:1.7">In the <a href="/accreditation-terms">Accreditation Terms</a>. You will be asked to agree to them when you apply.</p></details>
+</section>
+
+<section style="margin-top:56px">
+<div class="card sage" style="padding:32px;max-width:780px">
+<h2 style="margin-top:0">Ready to apply?</h2>
+<p>The application takes about ten minutes if you have your links to hand.</p>
+<div class="row" style="gap:10px;flex-wrap:wrap">
+<a class="btn" href="{{ apply_url }}">Apply for Accredited</a>
+<a class="btn outline" href="/accreditation-terms">Read the Accreditation Terms</a>
+</div>
+</div>
+</section>
+</div></div>
+{% endblock %}

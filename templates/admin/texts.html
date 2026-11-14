@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Terms · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium">
+  <div class="eyebrow">Admin</div><h1>Terms and wording</h1>
+  {% include 'admin/_nav.html' %}
+  <p class="lead">New members see and agree to these at sign-up. Leave a blank line between paragraphs.</p>
+  <form method="post">
+    <input type="hidden" name="csrf" value="{{ csrf() }}">
+    <div class="field"><label for="terms_text">Terms and conditions</label><textarea id="terms_text" name="terms_text" style="min-height:220px">{{ v.terms_text }}</textarea></div>
+    <div class="field"><label for="code_text">Code of conduct</label><textarea id="code_text" name="code_text" style="min-height:220px">{{ v.code_text }}</textarea></div>
+    <div class="field"><label for="privacy_text">Privacy policy</label><textarea id="privacy_text" name="privacy_text" style="min-height:220px">{{ v.privacy_text }}</textarea></div>
+    <button class="btn" type="submit">Save</button>
+  </form>
+</div></div>
+{% endblock %}

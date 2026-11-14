@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Your invitation · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium" style="max-width:560px">
+  <div class="eyebrow">Existing members</div>
+  <h1>Enter your invitation code</h1>
+  <p class="lead" style="margin-top:12px">Your code is in the email we sent you.</p>
+  <form method="get" class="card" style="margin-top:24px">
+    <div class="field"><label for="code">Invitation code</label><input id="code" name="code" type="text" required autocomplete="off" value="{{ code }}" style="text-transform:uppercase"></div>
+    <button class="btn" type="submit">Continue</button>
+  </form>
+</div></div>
+{% endblock %}

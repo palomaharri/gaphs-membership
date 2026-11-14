@@ -1,0 +1,41 @@
+<script>
+(function () {
+  var names = null, box = null, active = null;
+  function load(cb) {
+    if (names) { cb(); return; }
+    fetch('/forum/members.json').then(function (r) { return r.ok ? r.json() : []; }).then(function (j) { names = j || []; cb(); }).catch(function () { names = []; });
+  }
+  function hide() { if (box) { box.remove(); box = null; } }
+  function query(ta) {
+    var before = ta.value.slice(0, ta.selectionStart);
+    var m = before.match(/(^|\s)@([^\s@\[\]]{1,30}(?: [^\s@\[\]]{0,30}){0,2})$/);
+    return m ? { text: m[2], start: before.length - m[2].length - 1 } : null;
+  }
+  function show(ta) {
+    var q = query(ta); hide();
+    if (!q) { return; }
+    var low = q.text.toLowerCase();
+    var hits = names.filter(function (n) { return n.toLowerCase().indexOf(low) !== -1; }).slice(0, 6);
+    if (!hits.length) { return; }
+    box = document.createElement('div');
+    box.style.cssText = 'border:1px solid #DDD6C6;border-radius:6px;background:#fff;margin-top:4px;overflow:hidden;max-width:360px';
+    hits.forEach(function (n) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = n;
+      b.style.cssText = 'display:block;width:100%;text-align:left;padding:8px 12px;border:0;background:#fff;font:inherit;cursor:pointer';
+      b.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        var q2 = query(ta); if (!q2) { hide(); return; }
+        var end = ta.selectionStart, ins = '@[' + n + '] ';
+        ta.value = ta.value.slice(0, q2.start) + ins + ta.value.slice(end);
+        var pos = q2.start + ins.length; ta.focus(); ta.setSelectionRange(pos, pos); hide();
+      });
+      box.appendChild(b);
+    });
+    ta.parentNode.insertBefore(box, ta.nextSibling);
+  }
+  document.querySelectorAll('textarea[data-mention]').forEach(function (ta) {
+    ta.addEventListener('input', function () { load(function () { show(ta); }); });
+    ta.addEventListener('blur', function () { setTimeout(hide, 150); });
+  });
+})();
+</script>

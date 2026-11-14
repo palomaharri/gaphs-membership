@@ -1,0 +1,50 @@
+/* Home Staging Education Centre skin. Loaded only on the Education Centre host, after site.css.
+   Palette: green and cream. Fonts: Lora for headings, Inter for text. */
+body.edu{--brown:#3F4A3C;--text:#2B2A28;--muted:#6B665E;--cream:#F6F1E9;--sage:#EDE7D9;--sage-line:#C9D4C2;--logo-brown:#F6F1E9;
+--green:#9C7D2F;--deep:#3F4A3C;--mid:#566B50;background:var(--cream)}
+.edu h1,.edu h2,.edu h3{font-family:'Lora',Georgia,serif;font-weight:500;color:var(--deep);letter-spacing:0}
+.edu a{color:var(--green)}
+.edu .btn,.edu button.btn{background:var(--green);border-color:var(--green);color:var(--cream)}
+.edu .btn:hover{background:var(--deep);border-color:var(--deep)}
+.edu .btn.outline{background:transparent;color:var(--deep);border-color:var(--green)}
+.edu .btn.outline:hover{background:var(--sage)}
+.edu .btn.light{background:var(--cream);color:var(--deep);border-color:var(--cream)}
+.edu .btn.light:hover{background:#fff}
+.edu .card{border-color:var(--sage-line)}
+.edu .eyebrow{color:var(--green)}
+/* header and footer: cream, matching the logo file */
+.edu .site-header,.edu .site-footer{background:var(--cream);color:var(--deep)}
+.edu .site-header{border-bottom:1px solid #E0D5C0}
+.edu .site-footer{border-top:1px solid #E0D5C0;margin-top:0}
+.edu .site-header img.edu-logo{width:auto;height:46px}
+.edu .site-footer img.edu-logo{width:auto;height:42px}
+.edu .nav a,.edu .nav button.linklike{color:var(--deep);text-decoration:none}
+.edu .site-footer a{color:var(--green)}
+.edu .item-card .price-line{margin-top:2px}
+/* landing page */
+.edu-hero{padding:56px 0 32px}
+.edu-hero-grid{display:grid;gap:48px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));align-items:center}
+.edu-hero h1{font-size:clamp(34px,5vw,54px);line-height:1.1;margin-bottom:20px}
+.edu-hero img{width:100%;border-radius:4px;display:block}
+.edu-sect{padding:56px 0 8px}
+.edu-head{max-width:640px;margin-bottom:28px}
+.edu-head h2{font-size:clamp(28px,3.4vw,38px);margin-bottom:10px}
+.edu-courses{grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px}
+.edu-band{background:var(--green);color:var(--cream);border-radius:4px;padding:48px;display:grid;gap:40px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.edu-band h2,.edu-band h3{color:var(--cream)}
+.edu-band .eyebrow{color:#DCE3D5}
+.edu-band p{color:#EDF0E8}
+.edu-why{display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.edu-why h3{font-size:19px;margin-bottom:6px}
+.edu-about{display:grid;gap:48px;grid-template-columns:minmax(220px,340px) 1fr;align-items:center}
+.edu-about img{width:100%;border-radius:4px;display:block}
+.edu-notify{padding:32px;max-width:760px}
+.edu-faq{max-width:820px}
+.edu-faq details{border-top:1px solid var(--sage-line);padding:14px 0}
+.edu-faq summary{cursor:pointer;font-weight:600}
+.edu-faq details p{margin:10px 0 0}
+.edu-final{background:var(--sage);margin-top:72px;padding:64px 0;text-align:center}
+.edu-final h2{font-size:clamp(28px,3.4vw,38px);margin-bottom:10px}
+.edu-final p{margin:0 auto 24px;max-width:520px}
+@media (max-width:640px){.edu-band{padding:28px}.edu-about{grid-template-columns:1fr}.edu-hero{padding-top:32px}}
+.edu .site-footer .wrap{justify-content:flex-start;gap:14px}.edu .site-footer .wrap>div{margin-left:auto}

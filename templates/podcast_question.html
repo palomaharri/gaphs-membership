@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Podcast questions · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium">
+<div class="eyebrow">The GAPHS Podcast</div>
+<h1>Submit your questions</h1>
+<p class="lead" style="margin-top:12px">Is there something you would like answered on the podcast? Send it to Paloma here.</p>
+<div class="card sage" style="margin-top:24px;max-width:640px">
+{% if sent %}
+<p style="margin:0"><strong>Thank you, your question has been sent.</strong> Listen out for it on a future episode.</p>
+{% else %}
+<form method="post" action="/podcast/question">
+<input type="hidden" name="csrf" value="{{ csrf() }}">
+<input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+<div class="two">
+<div class="field"><label for="q_name">Name</label><input id="q_name" name="name" type="text" value="{{ user.name if user else '' }}"></div>
+<div class="field"><label for="q_email">Email</label><input id="q_email" name="email" type="email" required value="{{ user.email if user else '' }}"></div>
+</div>
+<div class="field"><label for="q_question">Your question</label><textarea id="q_question" name="question" rows="5" required></textarea></div>
+<button class="btn" type="submit">Send my question</button>
+</form>
+{% endif %}
+</div>
+<p class="small muted" style="margin-top:20px"><a href="https://open.spotify.com/show/7gqtNAEMWzvZzQUBXUFuqR" target="_blank" rel="noopener">Listen to the podcast on Spotify</a></p>
+</div></div>
+{% endblock %}

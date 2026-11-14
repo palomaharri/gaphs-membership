@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Online home staging courses · {% endblock %}
+{% block body %}
+<div class="page"><div class="wrap">
+<div class="eyebrow">GAPHS courses</div>
+<h1>Courses from the Global Association of Professional Home Stagers</h1>
+<p class="lead">GAPHS courses are included in membership. Courses offered by the Home Staging Education Centre are bought on its own website.</p>
+<div class="grid cols-3" style="margin-top:32px">
+{% for c in courses %}{% include '_course_card.html' %}{% endfor %}
+</div>
+</div></div>
+{% endblock %}

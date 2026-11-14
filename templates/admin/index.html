@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Admin · {% endblock %}
+{% block body %}
+<div class="page"><div class="wrap">
+  <div class="eyebrow">Admin</div><h1>Overview</h1>
+  {% include 'admin/_nav.html' %}
+  <div class="grid cols-3">
+    <div class="card"><div class="stat">{{ stats.active }}</div><p class="muted">Active members ({{ stats.pros }} Members, {{ stats.members }} Associates)</p></div>
+    <div class="card"><div class="stat">{{ stats.awaiting }}</div><p class="muted">Listings taken offline</p>
+      </div>
+    <div class="card"><div class="stat">{{ stats.pending_pay }}</div><p class="muted">Signed up, not yet paid</p></div>
+    <div class="card"><div class="stat">{{ stats.orders }}</div><p class="muted">Shop orders</p></div>
+  </div>
+</div></div>
+{% endblock %}

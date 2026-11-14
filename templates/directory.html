@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}Find a stager{% if country %} in {{ country }}{% endif %} · {% endblock %}
+{% block body %}
+<div class="page"><div class="wrap">
+  <div class="eyebrow">The GAPHS global directory</div>
+  <h1>{% if country %}Home stagers in {{ country }}{% else %}Find a home stager in your country{% endif %}</h1>
+  <p class="lead" style="margin-top:12px">Every GAPHS Member has completed a home staging training course and agrees to our Code of Ethics and Conduct.</p>
+
+  <form method="get" class="dir-search" role="search">
+    <div class="field" style="margin:0">
+      <label for="dir-country">Your country</label>
+      <input id="dir-country" type="text" name="country" list="dir-countries" autocomplete="country-name" value="{{ country or typed }}"
+             placeholder="Type your country, e.g. Italy" data-auto="{{ '' if (country or term) else '1' }}">
+      <datalist id="dir-countries">
+        {% for code, c in countries %}<option value="{{ c }}" data-code="{{ code }}"></option>{% endfor %}
+      </datalist>
+    </div>
+    <div class="field" style="margin:0">
+      <label for="dir-q">City, name or service <span class="muted small">(optional)</span></label>
+      <input id="dir-q" type="search" name="q" value="{{ term }}" placeholder="e.g. Madrid, vacant staging">
+    </div>
+    <button class="btn" type="submit">Find a stager</button>
+  </form>
+
+  {% if counts %}
+  <div class="country-chips" aria-label="Countries with GAPHS members">
+    {% for c, n in counts %}<a class="chip{{ ' on' if c == country }}" href="{{ url_for('auth.directory', country=c) }}">{{ c }} <span>{{ n }}</span></a>{% endfor %}
+  </div>
+  {% endif %}
+
+  {% if searched %}
+    {% if listings %}
+    <p class="muted" style="margin:32px 0 16px">{{ listings|length }} stager{{ '' if listings|length == 1 else 's' }}{% if country %} in {{ country }}{% endif %}{% if term %} matching &ldquo;{{ term }}&rdquo;{% endif %}</p>
+    <div class="grid cols-3">
+      {% for l in listings %}
+      <a class="card listing" href="{{ url_for('auth.business', slug=l.slug) }}">
+        <div class="logo">{% if l.logo %}<img src="{{ media_url(l.logo) }}" alt="">{% endif %}</div>
+        <h3>{{ l.business_name }}</h3>
+        <div class="small" style="color:var(--gold-deep);letter-spacing:.14em;text-transform:uppercase;font-size:11px">{{ l.location }}{% if l.location and l.country %} &middot; {% endif %}{{ l.country }}</div>
+        {% if l.tagline %}<div class="muted">{{ l.tagline }}</div>{% endif %}
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="card sage dir-none" style="margin-top:32px;max-width:820px">
+      <h3 style="margin:0">No GAPHS stagers {% if country %}in {{ country }} {% endif %}yet{% if term %} for &ldquo;{{ term }}&rdquo;{% endif %}.</h3>
+      {% if request.args.get('asked') %}
+      <p style="margin:10px 0 0">Thank you, we have your request. We will reply by email, usually within a few days.</p>
+      {% else %}
+      <p style="margin:10px 0 0">GAPHS is growing country by country, through members and local chapters. Tell us where your property is and we will put you in touch with a trained stager who works in your area, or with the nearest GAPHS chapter.</p>
+      <form method="post" action="{{ url_for('auth.directory_request') }}" class="dir-ask">
+        <input type="hidden" name="csrf" value="{{ csrf() }}">
+        <input type="hidden" name="country" value="{{ country or typed }}">
+        <div class="hp" aria-hidden="true"><label>Website <input name="website" tabindex="-1" autocomplete="off"></label></div>
+        <div class="field"><label for="ask-name">Your name</label><input id="ask-name" type="text" name="name" autocomplete="name"></div>
+        <div class="field"><label for="ask-email">Your email</label><input id="ask-email" name="email" type="email" required autocomplete="email"></div>
+        <div class="field"><label for="ask-city">City or area</label><input id="ask-city" type="text" name="city" placeholder="e.g. Lisbon"></div>
+        <div class="field full"><label for="ask-msg">What do you need? <span class="muted small">(optional)</span></label><textarea id="ask-msg" name="message" rows="3" placeholder="e.g. a two-bedroom flat going on sale in spring"></textarea></div>
+        <div class="full"><button class="btn" type="submit">Ask GAPHS to find a stager</button>
+        <span class="muted small" style="margin-left:12px">Or write to <a href="mailto:info@gaphs.org">info@gaphs.org</a></span></div>
+      </form>
+      {% endif %}
+    </div>
+    {% endif %}
+  {% else %}
+  <div class="grid cols-3 dir-hero" style="margin-top:40px">
+    {% for n, label in ((1, 'Find a trained professional'), (2, 'Prepare your property'), (3, 'Sell or let with confidence')) %}<div class="dir-sq"><img src="{{ img_url('dir' ~ n) }}" alt=""><span>{{ label }}</span></div>{% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="card" style="margin-top:56px;display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justify-content:space-between">
+    <div><h3 style="margin:0">Are you a home stager?</h3><p class="muted" style="margin:4px 0 0">Join GAPHS as a Member and get your page in the global directory.</p></div>
+    <a class="btn" href="{{ url_for('auth.join') }}">Become a Member</a>
+  </div>
+</div></div>
+<script>
+// Suggest the visitor's own country from their browser language (e.g. es-ES -> Spain). Nothing is sent anywhere.
+(function () {
+  var s = document.getElementById('dir-country');
+  if (!s || !s.getAttribute('data-auto') || s.value) return;
+  var m = (navigator.languages || [navigator.language || '']).join(',').match(/[a-z]{2,3}-([A-Z]{2})/);
+  if (!m) return;
+  var o = document.querySelector('#dir-countries option[data-code="' + m[1] + '"]');
+  if (o) s.value = o.value;
+})();
+</script>
+{% endblock %}

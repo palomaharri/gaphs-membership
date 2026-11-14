@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Terms and conditions · {% endblock %}
+{% block body %}
+<div class="page"><div class="wrap" style="max-width:760px">
+<div class="eyebrow">Home Staging Education Centre</div>
+<h1>Terms and conditions</h1>
+<p class="muted">Last updated 8 November 2026</p>
+
+<h2>1. Who we are</h2>
+<p>This website, homestagingeducationcentre.co.uk, is the Home Staging Education Centre. Courses, classes, e-books, guides and templates on this site are sold by <strong>Paloma Harrington Limited</strong>, a company registered in the United Kingdom ("we", "us"). You can contact us through the <a href="{{ url_for('auth.contact') }}">contact page</a>.</p>
+
+<h2>2. What we sell</h2>
+<p>We sell digital products: online courses, video classes, e-books, guides and document templates. Nothing is posted to you. By placing an order you agree to these terms.</p>
+
+<h2>3. Prices and payment</h2>
+<p>Prices are shown in pounds sterling (GBP) and are one-off payments. There are no subscriptions on this site and we do not offer payment plans or split payments. Payment is taken securely by our payment provider, Stripe, at checkout. We never see or store your card details. Your order is confirmed by email once payment has succeeded, and you receive access straight away.</p>
+
+<h2>4. No refunds</h2>
+<p>Because our products are digital and available to you immediately, <strong>all sales are final and we do not offer refunds, returns or exchanges</strong>.</p>
+<p>By buying, you ask us to give you access to the digital content straight away, and you acknowledge that once access begins you lose your legal right to cancel within 14 days.</p>
+<p>This does not affect your statutory rights. If a product is faulty, cannot be accessed, or is not as described, contact us and we will put it right. Where the law entitles you to a repair, replacement or refund, we will give it.</p>
+
+<h2>5. Access to your purchase</h2>
+<p>When you buy, you get access through your account on this site (or through the link in your confirmation email if you bought without an account). Courses marked "coming soon" are not yet available to buy. Access to a course lasts for as long as the course is available on this site. If we ever withdraw a course, we will give you reasonable notice and the opportunity to download or finish what you have bought where we are able to.</p>
+
+<h2>6. Licence and how you may use the content</h2>
+<p>Everything you buy is for your own personal or business use as a home stager. You may use our templates in your own staging business. You may not share your login, copy, resell, republish, distribute or upload our courses, classes, e-books, guides or templates (in whole or in part) for others to use, or use them to create a competing course or product.</p>
+<p>All content, videos, text, images and branding remain our intellectual property or that of our contributors.</p>
+
+<h2>7. Education, not advice</h2>
+<p>Our content is educational. We do not guarantee any particular result, income, number of clients or career outcome. Templates and agreements are general examples and are not legal, tax or financial advice. Please take professional advice for your own circumstances before you use them.</p>
+
+<h2>8. Our responsibility to you</h2>
+<p>We are responsible for losses you suffer that are a foreseeable result of us breaking these terms or failing to use reasonable care and skill. We are not responsible for losses that were not foreseeable, for business losses, or for loss of profit. Nothing in these terms limits liability for death or personal injury caused by negligence, for fraud, or for anything else the law does not allow us to limit.</p>
+
+<h2>9. Your data</h2>
+<p>How we use your personal data is explained in our <a href="{{ url_for('auth.privacy') }}">privacy policy</a>.</p>
+
+<h2>10. Changes</h2>
+<p>We may update these terms from time to time. The terms that apply to your order are the ones shown on this page when you place it.</p>
+
+<h2>11. Law and disputes</h2>
+<p>These terms are governed by the law of England and Wales, and the courts of England and Wales have jurisdiction, although if you live elsewhere in the UK you keep the right to bring a claim in your home courts.</p>
+
+<h2>12. Contact</h2>
+<p>Questions about an order or these terms? Please use the <a href="{{ url_for('auth.contact') }}">contact page</a>.</p>
+</div></div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Your courses · {% endblock %}
+{% block body %}
+<div class="page"><div class="narrow" style="max-width:720px">
+  <h1>Your courses</h1>
+  <p class="muted">Welcome back. Pick up where you left off, on any device, any time you log in.</p>
+  {% if rows %}
+  <div style="margin-top:24px;display:grid;gap:14px">
+  {% for r in rows %}
+    <div style="border:1px solid #DDD6C6;border-radius:8px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+      <strong>{{ r['title'] }}</strong>
+      <a class="btn" href="{{ url_for('members.purchase', token=r['token']) }}">Watch</a>
+    </div>
+  {% endfor %}
+  </div>
+  {% else %}
+  <p style="margin-top:24px">There are no courses on this account yet. If you bought with a different email address, log in with that one.</p>
+  <p><a class="btn" href="/">See the courses</a></p>
+  {% endif %}
+</div></div>
+{% endblock %}

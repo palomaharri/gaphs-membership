@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Test checkout · {% endblock %}
+{% block body %}
+<div class="page"><div class="narrow" style="max-width:560px">
+  <div class="eyebrow">Test mode</div>
+  <h1>Checkout</h1>
+  <div class="card" style="margin-top:24px">
+    <p style="margin:0"><strong>{{ data.name }}</strong></p>
+    <p class="amount" style="font-family:'Montserrat',sans-serif;font-size:32px;color:var(--brown);margin:8px 0">{{ money(data.amount) }}</p>
+    {% if data.then and data.then != data.amount %}<p class="small muted">Then {{ money(data.then) }} a year.</p>{% endif %}
+    <p class="small muted">This is a practice checkout. No card is charged. When Stripe is connected, members pay on Stripe's secure page instead.</p>
+    <form method="post">
+      <input type="hidden" name="csrf" value="{{ csrf() }}">
+      <button class="btn" type="submit">Pay (test)</button>
+    </form>
+  </div>
+</div></div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Edit content · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium">
+  <div class="eyebrow">Admin</div><h1>{{ c.title if c else 'New content' }}</h1>
+  {% include 'admin/_nav.html' %}
+  <form method="post" enctype="multipart/form-data" class="card">
+    <input type="hidden" name="csrf" value="{{ csrf() }}">
+    <div class="two">
+      <div class="field"><label for="title">Title</label><input id="title" name="title" type="text" required value="{{ c.title if c else '' }}"></div>
+      <div class="field"><label for="kind">Type</label><select id="kind" name="kind">{% for k, l in [('video','Video'),('pdf','PDF'),('course','Course')] %}<option value="{{ k }}" {{ 'selected' if c and c.kind == k }}>{{ l }}</option>{% endfor %}</select></div>
+    </div>
+    <div class="field"><label for="category">Section in the Library</label><select id="category" name="category">{% for k, l in [('','Automatic'),('course','Courses'),('class','Classes'),('masterclass','Master classes'),('webinar','Webinars'),('guide','Guides'),('report','Home Staging Reports'),('ebook','E-books'),('template','Document templates')] %}<option value="{{ k }}" {{ 'selected' if c and c.category == k }}>{{ l }}</option>{% endfor %}</select></div>
+    <div class="field"><label for="description">Description</label><textarea id="description" name="description" style="min-height:100px">{{ c.description if c else '' }}</textarea></div>
+    <div class="two">
+      <div class="field"><label for="video_url">Video link (YouTube, Vimeo or .mp4)</label><input id="video_url" name="video_url" type="text" value="{{ c.video_url if c else '' }}"><div class="hint">Best for large videos. Or upload below.</div></div>
+      <div class="field"><label for="file">Or upload a file (mp4 or PDF)</label><input id="file" name="file" type="file" accept="video/mp4,application/pdf">
+        {% if c and c.file_private %}<label class="check" style="margin-top:8px;font-weight:400"><input type="checkbox" name="remove_file" value="1"><span>A file is uploaded. Tick to remove it.</span></label>{% endif %}</div>
+      <div class="field"><label for="cover">Cover photo</label>{% if c and c.cover %}<img src="{{ media_url(c.cover) }}" alt="" style="max-height:80px;display:block;margin-bottom:8px">{% endif %}<input id="cover" name="cover" type="file" accept="image/*"></div>
+      <div class="field"><label for="drip_days">Opens for monthly members after (days)</label><input id="drip_days" name="drip_days" type="number" min="0" value="{{ c.drip_days if c else 0 }}"><div class="hint">0 means straight away. Annual members always see everything.</div></div>
+      <div class="field"><label for="price">Public shop price (€)</label><input id="price" name="price" type="text" inputmode="decimal" value="{{ '%.2f' % (c.price / 100) if c and c.price else '' }}"><div class="hint">Leave empty if it is for members only.</div></div>
+    </div>
+    <label class="check"><input type="checkbox" name="published" value="1" {{ 'checked' if not c or c.published }}><span>Published</span></label>
+    <label class="check"><input type="checkbox" name="featured" value="1" {{ 'checked' if c and c.featured }}><span>Show on the home page row (needs a shop price)</span></label>
+    <button class="btn" type="submit">Save</button>
+  </form>
+
+  {% if c %}
+  <form method="post" action="{{ url_for('admin.content_delete', item_id=c.id) }}" style="margin-top:16px"><input type="hidden" name="csrf" value="{{ csrf() }}">
+    <button class="btn danger small" type="submit" onclick="return confirm('Delete this?')">Delete</button></form>
+  {% endif %}
+
+  {% if c and c.kind == 'course' %}
+  <hr class="rule" id="lessons"><h2>Lessons</h2>
+  {% for l in lessons %}
+  <form method="post" action="{{ url_for('admin.lesson_update', lesson_id=l.id) }}" enctype="multipart/form-data" class="card" style="margin-top:12px">
+    <input type="hidden" name="csrf" value="{{ csrf() }}">
+    <div class="two">
+      <div class="field"><label>Title</label><input name="title" type="text" value="{{ l.title }}"></div>
+      <div class="field"><label>Opens after (days)</label><input name="drip_days" type="number" min="0" value="{{ l.drip_days }}"></div>
+      {% if l.kind == 'video' %}<div class="field"><label>Video link</label><input name="video_url" type="text" value="{{ l.video_url }}"></div>{% endif %}
+      <div class="field"><label>{{ 'Replace file' if l.file_private else 'Upload file' }} ({{ l.kind }})</label><input name="file" type="file"></div>
+    </div>
+    <details{% if l.body %} open{% endif %}><summary class="small" style="cursor:pointer;margin-bottom:8px">Lesson text {% if l.body %}({{ l.body|length }} characters){% else %}(optional){% endif %}</summary>
+      <div class="field"><textarea name="body" rows="8" aria-label="Lesson text">{{ l.body }}</textarea><div class="hint">Shown under the video or PDF. Start a line with ### for a heading; leave a blank line between paragraphs.</div></div>
+    </details>
+    <div class="row"><button class="btn small" type="submit">Save</button>
+      <button class="btn small outline" name="action" value="up" type="submit">Move up</button>
+      <button class="btn small outline" name="action" value="down" type="submit">Move down</button>
+      <button class="btn small danger" name="action" value="delete" type="submit">Remove</button></div>
+  </form>
+  {% endfor %}
+  <form method="post" action="{{ url_for('admin.lesson_add', item_id=c.id) }}" enctype="multipart/form-data" class="card sage" style="margin-top:20px">
+    <input type="hidden" name="csrf" value="{{ csrf() }}"><h3>Add a lesson</h3>
+    <div class="two">
+      <div class="field"><label for="ltitle">Title</label><input id="ltitle" name="title" type="text" required></div>
+      <div class="field"><label for="lkind">Type</label><select id="lkind" name="kind"><option value="video">Video</option><option value="pdf">PDF</option></select></div>
+      <div class="field"><label for="lurl">Video link</label><input id="lurl" name="video_url" type="text"></div>
+      <div class="field"><label for="lfile">Or upload a file</label><input id="lfile" name="file" type="file"></div>
+      <div class="field"><label for="ldrip">Opens after (days)</label><input id="ldrip" name="drip_days" type="number" min="0" value="0"></div>
+    </div>
+    <div class="field"><label for="lbody">Lesson text <span class="muted small">(optional)</span></label><textarea id="lbody" name="body" rows="5"></textarea></div>
+    <button class="btn" type="submit">Add lesson</button>
+  </form>
+  {% endif %}
+</div></div>
+{% endblock %}

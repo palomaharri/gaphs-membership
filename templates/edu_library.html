@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Resources · {% endblock %}
+{% block body %}
+{% set course_imgs = {51: 'course_intro.jpg', 52: 'course_journey.jpg', 53: 'course_business.jpg', 54: 'course_agents.jpg', 55: 'course_designers.jpg', 56: 'course_design.jpg', 57: 'course_photo.jpg'} %}
+<style>
+.edu-res{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:22px;margin-top:20px}
+.edu-res a{display:flex;flex-direction:column;border:1px solid #DAD3C4;border-radius:10px;background:#FBF9F4;text-decoration:none;color:inherit;overflow:hidden;transition:border-color .15s,transform .15s}
+.edu-res a:hover{border-color:#9C7D2F;transform:translateY(-2px)}
+.edu-res .cv{aspect-ratio:4/3;background:#E4E8DC;overflow:hidden}
+.edu-res .cv img{width:100%;height:100%;object-fit:cover;display:block}
+.edu-res .b{display:flex;flex-direction:column;gap:10px;flex:1;padding:20px 22px 20px}
+.edu-res h3{margin:0;font-size:20px;line-height:1.25}
+.edu-res .d{flex:1;margin:0;font-size:14px;line-height:1.55;color:#6B6B6B}
+.edu-res .p{font-family:'Inter',sans-serif;font-size:15px;font-weight:600;color:#9C7D2F}
+.edu-res .yours{display:inline-block;align-self:flex-start;padding:3px 12px;border-radius:999px;background:#9C7D2F;color:#F6F1E9;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+</style>
+<div class="page"><div class="wrap">
+<div class="eyebrow">Home Staging Education Centre</div>
+<h1>Resources</h1>
+<p class="lead">Guides, e-books, templates and classes to help you learn home staging and run your business. Buy one at a time. Your purchase is linked to your email address, so you can log in and watch whenever you like.</p>
+{% for key, title, desc, rows in sections %}
+<h2 style="margin-top:52px;margin-bottom:4px">{{ title.split(':')[0] }}</h2>
+{% if desc %}<p class="muted" style="margin:0">{{ desc|replace('HSA guides','guides')|replace('HSA ','') }}</p>{% endif %}
+<div class="edu-res">
+{% for r in rows %}{% set c = r.c %}
+<a href="{% if r.gift or r.ok %}{{ url_for('members.item', item_id=c.id) }}{% else %}{{ url_for('members.shop_item', item_id=c.id) }}{% endif %}">
+{% if c.cover %}<div class="cv"><img src="{{ media_url(c.cover) }}" alt=""></div>{% elif course_imgs.get(c.id) %}<div class="cv"><img src="{{ url_for('static', filename='img/courses/' + course_imgs[c.id]) }}" alt=""></div>{% endif %}
+<div class="b">
+<h3>{{ c.title }}</h3>
+{% if c.description %}<p class="d">{{ c.description|striptags|truncate(120) }}</p>{% else %}<p class="d"></p>{% endif %}
+{% if r.gift %}<span class="p">A gift to you · Free</span>{% elif r.ok %}<span class="yours">Yours</span>{% elif c.price %}<span class="p">£{{ '%.2f' % (c.price/100) }}</span>{% else %}<span class="p">Free</span>{% endif %}
+</div>
+</a>
+{% endfor %}
+</div>
+{% endfor %}
+</div></div>
+{% endblock %}

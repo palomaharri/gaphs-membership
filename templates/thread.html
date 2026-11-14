@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% macro avatar(x) %}<span class="avatar{% if x.is_admin %} hsa{% endif %}">{% if x.is_admin %}<img src="{{ url_for('static', filename='img/gaphs-mark-gold.svg') }}" alt="">{% elif x.logo %}<img src="{{ media_url(x.logo) }}" alt="">{% else %}{{ (x.author or '?')[:1]|upper }}{% endif %}</span>{% endmacro %}
+{% block title %}{{ t.title }} · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium">
+  <p class="small"><a href="{{ url_for('members.forum') }}">Forum</a> &rsaquo; <a href="{{ url_for('members.forum_category', cat_id=cat.id) }}">{{ cat.title }}</a></p>
+  <h1>{{ t.title }}</h1>
+  {% if user.is_admin %}<form method="post" action="{{ url_for('members.forum_pin', thread_id=t.id) }}"><input type="hidden" name="csrf" value="{{ csrf() }}"><button class="btn small outline" type="submit">{{ 'Unpin' if t.pinned else 'Pin' }} thread</button></form>{% endif %}
+  <div style="margin-top:16px">
+  {% for p in posts %}
+    <div class="post">
+      <div class="who">{{ avatar(p) }}<span>{% if p.slug %}<a href="{{ url_for('auth.business', slug=p.slug) }}">{{ p.author }}</a>{% else %}{{ p.author }}{% endif %}
+        <span class="muted small" style="font-weight:400"> · {{ fmt_date(p.created_at) }}</span></span></div>
+      <div class="prewrap" style="margin-top:8px">{{ forum_html(p.body) }}</div>
+      {% if p.user_id == user.id or user.is_admin %}
+      <form method="post" action="{{ url_for('members.forum_delete_post', post_id=p.id) }}" style="margin-top:8px"><input type="hidden" name="csrf" value="{{ csrf() }}">
+        <button class="linklike small" type="submit">Delete</button></form>{% endif %}
+    </div>
+  {% endfor %}
+  </div>
+  <span id="end"></span>
+  <h2 style="margin-top:40px">Reply</h2>
+  <p class="muted small" style="margin:6px 0 0">Type @ and a name to tag another member.</p>
+  <form method="post" action="{{ url_for('members.forum_reply', thread_id=t.id) }}" class="card" style="margin-top:16px">
+    <input type="hidden" name="csrf" value="{{ csrf() }}">
+    <div class="field"><label for="body" class="sr-only">Message</label><textarea id="body" name="body" data-mention required></textarea></div>
+    <button class="btn" type="submit">Post reply</button>
+  </form>
+</div></div>
+{% include '_mention.html' %}
+{% endblock %}

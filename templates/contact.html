@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Contact · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium">
+  <div class="eyebrow">Get in touch</div>
+  <h1>Contact us</h1>
+  <p class="lead" style="margin-top:12px">Contact us at <a href="mailto:info@gaphs.org">info@gaphs.org</a></p>
+  <p class="muted" style="margin-top:12px">A question about membership, chapters, partnerships or your business page? Write to us and we will reply as soon as we can.</p>
+  <p style="margin-top:24px"><a class="btn" href="{{ url_for('auth.home') }}">Back to the home page</a></p>
+</div></div>
+{% endblock %}

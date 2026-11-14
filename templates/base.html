@@ -1,0 +1,113 @@
+<!doctype html>
+{% set brand = brand|default({'name': 'GAPHS · Global Association of Professional Home Stagers', 'short': 'GAPHS', 'theme': '#1A1A1A'}) %}
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{% endblock %}{{ brand.name }}</title>
+{% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}">{% endif %}
+{% block meta %}{% endblock %}
+<link rel="stylesheet" href="/fonts/fonts.css">
+{% if is_edu %}
+{% else %}
+{% endif %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+{% if is_edu %}<link rel="stylesheet" href="{{ url_for('static', filename='css/edu.css') }}">{% endif %}
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="{{ brand.theme }}">
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/edu-apple-touch-icon.png' if is_edu else 'icons/apple-touch-icon.png') }}">
+{% if not is_edu %}<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='icons/favicon-32.png') }}">
+<link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='icons/icon.svg') }}">{% endif %}
+{% if is_edu %}<link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='icons/edu-192.png') }}">{% endif %}
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="{{ brand.short }}">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body{% if is_edu %} class="edu"{% endif %}>
+{% if test_mode and not is_edu %}<div class="testbanner">Test mode: payments are simulated until Stripe is connected. No money moves.</div>{% endif %}
+{% if is_edu %}
+<header class="site-header edu-header">
+<div class="wrap">
+<a href="/"><img class="edu-logo" src="{{ url_for('static', filename='img/edu/logo.png') }}" alt="Home Staging Education Centre"></a>
+<nav class="nav" aria-label="Main">
+<a href="{{ url_for('members.courses') }}">Courses</a><a href="{{ url_for('members.library') }}">Resources</a>
+<a href="/#about">About</a>
+{% if user %}
+<a href="{{ url_for('auth.dashboard') }}">My account</a>
+{% if user.is_admin %}<a href="{{ url_for('admin.index') }}">Admin</a>{% endif %}
+<form method="post" action="{{ url_for('auth.logout') }}" style="margin:0">
+<input type="hidden" name="csrf" value="{{ csrf() }}">
+<button class="linklike" type="submit">Log out</button>
+</form>
+{% else %}
+<a href="{{ url_for('auth.login') }}">Log in</a>
+{% endif %}
+</nav>
+</div>
+</header>
+{% else %}
+<header class="site-header">
+<div class="wrap">
+<a href="{{ url_for('auth.home') }}" aria-label="GAPHS home"><img src="{{ url_for('static', filename='img/gaphs-wordmark-white.svg') }}" alt="GAPHS"></a>
+<nav class="nav" aria-label="Main">
+<a href="{{ url_for('auth.directory') }}">Find a stager</a>
+<a href="{{ url_for('members.courses') }}">Courses</a>
+<a href="{{ url_for('members.library') }}">Library</a>
+{% if user and can_access(user) %}
+<a href="{{ url_for('members.forum') }}">Forum</a>
+{% endif %}
+{% if user %}
+<a href="{{ url_for('auth.dashboard') }}">My account</a>
+{% if user.is_admin %}<a href="{{ url_for('admin.index') }}">Admin</a>{% endif %}
+<form method="post" action="{{ url_for('auth.logout') }}" style="margin:0">
+<input type="hidden" name="csrf" value="{{ csrf() }}">
+<button class="linklike" type="submit">Log out</button>
+</form>
+{% else %}
+<a href="{{ url_for('auth.login') }}">Log in</a>
+<a class="btn light" href="{{ url_for('auth.join') }}">Join</a>
+{% endif %}
+</nav>
+</div>
+</header>
+{% endif %}
+{% include '_flash.html' %}
+<main>
+{% block body %}{% endblock %}
+</main>
+{% if is_edu %}
+<footer class="site-footer edu-footer">
+<div class="wrap">
+<img class="edu-logo" src="{{ url_for('static', filename='img/edu/logo.png') }}" alt="Home Staging Education Centre">
+{% include '_hsa_round.html' %}
+<div>
+<a href="{{ url_for('members.courses') }}">Courses</a> &nbsp;
+<a href="{{ url_for('auth.terms') }}">Terms</a> &nbsp;
+<a href="{{ url_for('auth.privacy') }}">Privacy</a> &nbsp;
+<a href="{{ url_for('auth.contact') }}">Contact</a>
+</div>
+</div>
+
+</footer>
+{% else %}
+<footer class="site-footer">
+<div class="wrap">
+<div>
+<img src="{{ url_for('static', filename='img/gaphs-logo-white.svg') }}" alt="GAPHS, Global Association of Professional Home Stagers">
+<div style="margin-top:14px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#888888">Knowledge partner of CEPI &middot; Member of FIABCI</div>
+</div>
+<div>
+<a href="{{ url_for('auth.terms') }}">Terms</a> &nbsp;
+<a href="{{ url_for('auth.privacy') }}">Privacy</a> &nbsp;
+<a href="{{ url_for('auth.code_of_conduct') }}">Code of Ethics</a> &nbsp;
+<a href="/faqs">FAQs</a> &nbsp;
+<a href="{{ url_for('auth.contact') }}">Contact</a> &nbsp;
+<a href="https://www.gaphs.org" rel="noopener">gaphs.org</a>
+</div>
+</div>
+</footer>
+{% endif %}
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+</body>
+</html>

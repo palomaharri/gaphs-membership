@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Blocked list · {% endblock %}
+{% block body %}
+<div class="page"><div class="wrap">
+  <div class="eyebrow">Admin</div><h1>Blocked list</h1>
+  {% include 'admin/_nav.html' %}
+  <p class="muted">People and companies on this list cannot sign up, buy, or join with a code. They see a neutral message. A name matches if it appears in the name, business name or email they enter.</p>
+  {% if found %}
+  <div class="card" style="margin:20px 0"><strong>Already in your members list ({{ found|length }})</strong>
+    <ul>{% for u in found %}<li>{{ u.name }} · {{ u.email }}{% if u.business_name %} · {{ u.business_name }}{% endif %} ({{ u.status }}) <a href="{{ url_for('admin.members', q=u.email) }}">Open in Members</a></li>{% endfor %}</ul></div>
+  {% endif %}
+  <form method="post" class="card" style="margin:20px 0">
+    <input type="hidden" name="csrf" value="{{ csrf() }}">
+    <div class="two">
+      <div class="field"><label for="kind">Type</label><select id="kind" name="kind"><option value="name">Name (person or business)</option><option value="domain">Email domain (company.com)</option><option value="email">Email address</option></select></div>
+      <div class="field"><label for="note">Private note (optional)</label><input id="note" name="note" type="text" placeholder="Company"></div>
+    </div>
+    <div class="field"><label for="entries">One per line</label><textarea id="entries" name="entries" required placeholder="Name Surname"></textarea></div>
+    <button class="btn" type="submit">Add to blocked list</button>
+  </form>
+  <div class="table-wrap"><table class="t"><thead><tr><th>Type</th><th>Entry</th><th>Note</th><th></th></tr></thead><tbody>
+  {% for r in rows %}<tr><td>{{ r.kind }}</td><td>{{ r.value }}</td><td>{{ r.note }}</td>
+    <td><form method="post" style="display:inline"><input type="hidden" name="csrf" value="{{ csrf() }}"><input type="hidden" name="id" value="{{ r.id }}">
+    <button class="btn small danger" name="do" value="delete" type="submit" onclick="return confirm('Remove this entry?')">Remove</button></form></td></tr>{% endfor %}
+  </tbody></table></div>
+</div></div>
+{% endblock %}

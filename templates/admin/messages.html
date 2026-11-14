@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Messages · {% endblock %}
+{% block body %}
+<div class="page"><div class="wrap">
+  <div class="eyebrow">Admin</div><h1>Messages</h1>
+  {% include 'admin/_nav.html' %}
+  {% for r in rows %}
+  <div class="card" style="margin-bottom:16px;{{ 'opacity:.6' if r.handled }}">
+    <div class="small muted">{{ fmt_date(r.created_at) }} · {{ r.name or 'No name' }} · <a href="mailto:{{ r.email }}">{{ r.email }}</a></div>
+    <p style="white-space:pre-wrap;margin:10px 0 14px 0">{{ r.body }}</p>
+    <form method="post" class="row" style="gap:8px">
+      <input type="hidden" name="csrf" value="{{ csrf() }}"><input type="hidden" name="id" value="{{ r.id }}">
+      <button class="btn outline" type="submit">{{ 'Mark as not done' if r.handled else 'Mark as done' }}</button>
+      <button class="btn outline" type="submit" name="do" value="delete">Delete</button>
+    </form>
+  </div>
+  {% else %}<p class="muted">No messages yet.</p>{% endfor %}
+</div></div>
+{% endblock %}

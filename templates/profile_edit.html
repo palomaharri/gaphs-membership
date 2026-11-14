@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}My business page · {% endblock %}
+{% block body %}
+{% set f = form if form else p %}
+<div class="page"><div class="medium">
+  <div class="eyebrow">My business page</div>
+  <h1>Edit your page</h1>
+  <p class="lead" style="margin-top:12px">
+    {% if not public %}Your plan does not include a public directory page, but you can keep your details up to date here.
+    {% elif missing %}Your page goes live once these are filled in: {{ missing|join(', ')|lower }}.
+    {% elif not p.approved %}Your page has been taken offline. Please get in touch with us.
+    {% elif p.published %}Your page is live: <a href="{{ url_for('auth.business', slug=p.slug) }}">view it</a>.
+    {% else %}Your page is hidden from the public.{% endif %}
+    {% if p.slug %}<a href="{{ url_for('auth.business', slug=p.slug) }}">Preview</a>{% endif %}
+  </p>
+
+  {% if errors %}<div class="errors" role="alert"><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+
+  <form method="post" enctype="multipart/form-data">
+    <input type="hidden" name="csrf" value="{{ csrf() }}">
+    <div class="field"><label for="business_name">Business name</label><input id="business_name" name="business_name" type="text" required value="{{ f.get('business_name') or '' }}"></div>
+    <div class="field"><label for="tagline">One-line description</label><input id="tagline" name="tagline" type="text" maxlength="160" value="{{ f.get('tagline') or '' }}"></div>
+    <div class="field"><label for="bio">About your business</label><textarea id="bio" name="bio">{{ f.get('bio') or '' }}</textarea></div>
+    <div class="two">
+      <div class="field"><label for="location">Where you work</label><input id="location" name="location" type="text" value="{{ f.get('location') or '' }}"></div>
+      <div class="field"><label for="address">Business address</label><input id="address" name="address" type="text" required value="{{ f.get('address') or '' }}" placeholder="Street, town, postcode"><div class="small muted" style="margin-top:4px">For our records only. It is never shown on the public directory.</div></div>
+      <div class="field"><label for="country">Country</label><select id="country" name="country" required><option value="">Choose your country</option>{% for c in country_names %}<option value="{{ c }}" {% if f.get('country') == c %}selected{% endif %}>{{ c }}</option>{% endfor %}</select></div>
+      <div class="field"><label for="logo">Logo</label>
+        {% if p.logo %}<div style="margin-bottom:8px"><img src="{{ media_url(p.logo) }}" alt="Current logo" style="max-height:64px"></div>{% endif %}
+        <input id="logo" name="logo" type="file" accept="image/png,image/jpeg,image/webp">
+        {% if p.logo %}<label class="check" style="margin-top:8px;font-weight:400"><input type="checkbox" name="remove_logo" value="1"><span>Remove my logo</span></label>{% endif %}
+      </div>
+    </div>
+    <div class="field"><label for="services">Services</label><textarea id="services" name="services" style="min-height:90px">{{ f.get('services') or '' }}</textarea></div>
+    <div class="two">
+      <div class="field"><label for="contact_email">Contact email</label><input id="contact_email" name="contact_email" type="email" value="{{ f.get('contact_email') or '' }}"></div>
+      <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" value="{{ f.get('phone') or '' }}"></div>
+      <div class="field"><label for="website">Website</label><input id="website" name="website" type="text" value="{{ f.get('website') or '' }}"></div>
+      <div class="field"><label for="instagram">Instagram</label><input id="instagram" name="instagram" type="text" value="{{ f.get('instagram') or '' }}"></div>
+      <div class="field"><label for="facebook">Facebook</label><input id="facebook" name="facebook" type="text" value="{{ f.get('facebook') or '' }}"></div>
+      <div class="field"><label for="linkedin">LinkedIn</label><input id="linkedin" name="linkedin" type="text" value="{{ f.get('linkedin') or '' }}"></div>
+    </div>
+    <label class="check"><input type="checkbox" name="published" value="1" {% if (form and form.get('published')) or (not form and p.published) %}checked{% endif %}><span>Show my page to the public</span></label>
+    <button class="btn" type="submit">Save changes</button>
+  </form>
+
+  <hr class="rule" id="gallery">
+  <h2 style="margin-bottom:8px">Photo gallery</h2>
+  <p class="muted" style="margin-top:0">Up to 6 photos of your work. Large photos are shrunk automatically.</p>
+  {% if photos %}
+  <div class="gallery" style="margin:20px 0">
+    {% for ph in photos %}
+    <div class="item"><img src="{{ media_url(ph.path) }}" alt="">
+      <form method="post" action="{{ url_for('auth.gallery_delete', photo_id=ph.id) }}"><input type="hidden" name="csrf" value="{{ csrf() }}">
+        <button class="btn small light" type="submit" aria-label="Remove this photo">Remove</button></form></div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <form method="post" action="{{ url_for('auth.gallery_add') }}" enctype="multipart/form-data" class="row">
+    <input type="hidden" name="csrf" value="{{ csrf() }}">
+    <input type="file" name="photos" accept="image/png,image/jpeg,image/webp" multiple style="max-width:340px">
+    <button class="btn outline" type="submit">Add photos</button>
+  </form>
+</div></div>
+{% endblock %}

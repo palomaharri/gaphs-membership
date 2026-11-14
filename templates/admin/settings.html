@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Prices · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium">
+  <div class="eyebrow">Admin</div><h1>Prices and listings</h1>
+  {% include 'admin/_nav.html' %}
+  <form method="post" class="card">
+    <input type="hidden" name="csrf" value="{{ csrf() }}">
+    <h3>Prices (€)</h3>
+    <div class="two">
+      {% for key, lbl in [('member_annual','Associate, per year'),('member_monthly','Associate, per month'),('pro_annual','Member, per year'),('pro_monthly','Member, per month')] %}
+      <div class="field"><label for="{{ key }}">{{ lbl }}</label><input id="{{ key }}" name="{{ key }}" type="text" inputmode="decimal" value="{{ '%.2f' % (v[key]|int / 100) }}">
+        {% if key.endswith('monthly') and not v[key]|int %}<div class="hint">Not set yet: the monthly option stays hidden until you add a price.</div>{% endif %}</div>
+      {% endfor %}
+    </div>
+    <input type="hidden" name="founding_limit" value="0"><input type="hidden" name="founding_code" value="">
+    <h3>Public pages</h3>
+    <label class="check"><input type="checkbox" name="public_member" value="1" {{ 'checked' if 'member' in v.public_plans.split(',') }}><span>Associates get a public directory page</span></label>
+    <label class="check"><input type="checkbox" name="public_professional" value="1" {{ 'checked' if 'professional' in v.public_plans.split(',') }}><span>Members get a public directory page</span></label>
+    <button class="btn" type="submit">Save</button>
+  </form>
+</div></div>
+{% endblock %}

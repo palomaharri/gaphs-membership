@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Home page photos · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium">
+  <div class="eyebrow">Admin</div><h1>Home page photos</h1>
+  {% include 'admin/_nav.html' %}
+  {% for key, lbl in slots %}
+  <form method="post" enctype="multipart/form-data" class="card" style="margin-bottom:16px">
+    <input type="hidden" name="csrf" value="{{ csrf() }}"><input type="hidden" name="key" value="{{ key }}">
+    <div class="row" style="gap:20px">
+      {% if img_url(key) %}<img src="{{ img_url(key) }}" alt="" style="width:120px;height:80px;object-fit:cover;border-radius:4px">{% endif %}
+      <div style="flex:1;min-width:200px"><strong>{{ lbl }}</strong><br><input name="image" type="file" accept="image/*" aria-label="Photo for {{ lbl }}"></div>
+      <button class="btn small" type="submit">Replace</button>
+      <button class="btn small outline" name="reset" value="1" type="submit">Use original</button>
+    </div>
+  </form>{% endfor %}
+</div></div>
+{% endblock %}

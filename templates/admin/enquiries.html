@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Enquiries · {% endblock %}
+{% block body %}
+<div class="page"><div class="wrap">
+  <div class="eyebrow">Admin</div><h1>Enquiries</h1>
+  {% include 'admin/_nav.html' %}
+  <p class="muted" style="max-width:760px">Messages clients have sent to members through the contact form on their directory page. Each one is emailed to the member, and a copy is emailed to you.</p>
+  <p><span class="badge dark">{{ total }} enquir{{ 'y' if total == 1 else 'ies' }} in total</span></p>
+
+  <h2 style="margin-top:28px">By member</h2>
+  <div class="table-wrap"><table class="t"><thead><tr><th>Member</th><th>Enquiries</th><th>Latest</th><th></th></tr></thead>
+  <tbody>{% for t in totals %}<tr>
+    <td><strong>{{ t.business or 'Member ' ~ t.user_id }}</strong></td>
+    <td>{{ t.n }}</td>
+    <td class="small">{{ fmt_date(t.last_at) }}</td>
+    <td class="small"><a href="{{ url_for('admin.enquiries', member=t.user_id) }}">See messages</a>{% if t.slug %} · <a href="{{ url_for('auth.business', slug=t.slug) }}" target="_blank" rel="noopener">Page</a>{% endif %}</td>
+  </tr>{% endfor %}</tbody></table></div>
+  {% if not totals %}<p class="muted">No enquiries yet.</p>{% endif %}
+
+  <h2 style="margin-top:36px">{{ 'Messages for this member' if member else 'Latest messages' }}</h2>
+  {% if member %}<p class="small"><a href="{{ url_for('admin.enquiries') }}">Show all members</a></p>{% endif %}
+  {% for r in rows %}
+  <div class="card" style="margin:14px 0">
+    <div class="row" style="justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div><strong>{{ r.name }}</strong> <span class="small muted">to {{ r.business }}</span><br><span class="small"><a href="mailto:{{ r.email }}">{{ r.email }}</a>{% if r.phone %} · {{ r.phone }}{% endif %}</span></div>
+      <div class="small muted">{{ fmt_date(r.created_at) }}{% if not r.delivered %} <span class="badge warn">Email to member failed</span>{% endif %}</div>
+    </div>
+    <p class="prewrap" style="margin:12px 0 0">{{ r.message }}</p>
+  </div>
+  {% endfor %}
+</div></div>
+{% endblock %}

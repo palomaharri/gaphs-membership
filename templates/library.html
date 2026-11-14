@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Library · {% endblock %}
+{% block body %}
+<div class="page"><div class="wrap">
+  <div class="eyebrow">Library</div>
+  <h1>Courses, guides, video guides and tools</h1>
+  {% if member %}
+    <p class="lead">Everything from GAPHS is free for you as a member.{% if user.billing == 'monthly' and not user.comped and not user.is_admin %} New course content opens up regularly throughout your membership.{% endif %}</p>
+  {% else %}
+  <div class="card sage" style="margin-top:24px;padding:18px 24px">
+    Everything from GAPHS below is free for members. Courses from the Home Staging Education Centre are bought on its own website. Not a member yet? <a href="{{ url_for('auth.join') }}"><strong>Join now</strong></a> and unlock access. Or purchase single items, no account needed.
+    {% if not user %}<br>Already a member? <a href="{{ url_for('auth.login', next=url_for('members.library')) }}">Log in</a>.{% endif %}
+  </div>
+  {% endif %}
+  <div class="row" style="margin-top:28px;gap:8px;flex-wrap:wrap">
+    <a class="btn small {{ '' if not active else 'outline' }}" href="{{ url_for('members.library') }}">All</a>
+    {% for k, l in tabs %}<a class="btn small {{ '' if active == k else 'outline' }}" href="{{ url_for('members.library', type=k) }}">{{ l }}</a>{% endfor %}
+  </div>
+  {% for k, t, d, rows in sections %}
+  <section id="{{ k }}" style="margin-top:56px;scroll-margin-top:90px">
+    <h2 style="margin:0">{{ t }}</h2>
+    <p class="muted" style="margin:6px 0 0 0">{{ d }}</p>
+    <div class="grid cols-3" style="margin-top:20px">
+      {% for r in rows %}{% set c = r.c %}
+      {% if c.category == 'report' %}{% set href = url_for('members.shop_item', item_id=c.id) %}{% elif member %}{% set href = url_for('members.item', item_id=c.id) %}
+      {% elif c.price and c.price > 0 %}{% set href = url_for('members.shop_item', item_id=c.id) %}
+      {% else %}{% set href = url_for('members.shop_item', item_id=c.id) %}{% endif %}
+      <a class="item-card" href="{{ href }}">
+        <div class="cover">{% if c.cover %}<img src="{{ media_url(c.cover) }}" alt="">{% else %}{% set ns = namespace(img='') %}{% for sc in sales_courses %}{% if sc.title|lower|trim == c.title|lower|trim %}{% set ns.img = sc.img %}{% endif %}{% endfor %}{% if ns.img %}<img src="{{ url_for('static', filename='img/courses/' + ns.img) }}" alt="">{% endif %}{% endif %}</div>
+        <h3 style="margin:0">{{ c.title }}</h3>
+        {% if c.category == 'report' %}<span class="small muted">Free for everyone</span>{% elif member %}<span class="small muted">Included</span>
+        {% elif c.price and c.price > 0 %}<span>{{ money(c.price) }}</span>
+        {% else %}<span class="small muted">Included with membership</span>{% endif %}
+      </a>
+      {% endfor %}
+      {% if k == 'course' %}{% for sc in sales_courses %}{% if not course_row(sc) %}
+      <a class="item-card" href="{{ url_for('members.course_page', slug=sc.slug) }}">
+        <div class="cover"><img src="{{ url_for('static', filename='img/courses/' + sc.img) }}" alt=""></div>
+        <h3 style="margin:0">{{ sc.title }}</h3>
+        <span class="small muted">{% if sc.external %}{% with c = sc %}{% include '_price.html' %}{% endwith %} · Offered by the {{ sc.provider }}{% elif sc.price %}€{{ (sc.price/100)|int }} · opening soon{% else %}Free · opening soon{% endif %}</span>
+      </a>
+      {% endif %}{% endfor %}{% endif %}
+    </div>
+  </section>
+  {% endfor %}
+  {% if not sections %}<p class="muted" style="margin-top:32px">Content is on its way.</p>{% endif %}
+</div></div>
+{% endblock %}

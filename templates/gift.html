@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Our gift to you · {% endblock %}
+{% block body %}
+{% if token %}
+<div class="page"><div class="medium">
+  <div class="eyebrow">Our gift to you</div>
+  <h1>Your free guide</h1>
+  <p class="lead" style="margin-top:12px">Thank you. It is yours to keep.</p>
+  <div class="row" style="gap:12px;margin-top:24px;flex-wrap:wrap">
+    {% if report %}<a class="btn" href="/library/{{ report.id }}">Read the {{ report.title }}</a>{% endif %}
+    <a class="btn" href="{{ url_for('members.purchase', token=token) }}">Open the guide: {{ c.title }}</a>
+  </div>
+</div></div>
+{% else %}
+<div class="page"><div class="medium">
+  <div class="eyebrow">Our gift to you</div>
+  <h1>{{ c.title }}</h1>
+  <p class="lead" style="margin-top:12px">A free guide from the Global Association of Professional Home Stagers. Enter your email and we will take you straight to it.</p>
+  <img src="{{ media_url(c.cover) }}" alt="{{ c.title }}" style="width:100%;max-width:520px;display:block;border-radius:4px;margin:24px 0">
+  <form method="post" class="row" style="gap:10px">
+    <input type="hidden" name="csrf" value="{{ csrf() }}">
+    <input type="email" name="email" required placeholder="Your email" aria-label="Your email" style="flex:1 1 240px">
+    <button class="btn" type="submit">Send me the guide</button>
+  </form>
+  <p class="small muted" style="margin-top:12px">We will also send you the occasional GAPHS news. Unsubscribe any time.</p>
+</div></div>
+{% endif %}
+{% endblock %}

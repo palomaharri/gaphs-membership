@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Forum categories · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium">
+  <div class="eyebrow">Admin</div><h1>Forum categories</h1>
+  {% include 'admin/_nav.html' %}
+  {% for c in cats %}
+  <form method="post" class="card" style="margin-bottom:12px"><input type="hidden" name="csrf" value="{{ csrf() }}"><input type="hidden" name="id" value="{{ c.id }}">
+    <div class="two"><div class="field"><label>Title</label><input name="title" value="{{ c.title }}"></div><div class="field"><label>Description</label><input name="description" value="{{ c.description }}"></div></div>
+    <div class="row"><button class="btn small" name="action" value="save">Save</button>
+    <button class="btn small danger" name="action" value="delete" onclick="return confirm('Delete this category and all its threads?')">Delete</button></div></form>
+  {% endfor %}
+  <form method="post" class="card sage"><input type="hidden" name="csrf" value="{{ csrf() }}"><input type="hidden" name="action" value="add"><h3>Add a category</h3>
+    <div class="two"><div class="field"><label for="nt">Title</label><input id="nt" name="title" required></div><div class="field"><label for="nd">Description</label><input id="nd" name="description"></div></div>
+    <button class="btn" type="submit">Add</button></form>
+</div></div>
+{% endblock %}

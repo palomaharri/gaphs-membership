@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Orders · {% endblock %}
+{% block body %}
+<div class="page"><div class="wrap">
+  <div class="eyebrow">Admin</div><h1>Orders</h1>
+  {% include 'admin/_nav.html' %}
+  <div class="table-wrap"><table class="t"><thead><tr><th>Date</th><th>Item</th><th>Email</th><th>Paid</th><th>Access link</th></tr></thead>
+  <tbody>{% for r in rows %}<tr><td>{{ fmt_date(r.paid_at) }}</td><td>{{ r.title }}</td><td>{{ r.email }}</td><td>{{ money(r.amount) }}</td><td>{% if r.token %}<a href="https://homestagingeducationcentre.co.uk/purchase/{{ r.token }}">Open</a> <span class="muted" style="font-size:12px">/purchase/{{ r.token }}</span>{% endif %}</td></tr>
+  {% else %}<tr><td colspan="5" class="muted">No orders yet.</td></tr>{% endfor %}</tbody></table></div>
+</div></div>
+{% endblock %}

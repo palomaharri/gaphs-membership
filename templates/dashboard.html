@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% block title %}My account · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium">
+  <div class="eyebrow">My account</div>
+  <h1>Hello{% if user.name %}, {{ user.name.split(' ')[0] }}{% endif %}.</h1>
+
+  <div class="grid" style="margin-top:32px;align-items:stretch">
+    <div class="card sage stack">
+      <h3>My membership</h3>
+      {% if user.plan %}
+      <p style="margin:0"><strong>{{ 'Accredited' if acc_status(user.id) == 'accredited' else plan_label(user.plan) }}</strong>
+        <span class="muted">· {{ 'annual' if user.billing == 'annual' else 'monthly' }}</span>
+        {% if user.founding %}<span class="badge dark" style="margin-left:6px">Founding rate</span>{% endif %}</p>
+      <p style="margin:0">
+        {% if user.status == 'active' %}<span class="badge dark">Active</span>
+        {% elif user.status == 'past_due' %}<span class="badge warn">Payment problem</span>
+        {% elif user.status == 'pending' %}<span class="badge warn">Waiting for payment</span>
+        {% else %}<span class="badge warn">Ended</span>{% endif %}
+        {% if user.comped %}<span class="badge">Complimentary</span>{% endif %}
+      </p>
+      <ul class="small" style="margin:0;padding-left:18px">
+        {% if user.started_at %}<li>Member since {{ fmt_date(user.started_at) }}</li>{% endif %}
+        {% if user.period_end and user.status in ('active','past_due') %}<li>{{ 'Renews' if user.billing else 'Ends' }} on {{ fmt_date(user.period_end) }}</li>{% endif %}
+        {% if user.billing == 'annual' %}<li>Full access to all content.</li>
+        {% elif user.billing == 'monthly' %}<li>New course content opens up regularly throughout your membership.</li>{% endif %}
+        {% set _acc = acc_status(user.id) %}{% if _acc and _acc != 'accredited' %}<li>Accreditation application: <a href="/accreditation">{{ 'feedback is waiting for you' if _acc == 'feedback' else 'under review' }}</a></li>{% endif %}
+      </ul>
+      {% if next_content %}
+        <p class="small" style="margin:0">Next to open: <strong>{{ next_content.title }}</strong> ({{ next_content.course }}) in {{ next_content.in_days }} day{{ '' if next_content.in_days == 1 else 's' }}.</p>
+      {% endif %}
+      {% if user.status == 'past_due' %}<p class="small" style="margin:0">Your last payment did not go through. Please update your card.</p>{% endif %}
+      <div class="row">
+        {% if user.status in ('pending', 'canceled') and not user.comped %}
+          <form method="post" action="{{ url_for('auth.checkout_start') }}"><input type="hidden" name="csrf" value="{{ csrf() }}">
+            <button class="btn" type="submit">{{ 'Complete payment' if user.status == 'pending' else 'Rejoin' }}</button></form>
+        {% endif %}
+        {% if user.status in ('active', 'past_due') and not user.comped %}
+          <form method="post" action="{{ url_for('auth.billing_portal') }}"><input type="hidden" name="csrf" value="{{ csrf() }}">
+            <button class="btn outline" type="submit">Manage billing or cancel</button></form>
+        {% endif %}
+      </div>
+      {% else %}
+      <p>You have not chosen a plan yet.</p>
+      <a class="btn" href="{{ url_for('auth.join') }}">See the plans</a>
+      {% endif %}
+    </div>
+
+    <div class="card stack">
+      <h3>Quick links</h3>
+      {% if has_access %}
+        <p style="margin:0"><a href="{{ url_for('members.library') }}">Library</a></p>
+        <p style="margin:0"><a href="{{ url_for('members.forum') }}">Discussion forum</a></p>
+      {% endif %}
+      <p style="margin:0"><a href="{{ url_for('auth.profile_edit') }}">Edit my business page</a></p>
+      {% if profile and profile.slug %}<p style="margin:0">Enquiries received through your page: <strong>{{ enquiry_count(user.id) }}</strong></p>{% endif %}
+      {% if profile and profile.slug and listing == 'live' %}
+        <p style="margin:0"><a href="{{ url_for('auth.business', slug=profile.slug) }}">View my public page</a></p>
+      {% endif %}
+      {% if listing == 'incomplete' %}<p class="small muted" style="margin:0">Your page goes live as soon as these are filled in: {{ missing|join(', ')|lower }}. <a href="{{ url_for('auth.profile_edit') }}">Finish your page</a></p>{% endif %}
+      {% if listing == 'offline' %}<p class="small muted" style="margin:0">Your page has been taken offline. Please get in touch with us.</p>{% endif %}
+      {% if listing == 'needs_payment' %}<p class="small muted" style="margin:0">Your page goes live once your payment is complete.</p>{% endif %}
+      {% if listing == 'hidden' %}<p class="small muted" style="margin:0">Your page is hidden. Tick "Show my page" when editing to publish it.</p>{% endif %}
+      {% if listing == 'not_included' %}<p class="small muted" style="margin:0">Associate membership does not include a directory page: the directory lists GAPHS Members, who are home stagers.</p>{% endif %}
+    </div>
+  </div>
+
+  {% if user.plan == 'professional' and (user.status in ('active', 'past_due') or user.comped) %}
+  <hr class="rule">
+  <h2 style="margin-bottom:8px">Your GAPHS {{ 'Accredited' if acc_status(user.id) == 'accredited' else 'Member' }} logo</h2>
+  <p class="muted" style="margin:0 0 20px;max-width:640px">Download it for your website, email signature and marketing. It is yours to use while your GAPHS membership is active.</p>
+  <div id="pro-logos" style="display:flex;flex-wrap:wrap;gap:24px"></div>
+  <script>
+  (function () {
+    var box = document.getElementById('pro-logos');
+    var sets = [['noir', '#1A1A1A', '#B8963E'], ['parchment', '#F5F1E8', '#1A1A1A'], ['white', '#FFFFFF', '#1A1A1A']];
+    var im = new Image();
+    function rr(x, a, b, w, h, r) {
+      x.beginPath(); x.moveTo(a + r, b); x.arcTo(a + w, b, a + w, b + h, r); x.arcTo(a + w, b + h, a, b + h, r);
+      x.arcTo(a, b + h, a, b, r); x.arcTo(a, b, a + w, b, r); x.closePath();
+    }
+    function draw(cv, bg, fg) {
+      var S = 1000, x = cv.getContext('2d'); cv.width = S; cv.height = S;
+      x.fillStyle = bg; rr(x, 0, 0, S, S, 150); x.fill();
+      var tw = 640, th = Math.round(tw * (im.naturalHeight || 1) / (im.naturalWidth || 1));
+      var t = document.createElement('canvas'); t.width = tw; t.height = th;
+      var y = t.getContext('2d'); y.drawImage(im, 0, 0, tw, th); y.globalCompositeOperation = 'source-in';
+      y.fillStyle = fg; y.fillRect(0, 0, tw, th);
+      x.drawImage(t, (S - tw) / 2, 470 - th);
+      x.fillStyle = fg; x.strokeStyle = fg; x.font = '400 46px Montserrat, sans-serif'; x.textBaseline = 'middle';
+      var txt = "{{ 'ACCREDITED' if acc_status(user.id) == 'accredited' else 'GAPHS MEMBER' }}", gap = 16, w = 0, i;
+      for (i = 0; i < txt.length; i++) { w += x.measureText(txt[i]).width + (i < txt.length - 1 ? gap : 0); }
+      var px = (S - w) / 2, cy = 707;
+      for (i = 0; i < txt.length; i++) { x.fillText(txt[i], px, cy + 2); px += x.measureText(txt[i]).width + gap; }
+      x.lineWidth = 3; rr(x, (S - w) / 2 - 52, cy - 52, w + 104, 104, 52); x.stroke();
+    }
+    function build() {
+      sets.forEach(function (s) {
+        var wrap = document.createElement('div'); wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px';
+        var cv = document.createElement('canvas'); cv.style.cssText = 'width:170px;height:170px';
+        draw(cv, s[1], s[2]);
+        var b = document.createElement('button'); b.type = 'button'; b.className = 'btn small outline'; b.style.borderRadius = '999px';
+        b.textContent = 'Download';
+        b.addEventListener('click', function () {
+          cv.toBlob(function (blob) {
+            var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "gaphs-{{ 'accredited' if acc_status(user.id) == 'accredited' else 'member' }}-" + s[0] + '.png';
+            document.body.appendChild(a); a.click(); a.remove();
+          }, 'image/png');
+        });
+        wrap.appendChild(cv); wrap.appendChild(b); box.appendChild(wrap);
+      });
+    }
+    im.onload = function () {
+      var f = document.fonts && document.fonts.load ? document.fonts.load('400 46px Montserrat', 'GAPHS MEMBER') : Promise.resolve();
+      f.then(build, build);
+    };
+    im.src = "{{ url_for('static', filename='img/gaphs-wordmark-white.svg') }}";
+  })();
+  </script>
+  {% endif %}
+
+  <hr class="rule">
+  <h2 style="margin-bottom:20px">Account details</h2>
+  <form method="post" action="{{ url_for('auth.account_update') }}" class="card" style="max-width:640px">
+    <input type="hidden" name="csrf" value="{{ csrf() }}">
+    <div class="two">
+      <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" value="{{ user.name }}" required></div>
+      <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" value="{{ user.email }}" required></div>
+    </div>
+    <details style="margin-bottom:20px"><summary class="linklike">Change password</summary>
+      <div class="two" style="margin-top:14px">
+        <div class="field"><label for="current_password">Current password</label><input id="current_password" name="current_password" type="password" autocomplete="current-password"></div>
+        <div class="field"><label for="new_password">New password</label><input id="new_password" name="new_password" type="password" minlength="8" autocomplete="new-password"></div>
+      </div>
+    </details>
+    <button class="btn" type="submit">Save</button>
+  </form>
+
+  {% if purchases %}
+  <hr class="rule">
+  <h2 style="margin-bottom:20px">My purchases</h2>
+  <ul class="lessons">
+    {% for p in purchases %}<li><span>{{ p.title }} <span class="muted small">· {{ fmt_date(p.paid_at) }}</span></span>
+      <a href="{{ url_for('members.purchase', token=p.token) }}">Open</a></li>{% endfor %}
+  </ul>
+  {% endif %}
+</div></div>
+{% endblock %}

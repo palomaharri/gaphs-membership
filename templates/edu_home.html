@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Learn home staging online · {% endblock %}
+{% block meta %}<meta name="description" content="Learn home staging online with Paloma Harrington. Seven courses from beginner to business, for students worldwide.">{% endblock %}
+{% block body %}
+<section class="edu-hero"><div class="wrap edu-hero-grid">
+<div>
+<p class="eyebrow">Online home staging courses</p>
+<h1>Learn home staging. Build a career you love.</h1>
+<p class="lead">Seven online courses, from your first taste of staging to specialist skills and a profitable business. Taught by a founder who has done it, and built to work in every country.</p>
+<div class="row"><a class="btn" href="#courses">Choose your course</a><a class="btn outline" href="#about">Meet your teacher</a></div>
+</div>
+<img src="{{ url_for('static', filename='img/edu/hero.jpg') }}" alt="An open-plan living and dining space opening onto a terrace">
+</div></section>
+<section class="edu-sect" style="padding:0"><div class="wrap">{% include '_hsa_approved.html' %}</div></section>
+
+<section class="edu-sect" id="courses"><div class="wrap">
+<div class="edu-head"><p class="eyebrow">Seven courses, one clear path</p><h2>Start where you are</h2><p class="muted">Each course stands on its own and leads naturally to the next.</p></div>
+<div class="grid edu-courses">
+{% for c in courses %}{% include '_course_card.html' %}{% endfor %}
+</div>
+</div></section>
+
+<section class="edu-sect" id="why"><div class="wrap"><div class="edu-band">
+<div class="edu-head"><p class="eyebrow">Why learn here</p><h2>A method proven to work worldwide</h2>
+<p>Staging works wherever people buy and rent homes: overseas buyers purchasing locally, nationals buying abroad and every market in between.</p>
+<a class="btn light" href="#courses">Find your course</a></div>
+<div class="edu-why">
+<div><h3>Clear narrated lessons</h3><p>Follow each module at your own pace, on any device.</p></div>
+<div><h3>A downloadable toolkit</h3><p>Workbooks, checklists and templates to print or fill in on screen.</p></div>
+<div><h3>Real projects</h3><p>Examples from everyday homes to luxury properties, room by room.</p></div>
+<div><h3>Craft and business together</h3><p>Learn to stage beautifully and to run a business that pays.</p></div>
+</div></div></div></section>
+
+<section class="edu-sect" style="padding-bottom:0"><div class="wrap"><div class="card sage" style="display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center;justify-content:space-between;padding:24px 28px">
+<div><div class="eyebrow">Our gift to you</div><h3 style="margin:6px 0 4px">A Day in the Life of a Home Stager</h3><p class="muted" style="margin:0">A free e-book to read and keep. Create a free account and it is yours.</p></div>
+<a class="btn" href="{{ url_for('members.library') }}">Get the free e-book</a>
+</div></div></section>
+<section class="edu-sect" id="about"><div class="wrap edu-about">
+<img src="{{ url_for('static', filename='img/edu/paloma.jpg') }}" alt="Paloma Harrington">
+<div>
+<p class="eyebrow">Your teacher</p>
+<h2>Paloma Harrington</h2>
+<p style="margin-top:18px">{{ about }}</p>
+<a class="btn" href="#courses">Start learning with Paloma</a>
+</div>
+</div></section>
+
+<section class="edu-sect" id="keep-me-posted"><div class="wrap"><div class="card sage edu-notify">
+<h2 style="margin-top:0">Keep me posted</h2>
+{% if sent %}
+<p><strong>Thank you, you are on the list.</strong> We will write when there is news about the courses.</p>
+{% else %}
+<p>Leave your email and we will let you know when new courses open. No spam, and you can leave at any time.</p>
+<form method="post" action="/keep-me-posted" class="row" style="gap:10px">
+<input type="hidden" name="csrf" value="{{ csrf() }}">
+<input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+<input type="email" name="email" required placeholder="Your email" aria-label="Your email" style="flex:1 1 240px">
+<button class="btn" type="submit">Keep me posted</button>
+</form>
+{% endif %}
+</div></div></section>
+
+<section class="edu-sect" id="faq"><div class="wrap edu-faq">
+<div class="edu-head"><h2>Questions</h2></div>
+<details><summary>Do I need design or staging experience?</summary><p>No. Every course starts from the beginning and explains each term and step.</p></details>
+<details><summary>Will it work in my country?</summary><p>Yes. The method is designed to work worldwide, and the lessons show how to apply it in your market, including with international buyers.</p></details>
+<details><summary>How do the lessons work?</summary><p>Each course is a set of narrated modules you can follow at your own pace on any device, with downloadable workbooks, checklists and templates.</p></details>
+<details><summary>I am a real estate agent. Which course is for me?</summary><p>Home Staging for Real Estate Agents. It shows you how to use staging as a marketing tool in your listings and how to partner with professional stagers.</p></details>
+<details><summary>Which course should I start with?</summary><p>If you are unsure, begin with Introduction to Home Staging, which is free. If you are ready to learn the full craft and business, choose The Staging Journey.</p></details>
+<details><summary>Can I turn this into a business?</summary><p>Yes. The Staging Journey gives you the foundation, and The Home Staging Business Course goes deeper into pricing, profit and planning.</p></details>
+<details><summary>Can I get a refund or pay in instalments?</summary><p>Courses are digital and open as soon as you buy, so we do not offer refunds or split payments. The free Introduction to Home Staging is the best way to try our teaching first.</p></details>
+</div></section>
+
+<section class="edu-final"><div class="wrap">
+<h2>Take your first step today</h2>
+<p>Choose your course and start learning at your own pace, wherever you are in the world.</p>
+<a class="btn light" href="#courses">See the courses</a>
+</div></section>
+{% endblock %}

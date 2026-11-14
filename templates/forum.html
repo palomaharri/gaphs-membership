@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Forum · {% endblock %}
+{% block body %}
+<div class="page"><div class="medium">
+  <div class="eyebrow">Members' forum</div>
+  <h1>Discussion</h1>
+  <ul class="thread-list" style="margin-top:24px">
+  {% for c in cats %}
+    <li><span><a href="{{ url_for('members.forum_category', cat_id=c.id) }}"><strong>{{ c.title }}</strong></a>
+      {% if c.description %}<br><span class="muted small">{{ c.description }}</span>{% endif %}</span>
+      <span class="muted small">{{ c.n_threads }} thread{{ '' if c.n_threads == 1 else 's' }}{% if c.last_at %} · last {{ fmt_date(c.last_at) }}{% endif %}</span></li>
+  {% else %}<li class="muted">No categories yet.</li>{% endfor %}
+  </ul>
+  {% set _on = forum_notify_on(user) %}
+  <div class="card" style="margin-top:32px">
+    <form method="post" action="/forum/notifications" class="row" style="gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between;margin:0">
+      <input type="hidden" name="csrf" value="{{ csrf() }}"><input type="hidden" name="notify" value="{{ '0' if _on else '1' }}">
+      <span><strong>Forum emails are {{ 'on' if _on else 'off' }}.</strong><br><span class="muted small">We email you when someone tags you, or replies to a thread you started.</span></span>
+      <button class="btn small outline" type="submit">Turn {{ 'off' if _on else 'on' }}</button>
+    </form>
+  </div>
+  {% if user.is_admin %}
+  <details class="card" style="margin-top:16px"><summary style="cursor:pointer;font-weight:600">Blocked words (admins only)</summary>
+    <p class="small muted">Posts with offensive language are refused automatically and never appear. Add any extra words you want blocked here, separated by spaces or new lines.</p>
+    <form method="post" action="/forum/blocked-words"><input type="hidden" name="csrf" value="{{ csrf() }}">
+      <div class="field"><textarea name="words" rows="3" aria-label="Extra blocked words">{{ forum_extra_words() }}</textarea></div>
+      <button class="btn small" type="submit">Save</button></form>
+  </details>
+  {% endif %}
+</div></div>
+{% endblock %}
