@@ -2,8 +2,9 @@
 {% set cost = row.price if (row and row.price) else c.price %}
 <a class="item-card" href="{{ url_for('members.course_page', slug=c.slug) }}">
 <div class="cover"><img src="{{ url_for('static', filename='img/courses/' + c.img) }}" alt="{{ c.title }}"></div>
-<span class="small muted">{{ c.label }}{% if c.external %} · Offered by the {{ c.provider }}{% elif not row %} · <strong>Coming soon</strong>{% endif %}</span>
+<span class="small muted">{{ c.label }}{% if not c.external and not row %} · <strong>Coming soon</strong>{% endif %}</span>
 <h3 style="margin:0">{{ c.title }}</h3>
+{% if c.external %}<span class="offered">Offered by the {{ c.provider }}</span>{% endif %}
 <span class="small">{{ c.sub }}</span>
 <span class="small price-line">{% include '_price.html' %}</span>
 </a>

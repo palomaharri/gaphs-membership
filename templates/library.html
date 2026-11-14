@@ -37,7 +37,8 @@
       <a class="item-card" href="{{ url_for('members.course_page', slug=sc.slug) }}">
         <div class="cover"><img src="{{ url_for('static', filename='img/courses/' + sc.img) }}" alt=""></div>
         <h3 style="margin:0">{{ sc.title }}</h3>
-        <span class="small muted">{% if sc.external %}{% with c = sc %}{% include '_price.html' %}{% endwith %} · Offered by the {{ sc.provider }}{% elif sc.price %}€{{ (sc.price/100)|int }} · opening soon{% else %}Free · opening soon{% endif %}</span>
+        {% if sc.external %}<span class="offered">Offered by the {{ sc.provider }}</span>{% endif %}
+        <span class="small muted">{% if sc.external %}{% with c = sc %}{% include '_price.html' %}{% endwith %}{% elif sc.price %}€{{ (sc.price/100)|int }} · opening soon{% else %}Free · opening soon{% endif %}</span>
       </a>
       {% endif %}{% endfor %}{% endif %}
     </div>

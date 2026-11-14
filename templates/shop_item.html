@@ -28,6 +28,10 @@
           <div class="hint">We send your link here. No account needed.</div></div>{% endif %}
         <button class="btn" type="submit">Buy now</button>
       </form>
+      <div class="member-note">
+        <strong>Included in GAPHS membership.</strong> Members get this and the whole Library free.
+        <a href="{{ url_for('auth.join') }}">Join here</a>{% if not user %} &middot; Already a member? <a href="{{ url_for('auth.login', next=url_for('members.item', item_id=c.id)) }}">Log in</a>{% endif %}
+      </div>
 
       {% endif %}
     </div>

@@ -8,14 +8,14 @@
 <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;align-items:center">
 <div>
 <div class="eyebrow">{{ c.label }}{% if not row and not c.external %} · Coming soon{% endif %}</div>
-{% if c.external %}<p class="offered" style="margin:0 0 6px">Offered by the {{ c.provider }}</p>{% endif %}
 <h1 style="margin-top:8px">{{ c.title }}</h1>
+{% if c.external %}<p class="offered" style="margin:4px 0 0">Offered by the {{ c.provider }}</p>{% endif %}
 <p class="lead" style="margin-top:12px">{{ c.sub }}</p>
 <p class="muted">{{ c.meta }}</p>
 {% set member_here = (not is_edu) and user and can_access(user) and not c.external %}
 {% if c.external %}
 <div class="row" style="gap:10px;margin-top:20px;flex-wrap:wrap">
-<a class="btn" href="{{ c.external }}" target="_blank" rel="noopener">{{ 'Start' if not c.price else 'Buy' }} at the Education Centre</a>
+<a class="btn" href="{{ c.external }}" target="_blank" rel="noopener">{{ 'Buy' }} at the Education Centre</a>
 </div>
 {% elif row and member_here %}
 <div class="row" style="gap:10px;margin-top:20px;flex-wrap:wrap">
@@ -26,8 +26,11 @@
 <input type="hidden" name="csrf" value="{{ csrf() }}">
 {% if not user %}<input type="email" name="email" required placeholder="Your email" aria-label="Your email" style="flex:1 1 220px;max-width:300px">{% endif %}
 <button class="btn" type="submit">Buy for €{{ (row.price/100)|int }}</button>
-
 </form>
+<div class="member-note" style="max-width:560px">
+<strong>Included in GAPHS membership.</strong> Members get this course and the whole Library free.
+<a href="{{ url_for('auth.join') }}">Join here</a>{% if not user %} &middot; Already a member? <a href="{{ url_for('auth.login', next=url_for('members.item', item_id=row.id)) }}">Log in</a>{% endif %}
+</div>
 {% elif row %}
 <div class="row" style="gap:10px;margin-top:20px;flex-wrap:wrap">
 <a class="btn" href="{{ url_for('members.shop_item', item_id=row.id) }}">Start the course</a>
