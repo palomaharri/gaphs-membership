@@ -88,7 +88,7 @@
       y.fillStyle = fg; y.fillRect(0, 0, tw, th);
       x.drawImage(t, (S - tw) / 2, 470 - th);
       x.fillStyle = fg; x.strokeStyle = fg; x.font = '400 46px Montserrat, sans-serif'; x.textBaseline = 'middle';
-      var txt = "{{ 'ACCREDITED' if acc_status(user.id) == 'accredited' else 'GAPHS MEMBER' }}", gap = 16, w = 0, i;
+      var txt = "{{ 'ACCREDITED' if acc_status(user.id) == 'accredited' else 'MEMBER' }}", gap = 16, w = 0, i;
       for (i = 0; i < txt.length; i++) { w += x.measureText(txt[i]).width + (i < txt.length - 1 ? gap : 0); }
       var px = (S - w) / 2, cy = 707;
       for (i = 0; i < txt.length; i++) { x.fillText(txt[i], px, cy + 2); px += x.measureText(txt[i]).width + gap; }
@@ -111,7 +111,7 @@
       });
     }
     im.onload = function () {
-      var f = document.fonts && document.fonts.load ? document.fonts.load('400 46px Montserrat', 'GAPHS MEMBER') : Promise.resolve();
+      var f = document.fonts && document.fonts.load ? document.fonts.load('400 46px Montserrat', 'MEMBER') : Promise.resolve();
       f.then(build, build);
     };
     im.src = "{{ url_for('static', filename='img/gaphs-wordmark-white.svg') }}";
