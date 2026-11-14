@@ -46,6 +46,36 @@ def _seed_admin():
     con.close()
 
 
+def _seed_demo_member():
+    """Optional test account: set DEMO_MEMBER_EMAIL and DEMO_MEMBER_PASSWORD to get a free, active Member
+    (plan "professional") with a hidden business page. Remove the two settings to stop it being recreated."""
+    email = os.environ.get("DEMO_MEMBER_EMAIL", "").strip().lower()
+    password = os.environ.get("DEMO_MEMBER_PASSWORD", "")
+    if not email or not password:
+        return
+    con = sqlite3.connect(db.DB_PATH)
+    if not con.execute("SELECT 1 FROM users WHERE email = ?", (email,)).fetchone():
+        now = db.now_iso()
+        cur = con.execute("""INSERT INTO users(email, pw_hash, name, plan, billing, status, comped, created_at, started_at,
+                                               qualifying_course, agreed_at)
+                             VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
+                          (email, db.hash_password(password), "Test Member", "professional", "annual", "active", 1,
+                           now, now, "GAPHS test account", now))
+        slug = "gaphs-test-studio"
+        n = 1
+        while con.execute("SELECT 1 FROM profiles WHERE slug = ?", (slug,)).fetchone():
+            n += 1
+            slug = "gaphs-test-studio-%d" % n
+        con.execute("""INSERT INTO profiles(user_id, business_name, slug, tagline, bio, location, country, services,
+                                            contact_email, published, approved)
+                       VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
+                    (cur.lastrowid, "GAPHS Test Studio", slug, "A test account for the GAPHS board",
+                     "This is a test business page. It is hidden from the directory until you tick Show my page.",
+                     "Madrid", "Spain", "Consultation, occupied staging, vacant staging", email, 0, 1))
+        con.commit()
+    con.close()
+
+
 WELCOME_POSTS = {
     "Introductions": ("Welcome to the GAPHS community", """Welcome to the members' forum of the Global Association of Professional Home Stagers. This is the place to say hello and let fellow members around the world get to know you.
 
@@ -232,6 +262,7 @@ def create_app():
     app = Flask(__name__)
     db.init_db()
     _seed_admin()
+    _seed_demo_member()
     _seed_welcome()
     _seed_library_v1()
     _seed_library_v2()
