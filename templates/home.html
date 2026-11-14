@@ -206,11 +206,10 @@ details summary::-webkit-details-marker{display:none}
 <div class="ey">Education</div>
 <h2 class="h2">Learning, to one standard.</h2>
 <hr class="rule">
-<p class="p" style="margin:0">GAPHS reviews and approves home staging training courses, so members, clients and agents know a course meets professional standards. Training providers can apply for approval.</p>
+<p class="p" style="margin:0">GAPHS reviews and approves home staging training courses, so members, clients and agents know a course meets professional standards. </p>
 <p class="p" style="margin:18px 0 0">The GAPHS Library is free for members, for as long as they are members.</p>
 <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:32px">
 <a class="b b-dark" href="{{ url_for('members.library') }}">Open the Library</a>
-<a class="b b-ink" href="mailto:info@gaphs.org?subject=Course%20approval">Apply for course approval</a>
 </div>
 </div>
 <div class="lst" style="flex:1 1 480px;min-width:0">
@@ -222,6 +221,19 @@ details summary::-webkit-details-marker{display:none}
 <a href="{{ href }}"><div><div class="lt">{{ t }}</div><div class="ld">{{ d }}</div></div><span class="arr">&rarr;</span></a>
 {% endfor %}
 </div>
+</div>
+</section>
+
+<!-- SCHOOLS -->
+<section class="dark" style="padding:88px 0">
+<div class="w" style="display:flex;flex-wrap:wrap;gap:32px 64px;align-items:center;justify-content:space-between">
+<div style="flex:1 1 520px;min-width:0">
+<div class="ey">For training providers</div>
+<h2 class="h2" style="color:#FFFFFF">Are you a home staging school?</h2>
+<p class="lede" style="margin:18px 0 0;max-width:640px">Enquire about having your course approved by GAPHS.</p>
+<p class="p" style="margin:16px 0 0;max-width:640px">We review each course for its content, teaching and standards. Approved courses are recognised for GAPHS membership, approval lasts two years, and approved schools can share lessons with members in the GAPHS Library.</p>
+</div>
+<div style="flex:0 0 auto"><a class="b b-gold" href="mailto:info@gaphs.org?subject=Course%20approval%20enquiry">Contact us</a></div>
 </div>
 </section>
 
