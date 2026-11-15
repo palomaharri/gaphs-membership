@@ -80,26 +80,28 @@
       x.arcTo(a, b + h, a, b, r); x.arcTo(a, b, a + w, b, r); x.closePath();
     }
     function draw(cv, bg, fg) {
-      var S = 1000, x = cv.getContext('2d'); cv.width = S; cv.height = S;
-      x.fillStyle = bg; rr(x, 0, 0, S, S, 150); x.fill();
-      var tw = 640, th = Math.round(tw * (im.naturalHeight || 1) / (im.naturalWidth || 1));
+      // Rectangular badge, 2:1, with a fine inset outline: wordmark, a short gold rule, then MEMBER
+      var W = 1400, H = 700, x = cv.getContext('2d'); cv.width = W; cv.height = H;
+      x.fillStyle = bg; x.fillRect(0, 0, W, H);
+      x.strokeStyle = fg; x.lineWidth = 5; x.strokeRect(40, 40, W - 80, H - 80);
+      var tw = 700, th = Math.round(tw * (im.naturalHeight || 1) / (im.naturalWidth || 1));
       var t = document.createElement('canvas'); t.width = tw; t.height = th;
       var y = t.getContext('2d'); y.drawImage(im, 0, 0, tw, th); y.globalCompositeOperation = 'source-in';
       y.fillStyle = fg; y.fillRect(0, 0, tw, th);
-      x.drawImage(t, (S - tw) / 2, 470 - th);
-      x.fillStyle = fg; x.strokeStyle = fg; x.font = '400 46px Montserrat, sans-serif'; x.textBaseline = 'middle';
-      var txt = "{{ 'ACCREDITED' if acc_status(user.id) == 'accredited' else 'MEMBER' }}", gap = 16, w = 0, i;
+      x.drawImage(t, (W - tw) / 2, 372 - th);
+      x.fillStyle = '#B8963E'; x.fillRect(W / 2 - 40, 418, 80, 2);
+      x.fillStyle = fg; x.font = '500 50px Montserrat, sans-serif'; x.textBaseline = 'middle';
+      var txt = "{{ 'ACCREDITED' if acc_status(user.id) == 'accredited' else 'MEMBER' }}", gap = 22, w = 0, i;
       for (i = 0; i < txt.length; i++) { w += x.measureText(txt[i]).width + (i < txt.length - 1 ? gap : 0); }
-      var px = (S - w) / 2, cy = 707;
-      for (i = 0; i < txt.length; i++) { x.fillText(txt[i], px, cy + 2); px += x.measureText(txt[i]).width + gap; }
-      x.lineWidth = 3; rr(x, (S - w) / 2 - 52, cy - 52, w + 104, 104, 52); x.stroke();
+      var px = (W - w) / 2, cy = 510;
+      for (i = 0; i < txt.length; i++) { x.fillText(txt[i], px, cy); px += x.measureText(txt[i]).width + gap; }
     }
     function build() {
       sets.forEach(function (s) {
         var wrap = document.createElement('div'); wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px';
-        var cv = document.createElement('canvas'); cv.style.cssText = 'width:170px;height:170px';
+        var cv = document.createElement('canvas'); cv.style.cssText = 'width:260px;height:130px;border:1px solid #E6E0D2';
         draw(cv, s[1], s[2]);
-        var b = document.createElement('button'); b.type = 'button'; b.className = 'btn small outline'; b.style.borderRadius = '999px';
+        var b = document.createElement('button'); b.type = 'button'; b.className = 'btn small outline';
         b.textContent = 'Download';
         b.addEventListener('click', function () {
           cv.toBlob(function (blob) {
@@ -111,7 +113,7 @@
       });
     }
     im.onload = function () {
-      var f = document.fonts && document.fonts.load ? document.fonts.load('400 46px Montserrat', 'MEMBER') : Promise.resolve();
+      var f = document.fonts && document.fonts.load ? document.fonts.load('500 50px Montserrat', 'MEMBER') : Promise.resolve();
       f.then(build, build);
     };
     im.src = "{{ url_for('static', filename='img/gaphs-wordmark-white.svg') }}";

@@ -21,11 +21,13 @@ def init(app):
     @app.route("/sitemap.xml")
     def sitemap_xml():
         base = _base()
-        paths = ["/", "/courses", "/library", "/directory", "/join", "/contact", "/terms", "/privacy"]
+        paths = ["/", "/courses", "/library", "/directory", "/join", "/contact", "/terms", "/privacy", "/blog"]
         paths += ["/courses/" + c["slug"] for c in courses_data.COURSES]
         try:
             for r in db.q("SELECT id FROM content WHERE published = 1 ORDER BY id"):
                 paths.append("/shop/%d" % r["id"])
+            for r in db.q("SELECT slug FROM blog_posts WHERE status = 'published'"):
+                paths.append("/blog/" + r["slug"])
             for r in db.q("SELECT slug FROM profiles WHERE slug != '' AND published = 1 AND approved = 1"):
                 paths.append("/directory/" + r["slug"])
         except Exception:

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}{{ p.title }} · {% endblock %}
+{% block meta %}<meta name="description" content="{{ p.excerpt }}">
+<meta property="og:title" content="{{ p.title }}"><meta property="og:description" content="{{ p.excerpt }}">
+{% if p.cover %}<meta property="og:image" content="{{ request.url_root.rstrip('/') }}{{ media_url(p.cover) }}">{% endif %}{% endblock %}
+{% block body %}
+<div class="page"><div class="medium blog-article">
+  <a class="small muted" href="{{ url_for('blog.index') }}">&larr; The GAPHS Journal</a>
+  {% if p.status != 'published' %}<p><span class="badge dark">Draft: only admins can see this</span></p>{% endif %}
+  <div class="blog-meta" style="margin-top:24px">{{ p.category }} · {{ nice_date(p.published_on) }}</div>
+  <h1>{{ p.title }}</h1>
+  {% if p.cover %}<img class="blog-hero" src="{{ media_url(p.cover) }}" alt="">{% endif %}
+  <div class="blog-body">{{ body }}</div>
+  {% if user and user.is_admin %}<p style="margin-top:32px"><a class="btn small outline" href="{{ url_for('admin.blog_edit', post_id=p.id) }}">Edit this post</a></p>{% endif %}
+  <div class="member-note" style="margin-top:48px">
+    <strong>Are you a home stager or real estate professional?</strong> Join GAPHS for the Library, the global directory and a community across continents.
+    <a href="{{ url_for('auth.join') }}">Join here</a>
+  </div>
+</div>
+{% if more %}
+<div class="wrap" style="margin-top:72px">
+  <h2>More from the Journal</h2>
+  <div class="grid cols-3" style="margin-top:20px">
+    {% for m in more %}
+    <a class="item-card blog-card" href="{{ url_for('blog.post', slug=m.slug) }}">
+      <div class="cover">{% if m.cover %}<img src="{{ media_url(m.cover) }}" alt="" loading="lazy">{% endif %}</div>
+      <div class="blog-meta">{{ m.category }} · {{ nice_date(m.published_on) }}</div>
+      <h3 style="margin:0">{{ m.title }}</h3>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Journal · {% endblock %}
+{% block meta %}<meta name="description" content="News, events and insights on home staging from the Global Association of Professional Home Stagers.">{% endblock %}
+{% block body %}
+<div class="page"><div class="wrap">
+  <div class="eyebrow">The GAPHS Journal</div>
+  <h1>News, events and insights</h1>
+  <p class="lead" style="max-width:720px">From the association, our chapters and partners, and the home staging profession around the world.</p>
+  {% if cats %}
+  <div class="country-chips" style="margin-top:28px">
+    <a class="chip {{ 'on' if not cat }}" href="{{ url_for('blog.index') }}">All</a>
+    {% for c in cats %}<a class="chip {{ 'on' if cat == c }}" href="{{ url_for('blog.index', category=c) }}">{{ c }}</a>{% endfor %}
+  </div>
+  {% endif %}
+  {% if posts %}
+  {% set lead = posts[0] if page == 1 and not cat else None %}
+  {% if lead %}
+  <a class="blog-lead" href="{{ url_for('blog.post', slug=lead.slug) }}">
+    <div class="cover">{% if lead.cover %}<img src="{{ media_url(lead.cover) }}" alt="">{% endif %}</div>
+    <div class="txt">
+      <div class="blog-meta">{{ lead.category }} · {{ nice_date(lead.published_on) }}</div>
+      <h2>{{ lead.title }}</h2>
+      <p>{{ lead.excerpt }}</p>
+      <span class="more">Read more &rarr;</span>
+    </div>
+  </a>
+  {% endif %}
+  <div class="grid cols-3" style="margin-top:40px">
+    {% for p in posts if not lead or p.id != lead.id %}
+    <a class="item-card blog-card" href="{{ url_for('blog.post', slug=p.slug) }}">
+      <div class="cover">{% if p.cover %}<img src="{{ media_url(p.cover) }}" alt="" loading="lazy">{% endif %}</div>
+      <div class="blog-meta">{{ p.category }} · {{ nice_date(p.published_on) }}</div>
+      <h3 style="margin:0">{{ p.title }}</h3>
+      <p class="small muted" style="margin:0">{{ p.excerpt }}</p>
+    </a>
+    {% endfor %}
+  </div>
+  {% if pages > 1 %}
+  <div class="row" style="margin-top:40px;gap:8px;flex-wrap:wrap">
+    {% for n in range(1, pages + 1) %}<a class="btn small {{ '' if n == page else 'outline' }}" href="{{ url_for('blog.index', page=n, category=cat or None) }}">{{ n }}</a>{% endfor %}
+  </div>
+  {% endif %}
+  {% else %}
+  <p class="muted" style="margin-top:32px">No posts yet.</p>
+  {% endif %}
+</div></div>
+{% endblock %}

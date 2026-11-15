@@ -7,8 +7,8 @@
   <p class="lead">{% if member_free %}Everything here is yours to open.{% else %}Everything here is included in the membership. Or buy what you need, one at a time, with no account.{% endif %}</p>
   <div class="card sage" style="margin-top:24px;padding:18px 24px">
     {% if member_free %}Everything here is included with your membership. <a href="{{ url_for('members.library') }}">Go to your library</a>
-    {% elif user %}Everything here is included in the membership. Not a member yet? <a href="{{ url_for('auth.join') }}"><strong>Join now</strong></a> and unlock access.
-    {% else %}Everything here is included in the membership. Not a member yet? <a href="{{ url_for('auth.join') }}"><strong>Join now</strong></a> and unlock access. Already a member? <a href="{{ url_for('auth.login') }}">Log in</a>.{% endif %}
+    {% elif user %}All resources here are included in membership. Non-members may <a href="{{ url_for('auth.join') }}"><strong>apply for membership</strong></a>.
+    {% else %}All resources here are included in membership. Non-members may <a href="{{ url_for('auth.join') }}"><strong>apply for membership</strong></a>. Already a member? <a href="{{ url_for('auth.login') }}">Log in</a>.{% endif %}
   </div>
   <div class="row" style="margin-top:28px;gap:8px;flex-wrap:wrap">
     {% for k, l in [('', 'All'), ('course', 'Courses'), ('pdf', 'Guides and templates'), ('video', 'Classes')] %}

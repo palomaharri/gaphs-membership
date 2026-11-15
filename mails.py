@@ -50,7 +50,7 @@ SIGN_LINE = "Global Association of Professional Home Stagers"
 
 
 def _signature(site):
-    return ('<p style="margin:26px 0 0;font-size:16px;color:%s">With warm regards,</p>'
+    return ('<p style="margin:26px 0 0;font-size:16px;color:%s">Kind regards,</p>'
             '<p style="margin:8px 0 2px;font-family:Georgia,\'Times New Roman\',serif;font-style:italic;font-size:26px;color:%s">%s</p>'
             '<p style="margin:0 0 22px;font-size:13px;letter-spacing:1px;color:#888888">%s</p>' % (INK, BROWN, SIGN_NAME, SIGN_LINE))
 
@@ -63,57 +63,55 @@ def _plan_items(user):
 
 def welcome(user, site):
     first = _first(user)
-    subject = "Welcome to GAPHS, %s" % first
+    subject = "Welcome to the Global Association of Professional Home Stagers"
     pro = user["plan"] == "professional" or bool(user["founding"])
     inner = (_p("Dear %s," % first)
-             + _p("Welcome to the Global Association of Professional Home Stagers. You are now part of a global movement of "
-                  "professionals, educators and partners committed to raising the standard of Home Staging across continents, "
-                  "cultures and markets.")
+             + _p("On behalf of the Board, it is a pleasure to welcome you to the Global Association of Professional Home Stagers. "
+                  "You join an international network of professionals, educators and partners committed to upholding and advancing "
+                  "the standards of Home Staging worldwide.")
              + _h("What your membership includes") + _list(_plan_items(user))
-             + _h("Three things to do first")
-             + _p("1. Complete your business page. " + ("It is what clients and agents see in the directory, so add your logo, a short bio and photos of your work."
-                   if pro else "Keep your details up to date so we know who you are."))
-             + _p("2. Explore the courses and resources. Start wherever suits you best, and come back to them whenever you like.")
-             + _p("3. Say hello in the forum. Introduce yourself and tell us about your business. Members love meeting new faces.")
+             + _h("Recommended first steps")
+             + _p("1. Complete your business page. " + ("This is the page clients and real estate professionals see in the directory; we recommend adding your logo, a short profile and photographs of your work."
+                   if pro else "Please ensure your details are complete and up to date."))
+             + _p("2. Explore the Library. All courses and resources are available to you for the duration of your membership.")
+             + _p("3. Introduce yourself in the members&rsquo; forum and connect with colleagues around the world.")
              + '<p style="margin:8px 0 6px">' + _button("Update my profile page", site + "/dashboard/profile")
              + _button("Courses and resources", site + "/library") + _button("Visit the forum", site + "/forum") + "</p>"
-             + _p("If you need anything at all, write to us at info@gaphs.org. We are always happy to help.")
+             + _p("For any questions, please contact the Association at info@gaphs.org.")
              + _signature(site))
-    text = ("Dear %s,\n\nWelcome to the Global Association of Professional Home Stagers. You are now part of a global movement of "
-            "professionals, educators and partners committed to raising the standard of Home Staging across continents, cultures and markets.\n\n"
+    text = ("Dear %s,\n\nOn behalf of the Board, it is a pleasure to welcome you to the Global Association of Professional Home Stagers. "
+            "You join an international network of professionals, educators and partners committed to upholding and advancing the standards of Home Staging worldwide.\n\n"
             "WHAT YOUR MEMBERSHIP INCLUDES\n%s\n\n"
-            "THREE THINGS TO DO FIRST\n1. Update your profile page: %s/dashboard/profile\n2. Explore the courses and resources: %s/library\n"
-            "3. Say hello in the forum: %s/forum\n\n"
-            "If you need anything, write to us at info@gaphs.org.\n\nWith warm regards,\nThe GAPHS Board\nGlobal Association of Professional Home Stagers\n"
+            "RECOMMENDED FIRST STEPS\n1. Complete your profile page: %s/dashboard/profile\n2. Explore the Library: %s/library\n"
+            "3. Introduce yourself in the members' forum: %s/forum\n\n"
+            "For any questions, please contact the Association at info@gaphs.org.\n\nKind regards,\nThe GAPHS Board\nGlobal Association of Professional Home Stagers\n"
             % (first, "\n".join("- " + i for i in _plan_items(user)), site, site, site))
-    return subject, text, _layout("A warm welcome, %s" % first, inner)
+    return subject, text, _layout("Welcome to GAPHS", inner)
 
 
 def renewal(user, end, site):
     first = _first(user)
     when = end.strftime("%d %B %Y").lstrip("0")
     plan = "Member" if user["plan"] == "professional" else "Associate"
-    subject = "Your membership renews on %s. Here is what you keep." % when
-    keep = ["Every course in the library, plus new content as it is added",
-            "The forum, where fellow members share projects, ideas and advice",
+    subject = "Your GAPHS membership renews on %s" % when
+    keep = ["All courses in the Library, together with new content as it is published",
+            "The members' forum, for professional exchange with colleagues",
             "Webinars and the resources library"]
     if user["plan"] == "professional":
-        keep.insert(3, "Your directory listing, putting your business in front of clients looking for a stager")
+        keep.insert(3, "Your listing in the GAPHS global directory")
     inner = (_p("Dear %s," % first)
-             + _p("Your %s membership renews automatically on %s, using the card you have on file. There is nothing you need to do." % (plan, when))
-             + _p("Before then, we would love you to get the most from your membership. Home staging is a stronger business when you are "
-                  "learning, sharing and connecting with others who do the same work.")
-             + _h("What stays yours") + _list(keep)
-             + _h("Make the most of it") + _p("Pick up a course you have not finished, browse the latest resources, or drop into the forum and "
-                                              "start a conversation with fellow members. It is the best way to get new ideas and referrals.")
+             + _p("Your %s membership renews automatically on %s, using the card you have on file. No action is required." % (plan, when))
+             + _p("We invite you to make full use of the benefits of your membership in the meantime.")
+             + _h("Your membership includes") + _list(keep)
+             + _h("Member resources") + _p("The Library, the members' forum and the GAPHS webinars remain available to you throughout your membership.")
              + '<p style="margin:8px 0 6px">' + _button("Courses and resources", site + "/library") + _button("Visit the forum", site + "/forum") + "</p>"
              + _p("To update your card or manage your membership, visit your account page: %s/dashboard" % site)
-             + _p("Thank you for being part of GAPHS. We are glad to have you.")
+             + _p("Thank you for your continued membership of GAPHS.")
              + _signature(site))
-    text = ("Dear %s,\n\nYour %s membership renews automatically on %s, using the card you have on file. There is nothing you need to do.\n\n"
-            "Before then, get the most from it. Home staging is a stronger business when you are learning, sharing and connecting with others who do the same work.\n\n"
-            "WHAT STAYS YOURS\n%s\n\nMAKE THE MOST OF IT\nCourses and resources: %s/library\nThe forum: %s/forum\n\n"
-            "To update your card or manage your membership: %s/dashboard\n\nThank you for being part of GAPHS.\n\n"
-            "With warm regards,\nThe GAPHS Board\nGlobal Association of Professional Home Stagers\n"
+    text = ("Dear %s,\n\nYour %s membership renews automatically on %s, using the card you have on file. No action is required.\n\n"
+            "We invite you to make full use of the benefits of your membership in the meantime.\n\n"
+            "YOUR MEMBERSHIP INCLUDES\n%s\n\nMEMBER RESOURCES\nLibrary: %s/library\nThe forum: %s/forum\n\n"
+            "To update your card or manage your membership: %s/dashboard\n\nThank you for your continued membership of GAPHS.\n\n"
+            "Kind regards,\nThe GAPHS Board\nGlobal Association of Professional Home Stagers\n"
             % (first, plan, when, "\n".join("- " + i for i in keep), site, site, site))
     return subject, text, _layout("Your membership renews on %s" % when, inner)

@@ -11,6 +11,7 @@
   <a href="{{ url_for('admin.messages') }}" class="{{ 'on' if ep == 'admin.messages' }}">Messages</a>
   <a href="{{ url_for('admin.subscribers') }}" class="{{ 'on' if ep == 'admin.subscribers' }}">Subscribers</a>
   <a href="{{ url_for('admin.orders') }}" class="{{ 'on' if ep == 'admin.orders' }}">Orders</a>
+  <a href="{{ url_for('admin.blog_list') }}" class="{{ 'on' if ep and ep.startswith('admin.blog') }}">Blog</a>
   <a href="{{ url_for('admin.forum') }}" class="{{ 'on' if ep == 'admin.forum' }}">Forum</a>
   <a href="{{ url_for('admin.settings') }}" class="{{ 'on' if ep == 'admin.settings' }}">Prices</a>
   <a href="{{ url_for('admin.texts') }}" class="{{ 'on' if ep == 'admin.texts' }}">Terms and wording</a>

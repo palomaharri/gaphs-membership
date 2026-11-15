@@ -65,6 +65,7 @@ details summary::-webkit-details-marker{display:none}
 <a class="hide-sm" href="{{ url_for('auth.directory') }}">Find a stager</a>
 <a class="hide-sm" href="{{ url_for('members.courses') }}">Courses</a>
 <a class="hide-sm" href="{{ url_for('members.library') }}">Library</a>
+<a class="hide-sm" href="{{ url_for('blog.index') }}">Journal</a>
 {% if user %}<a href="/dashboard">My account</a>{% else %}<a href="/login">Log in</a>
 <a class="b b-gold" href="/join" style="min-height:42px;padding:11px 22px;color:#1A1A1A">Join</a>{% endif %}
 </div>
@@ -99,14 +100,14 @@ details summary::-webkit-details-marker{display:none}
 </div>
 <div style="flex:1 1 480px;min-width:0">
 <div class="ey">Who we are</div>
-<h2 class="h2">One association for home staging, worldwide.</h2>
+<h2 class="h2">The international association for professional home staging.</h2>
 <hr class="rule">
 <p class="p" style="margin:0">GAPHS, the Global Association of Professional Home Stagers, unites professionals, key partners and affiliates across continents to elevate the Home Staging industry through advocacy, education and collaboration.</p>
 <p class="p" style="margin:18px 0 0">We set and uphold high standards of education, ethics and excellence, approve home staging training courses, and support our members with ongoing education, events and recognition. GAPHS is a non-profit association registered in Switzerland, the home staging knowledge partner of CEPI, the European Council of Real Estate Professions, and a direct member of FIABCI, the International Real Estate Federation.</p>
 <ul class="chk">
 <li>Raising the professional image of home staging with the public and the real estate world</li>
 <li>Approving training courses that meet professional standards</li>
-<li>A Code of Ethics every member signs</li>
+<li>A Code of Ethics to which every member is bound</li>
 </ul>
 </div>
 </div>
@@ -117,14 +118,14 @@ details summary::-webkit-details-marker{display:none}
 <div class="w" style="display:flex;flex-wrap:wrap;gap:40px 64px;align-items:center">
 <div style="flex:1 1 420px;min-width:0">
 <div class="ey">Find a home stager</div>
-<h2 class="h2" style="color:#FFFFFF">A trained professional in your country.</h2>
-<p class="lede" style="margin:18px 0 0;max-width:520px">Every GAPHS Member has completed a home staging training course and works to the GAPHS Code of Ethics.</p>
+<h2 class="h2" style="color:#FFFFFF">Qualified professionals in your country.</h2>
+<p class="lede" style="margin:18px 0 0;max-width:520px">Every GAPHS Member has completed a home staging training course and is bound by the GAPHS Code of Ethics.</p>
 </div>
 <form method="get" action="{{ url_for('auth.directory') }}" role="search" style="flex:1 1 420px;display:flex;flex-wrap:wrap;gap:10px;margin:0">
 <input id="home-country" class="cin" name="country" list="home-countries" autocomplete="country-name" placeholder="Type your country, e.g. Italy" aria-label="Your country">
 <datalist id="home-countries">{% for code, c in countries %}<option value="{{ c }}" data-code="{{ code }}"></option>{% endfor %}</datalist>
 <button type="submit" class="b b-gold" style="cursor:pointer;font-family:inherit;min-height:54px">Find a stager</button>
-<div style="flex-basis:100%;font-size:14px;color:#B9B3A8;margin-top:6px">No stager near you yet? We will help you find one: <a href="mailto:info@gaphs.org" style="color:#B8963E">info@gaphs.org</a></div>
+<div style="flex-basis:100%;font-size:14px;color:#B9B3A8;margin-top:6px">No Member listed in your area? The Association will provide a referral: <a href="mailto:info@gaphs.org" style="color:#B8963E">info@gaphs.org</a></div>
 </form>
 <script>(function(){var s=document.getElementById('home-country');var m=(navigator.languages||[navigator.language||'']).join(',').match(/[a-z]{2,3}-([A-Z]{2})/);if(!s||!m)return;var o=document.querySelector('#home-countries option[data-code="'+m[1]+'"]');if(o)s.value=o.value;})();</script>
 </div>
@@ -134,8 +135,8 @@ details summary::-webkit-details-marker{display:none}
 <section class="parch" style="padding:112px 0">
 <div class="w">
 <div class="ey">Membership</div>
-<h2 class="h2">Two ways to belong.</h2>
-<p class="lede" style="max-width:680px;margin:20px 0 0">For trained home stagers, and for the industry partners who work alongside them.</p>
+<h2 class="h2">Membership categories.</h2>
+<p class="lede" style="max-width:680px;margin:20px 0 0">GAPHS admits qualified home staging professionals as Members, and professionals from related industries as Associates.</p>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-top:56px;align-items:stretch;max-width:980px">
 {% set _li = 'font-size:16px;line-height:2;color:#4A4A4A;flex:1' %}
 <div style="border:1px solid #1A1A1A;border-top:2px solid #B8963E;padding:38px;display:flex;flex-direction:column;gap:16px;background:#1A1A1A;color:#FFFFFF">
@@ -155,7 +156,7 @@ details summary::-webkit-details-marker{display:none}
 <a class="b b-ink" href="/join?plan=member">Join as an Associate</a>
 </div>
 </div>
-<div style="margin-top:24px;font-size:14px;color:#6B6B6B">Applications are reviewed by the GAPHS Board. Every member agrees to the GAPHS Code of Ethics.</div>
+<div style="margin-top:24px;font-size:14px;color:#6B6B6B">All applications are reviewed by the GAPHS Board. Every member undertakes to uphold the GAPHS Code of Ethics.</div>
 </div>
 </section>
 
@@ -164,21 +165,21 @@ details summary::-webkit-details-marker{display:none}
 <div class="w" style="display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start">
 <div style="flex:1 1 440px;min-width:0">
 <div class="ey">National chapters</div>
-<h2 class="h2">GAPHS in your country.</h2>
+<h2 class="h2">Representing the profession nationally.</h2>
 <hr class="rule">
-<p class="p" style="margin:0">GAPHS chapters bring members together in their own country, in their own language. They organise educational and networking events, promote home staging with local media and real estate agencies, and take part in GAPHS-wide campaigns and conferences.</p>
-<p class="p" style="margin:18px 0 0">GAPHS Italia was founded in Rome in April 2026. Every chapter works under the GAPHS umbrella, to the same standards and Code of Ethics.</p>
+<p class="p" style="margin:0">GAPHS National Chapters represent the Association in their country and bring members together in their own language. They organise educational and networking events, promote home staging with local media and real estate agencies, and take part in GAPHS-wide campaigns and conferences.</p>
+<p class="p" style="margin:18px 0 0">GAPHS Italia was founded in Rome in April 2026. Every chapter operates under the governance of GAPHS and to the same standards and Code of Ethics.</p>
 </div>
 <div style="flex:1 1 400px;min-width:0;background:#F5F1E8;padding:40px;box-sizing:border-box">
 <div style="font-family:'Montserrat',sans-serif;font-weight:300;font-size:24px">Start a chapter</div>
-<p class="p" style="margin:10px 0 0;font-size:16px">Five or more active members in your country can propose a new chapter to the Board. Once approved, a chapter receives:</p>
+<p class="p" style="margin:10px 0 0;font-size:16px">A minimum of five active members in a country may submit a Chapter Foundation Proposal to the Board. Upon approval, a chapter receives:</p>
 <ul class="chk" style="margin-top:16px">
 <li>Official recognition and its own chapter logo</li>
 <li>An announcement on every GAPHS channel</li>
 <li>Mentoring from the Board and established chapter leaders</li>
 <li>Promotion of its local and national events</li>
 </ul>
-<a class="b b-dark" href="mailto:info@gaphs.org?subject=Starting%20a%20GAPHS%20chapter" style="margin-top:24px">Ask about a chapter</a>
+<a class="b b-dark" href="mailto:info@gaphs.org?subject=Starting%20a%20GAPHS%20chapter" style="margin-top:24px">Enquire about a chapter</a>
 </div>
 </div>
 </section>
@@ -193,8 +194,8 @@ details summary::-webkit-details-marker{display:none}
 <div class="ey">Giving back</div>
 <h2 class="h2" style="color:#FFFFFF">Worldwide Staging Service Week<sup style="font-size:.45em">&reg;</sup></h2>
 <hr class="rule">
-<p class="lede" style="margin:0;max-width:560px">Our most important event of the year.</p>
-<p class="p" style="margin:18px 0 0;max-width:560px">Every year, GAPHS members and chapters give their time and skills to transform spaces for charities, families and communities in need. Each project has a member as its ambassador, and every chapter is invited to take part.</p>
+<p class="lede" style="margin:0;max-width:560px">The Association&rsquo;s principal annual initiative.</p>
+<p class="p" style="margin:18px 0 0;max-width:560px">Each year, GAPHS members and chapters contribute their time and professional expertise to transform spaces for charitable organisations, families and communities in need. Every project is led by a member acting as its ambassador, and all chapters are invited to participate.</p>
 </div>
 </div>
 </section>
@@ -204,10 +205,10 @@ details summary::-webkit-details-marker{display:none}
 <div class="w" style="display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start">
 <div style="flex:1 1 380px;min-width:0">
 <div class="ey">Education</div>
-<h2 class="h2">Learning, to one standard.</h2>
+<h2 class="h2">Professional education to a common standard.</h2>
 <hr class="rule">
-<p class="p" style="margin:0">GAPHS reviews and approves home staging training courses, so members, clients and agents know a course meets professional standards. </p>
-<p class="p" style="margin:18px 0 0">The GAPHS Library is free for members, for as long as they are members.</p>
+<p class="p" style="margin:0">GAPHS reviews and approves home staging training courses, providing members, clients and real estate professionals with assurance that a course meets recognised professional standards. </p>
+<p class="p" style="margin:18px 0 0">The GAPHS Library is included in membership for its full duration.</p>
 <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:32px">
 <a class="b b-dark" href="{{ url_for('members.library') }}">Open the Library</a>
 </div>
@@ -215,8 +216,8 @@ details summary::-webkit-details-marker{display:none}
 <div class="lst" style="flex:1 1 480px;min-width:0">
 {% for href, t, d in [(url_for('members.library') ~ '#course', 'Home Staging for Real Estate Agents', 'A course for agents and brokers, with slides and twelve tools to use with clients.'),
                       (url_for('members.library') ~ '#guide', 'The Atelier Series', 'Practical guides on pricing, contracts, marketing and running a staging business.'),
-                      (url_for('members.library') ~ '#class', 'Video guides', 'Short lessons to watch at your own pace.'),
-                      (url_for('members.library') ~ '#school', 'From our approved schools', 'Lessons shared by GAPHS-approved training providers.'),
+                      (url_for('members.library') ~ '#class', 'Video guides', 'Concise lessons, available on demand.'),
+                      (url_for('members.library') ~ '#school', 'From our approved schools', 'Lessons contributed by GAPHS-approved training providers.'),
                       (url_for('members.courses'), 'Home Staging Education Centre courses', 'Introduction to Home Staging, the Business Course and Design Elements & Styling, offered by the Education Centre.')] %}
 <a href="{{ href }}"><div><div class="lt">{{ t }}</div><div class="ld">{{ d }}</div></div><span class="arr">&rarr;</span></a>
 {% endfor %}
@@ -231,7 +232,7 @@ details summary::-webkit-details-marker{display:none}
 <div class="ey">For training providers</div>
 <h2 class="h2" style="color:#FFFFFF">Are you a home staging school?</h2>
 <p class="lede" style="margin:18px 0 0;max-width:640px">Enquire about having your course approved by GAPHS.</p>
-<p class="p" style="margin:16px 0 0;max-width:640px">We review each course for its content, teaching and standards. Approved courses are recognised for GAPHS membership, approval lasts two years, and approved schools can share lessons with members in the GAPHS Library.</p>
+<p class="p" style="margin:16px 0 0;max-width:640px">Each course is reviewed for its content, teaching methods and standards. Approved courses are recognised for GAPHS membership, approval is granted for two years, and approved providers may contribute lessons to the GAPHS Library.</p>
 </div>
 <div style="flex:0 0 auto"><a class="b b-gold" href="mailto:info@gaphs.org?subject=Course%20approval%20enquiry">Contact us</a></div>
 </div>
@@ -241,8 +242,8 @@ details summary::-webkit-details-marker{display:none}
 <section style="padding:104px 0">
 <div class="w" style="text-align:center">
 <div class="ey">The Board</div>
-<h2 class="h2" style="margin-left:auto;margin-right:auto">Run by home stagers, for home stagers.</h2>
-<p class="lede" style="margin:18px auto 0;max-width:640px">The GAPHS Board are volunteers, elected by the members at the General Assembly.</p>
+<h2 class="h2" style="margin-left:auto;margin-right:auto">Governed by its members.</h2>
+<p class="lede" style="margin:18px auto 0;max-width:640px">The Board of GAPHS is elected by the members at the General Assembly and serves on a voluntary basis.</p>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px 24px;margin:56px auto 0;max-width:820px">
 <div><img src="{{ url_for('static', filename='img/board-sanja-radovanovic.jpg') }}" alt="Sanja Radovanovic" style="width:150px;height:150px;border-radius:50%;object-fit:cover;display:block;margin:0 auto;border:1px solid #B8963E;box-sizing:border-box">
 <div style="margin-top:18px;font-family:'Montserrat',sans-serif;font-weight:300;font-size:22px">Sanja Radovanovic</div>
@@ -257,21 +258,43 @@ details summary::-webkit-details-marker{display:none}
 </div>
 </section>
 
+{% set jp = latest_posts(3) %}
+{% if jp %}
+<!-- JOURNAL -->
+<section style="padding:104px 0">
+<div class="w">
+<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between">
+<div><div class="ey">The GAPHS Journal</div><h2 class="h2">News and announcements.</h2></div>
+<a class="b b-ink" href="{{ url_for('blog.index') }}">All news and articles</a>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px;margin-top:48px">
+{% for p in jp %}
+<a href="{{ url_for('blog.post', slug=p.slug) }}" style="display:block;color:#1A1A1A">
+<div style="aspect-ratio:4/3;overflow:hidden;background:#EDE7D9">{% if p.cover %}<img src="{{ media_url(p.cover) }}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">{% endif %}</div>
+<div style="margin-top:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#9C7D2F;font-weight:500">{{ p.category }} · {{ nice_date(p.published_on) }}</div>
+<div class="lt" style="margin-top:8px;line-height:1.35">{{ p.title }}</div>
+</a>
+{% endfor %}
+</div>
+</div>
+</section>
+
+{% endif %}
 <!-- FREE GUIDE -->
 {% if gift %}
 <section class="parch" style="padding:88px 0">
 <div class="w" style="display:flex;flex-wrap:wrap;gap:48px;align-items:center">
 <div style="flex:0 1 340px;min-width:0">{% if gift.cover %}<img src="{{ media_url(gift.cover) }}" alt="" style="width:100%;display:block;border:1px solid #DDD6C6">{% endif %}</div>
 <div style="flex:1 1 420px;min-width:0">
-<div class="ey">Free guide for real estate professionals</div>
+<div class="ey">Complimentary guide for real estate professionals</div>
 <h2 class="h2" style="font-size:38px">{{ gift.title }}</h2>
-<p class="p" style="margin:16px 0 0">Protect your commission, sell better and faster, and turn every listing into a marketing asset. Free from GAPHS.</p>
+<p class="p" style="margin:16px 0 0">A practical guide to presenting properties more effectively, protecting your commission and strengthening every listing. Complimentary from GAPHS.</p>
 <form method="post" action="{{ url_for('auth.gift') }}" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:24px">
 <input type="hidden" name="csrf" value="{{ csrf() }}">
 <input type="email" name="email" required placeholder="Your email" aria-label="Your email" style="flex:1 1 240px;min-height:50px;padding:0 16px;border:1px solid #DDD6C6;border-radius:2px;font:inherit;font-size:15px;background:#FFFFFF">
 <button type="submit" class="b b-dark" style="cursor:pointer;font-family:inherit">Send me the guide</button>
 </form>
-<p style="margin:12px 0 0;font-size:13px;color:#6B6B6B">We will also send you the occasional GAPHS news. Unsubscribe any time.</p>
+<p style="margin:12px 0 0;font-size:13px;color:#6B6B6B">You will also receive occasional news from GAPHS. You may unsubscribe at any time.</p>
 </div>
 </div>
 </section>
@@ -286,13 +309,13 @@ details summary::-webkit-details-marker{display:none}
 {% set _a = 'margin:14px 0 0;font-size:17px;line-height:1.75;color:#4A4A4A' %}
 <details style="border-top:1px solid #DDD6C6;padding:22px 0" open><summary style="{{ _q }}">What are the benefits of joining?</summary><div style="{{ _a }}">
 <div>A Library of courses, video guides, the Atelier Series guides and practical tools.</div>
-<div style="margin-top:10px">A community of professionals in many countries who share what works, plus webinars and local chapters.</div>
-<div style="margin-top:10px">Recognition: for Members, a directory listing and use of the GAPHS member logo, so clients and agents can find you and trust you.</div>
+<div style="margin-top:10px">An international network of professionals, together with webinars and national chapters.</div>
+<div style="margin-top:10px">Recognition: for Members, a directory listing and use of the GAPHS member logo, providing visibility and credibility with clients and real estate professionals.</div>
 </div></details>
 <details style="border-top:1px solid #DDD6C6;padding:22px 0"><summary style="{{ _q }}">Who can join?</summary><p style="{{ _a }}">Members are home stagers who have completed a home staging training course. Associates are industry partners who work with home stagers. Everyone agrees to the GAPHS Code of Ethics and Conduct.</p></details>
-<details style="border-top:1px solid #DDD6C6;padding:22px 0"><summary style="{{ _q }}">What is the difference between a Member and an Associate?</summary><p style="{{ _a }}">Members are trained home stagers: they get a page in the global directory and the GAPHS member logo. Associates are industry partners such as real estate agents, developers and photographers: they join the community and the Library, without a stager listing.</p></details>
-<details style="border-top:1px solid #DDD6C6;padding:22px 0"><summary style="{{ _q }}">How do I get a directory listing?</summary><p style="{{ _a }}">Join as a Member and complete your business page. It appears in the directory under your country.</p></details>
-<details style="border-top:1px solid #DDD6C6;border-bottom:1px solid #DDD6C6;padding:22px 0"><summary style="{{ _q }}">I work in real estate. Is there something for me?</summary><p style="{{ _a }}">Yes: join as an Associate. You get the course Home Staging for Real Estate Agents, the Library and the community, and the directory helps you find a trained stager for your listings.</p></details>
+<details style="border-top:1px solid #DDD6C6;padding:22px 0"><summary style="{{ _q }}">What is the difference between a Member and an Associate?</summary><p style="{{ _a }}">Members are trained home stagers: they get a page in the global directory and the GAPHS member logo. Associates are industry partners such as real estate agents, developers and photographers: they have access to the Library and the professional network, without a directory listing.</p></details>
+<details style="border-top:1px solid #DDD6C6;padding:22px 0"><summary style="{{ _q }}">How do I get a directory listing?</summary><p style="{{ _a }}">Directory listings are reserved for Members. Once your business page is complete, it is listed under your country.</p></details>
+<details style="border-top:1px solid #DDD6C6;border-bottom:1px solid #DDD6C6;padding:22px 0"><summary style="{{ _q }}">I work in real estate. Is there something for me?</summary><p style="{{ _a }}">Yes. Real estate professionals may join as Associates, with access to the course Home Staging for Real Estate Agents, the Library and the professional network. The directory also helps you identify a qualified stager for your listings.</p></details>
 </div>
 </section>
 

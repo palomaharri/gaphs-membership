@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}{{ p.title if p else 'New post' }} · {% endblock %}
+{% block body %}
+{% set v = form or p %}
+<div class="page"><div class="medium">
+  <div class="eyebrow">Admin · Blog</div><h1>{{ p.title if p else 'New post' }}</h1>
+  {% include 'admin/_nav.html' %}
+  <form method="post" enctype="multipart/form-data" class="card">
+    <input type="hidden" name="csrf" value="{{ csrf() }}">
+    <div class="field"><label for="title">Title</label><input id="title" name="title" type="text" required value="{{ v.title if v else '' }}"></div>
+    <div class="two">
+      <div class="field"><label for="published_on">Date</label><input id="published_on" name="published_on" type="text" placeholder="YYYY-MM-DD" value="{{ (v.published_on if v else '') or today }}"><div class="hint">Year-month-day, e.g. 2026-11-15. A future date publishes on that day.</div></div>
+      <div class="field"><label for="category">Category</label><input id="category" name="category" type="text" list="blog-cats" value="{{ v.category if v else '' }}">
+        <datalist id="blog-cats">{% for c in cats %}<option value="{{ c }}"></option>{% endfor %}</datalist></div>
+    </div>
+    <div class="field"><label for="body">Text</label><textarea id="body" name="body" style="min-height:420px">{{ v.body if v else '' }}</textarea>
+      <div class="hint">Each line is a paragraph. A short line with no full stop becomes a heading. Lines starting with &bull; or - become a list. Web links work automatically.</div></div>
+    <div class="field"><label for="excerpt">Short summary <span class="muted small">(optional)</span></label><textarea id="excerpt" name="excerpt" style="min-height:70px">{{ v.excerpt if v else '' }}</textarea><div class="hint">Shown on the Journal page. Left empty, the first paragraph is used.</div></div>
+    <div class="two">
+      <div class="field"><label for="cover">Cover picture</label>{% if p and p.cover %}<img src="{{ media_url(p.cover) }}" alt="" style="max-height:90px;display:block;margin-bottom:8px">{% endif %}<input id="cover" name="cover" type="file" accept="image/*"><div class="hint">JPG or PNG, landscape works best.</div></div>
+      <div class="field"><label for="slug">Web address <span class="muted small">(optional)</span></label><input id="slug" name="slug" type="text" value="{{ v.slug if v else '' }}"><div class="hint">/blog/&hellip; Made from the title if left empty.</div></div>
+    </div>
+    <label class="check"><input type="radio" name="status" value="published" {{ 'checked' if not v or v.status != 'draft' }}><span>Published</span></label>
+    <label class="check"><input type="radio" name="status" value="draft" {{ 'checked' if v and v.status == 'draft' }}><span>Draft (not on the website)</span></label>
+    <button class="btn" type="submit" style="margin-top:12px">Save</button>
+  </form>
+  {% if p %}
+  <form method="post" style="margin-top:16px"><input type="hidden" name="csrf" value="{{ csrf() }}"><input type="hidden" name="delete" value="1">
+    <button class="btn danger small" type="submit" onclick="return confirm('Delete this post?')">Delete post</button></form>
+  {% endif %}
+</div></div>
+{% endblock %}

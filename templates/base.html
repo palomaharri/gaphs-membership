@@ -54,6 +54,7 @@
 <a href="{{ url_for('auth.directory') }}">Find a stager</a>
 <a href="{{ url_for('members.courses') }}">Courses</a>
 <a href="{{ url_for('members.library') }}">Library</a>
+<a href="{{ url_for('blog.index') }}">Journal</a>
 {% if user and can_access(user) %}
 <a href="{{ url_for('members.forum') }}">Forum</a>
 {% endif %}

@@ -43,11 +43,11 @@
     </div>
     {% else %}
     <div class="card sage dir-none" style="margin-top:32px;max-width:820px">
-      <h3 style="margin:0">No GAPHS stagers {% if country %}in {{ country }} {% endif %}yet{% if term %} for &ldquo;{{ term }}&rdquo;{% endif %}.</h3>
+      <h3 style="margin:0">There are currently no GAPHS Members listed{% if country %} in {{ country }}{% endif %}{% if term %} for &ldquo;{{ term }}&rdquo;{% endif %}.</h3>
       {% if request.args.get('asked') %}
-      <p style="margin:10px 0 0">Thank you, we have your request. We will reply by email, usually within a few days.</p>
+      <p style="margin:10px 0 0">Thank you. Your request has been received and the Association will reply by email, normally within a few working days.</p>
       {% else %}
-      <p style="margin:10px 0 0">GAPHS is growing country by country, through members and local chapters. Tell us where your property is and we will put you in touch with a trained stager who works in your area, or with the nearest GAPHS chapter.</p>
+      <p style="margin:10px 0 0">GAPHS continues to extend its presence internationally through its members and national chapters. Please provide the location of your property and the Association will refer you to a qualified professional in your area, or to the nearest GAPHS chapter.</p>
       <form method="post" action="{{ url_for('auth.directory_request') }}" class="dir-ask">
         <input type="hidden" name="csrf" value="{{ csrf() }}">
         <input type="hidden" name="country" value="{{ country or typed }}">
@@ -55,8 +55,8 @@
         <div class="field"><label for="ask-name">Your name</label><input id="ask-name" type="text" name="name" autocomplete="name"></div>
         <div class="field"><label for="ask-email">Your email</label><input id="ask-email" name="email" type="email" required autocomplete="email"></div>
         <div class="field"><label for="ask-city">City or area</label><input id="ask-city" type="text" name="city" placeholder="e.g. Lisbon"></div>
-        <div class="field full"><label for="ask-msg">What do you need? <span class="muted small">(optional)</span></label><textarea id="ask-msg" name="message" rows="3" placeholder="e.g. a two-bedroom flat going on sale in spring"></textarea></div>
-        <div class="full"><button class="btn" type="submit">Ask GAPHS to find a stager</button>
+        <div class="field full"><label for="ask-msg">Project details <span class="muted small">(optional)</span></label><textarea id="ask-msg" name="message" rows="3" placeholder="e.g. property type and intended sale date"></textarea></div>
+        <div class="full"><button class="btn" type="submit">Request a referral</button>
         <span class="muted small" style="margin-left:12px">Or write to <a href="mailto:info@gaphs.org">info@gaphs.org</a></span></div>
       </form>
       {% endif %}
@@ -69,7 +69,7 @@
   {% endif %}
 
   <div class="card" style="margin-top:56px;display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justify-content:space-between">
-    <div><h3 style="margin:0">Are you a home stager?</h3><p class="muted" style="margin:4px 0 0">Join GAPHS as a Member and get your page in the global directory.</p></div>
+    <div><h3 style="margin:0">Home staging professionals</h3><p class="muted" style="margin:4px 0 0">GAPHS Members are listed in the global directory.</p></div>
     <a class="btn" href="{{ url_for('auth.join') }}">Become a Member</a>
   </div>
 </div></div>

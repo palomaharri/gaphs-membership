@@ -4,8 +4,8 @@
 {% set billing = 'annual' %}{# monthly plans are hidden from public view for now; the backend still supports them #}
 <div class="page"><div class="wrap">
   <div class="eyebrow">Membership</div>
-  <h1>Two ways to belong.</h1>
-  <p class="lead" style="margin-top:12px">For trained home stagers, and for the industry partners who work alongside them. Full access to the Library from day one.</p>
+  <h1>Membership categories.</h1>
+  <p class="lead" style="margin-top:12px">GAPHS admits qualified home staging professionals as Members, and professionals from related industries as Associates. Both categories have full access to the Library from the first day of membership.</p>
 
   <div class="grid" style="margin-top:12px;align-items:stretch;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));max-width:980px">
     <div class="card plan" style="background:#1A1A1A;color:#F5F1E8;border-color:#1A1A1A;border-top:2px solid #B8963E">
@@ -22,7 +22,7 @@
       <div class="eyebrow" style="margin:0">For industry partners</div>
       <h3 style="font-size:30px;font-weight:200;letter-spacing:.04em">Associate</h3>
       <div><span class="amount">{{ money(prices.member_annual) }}</span> <span class="small">a year</span></div>
-      <div class="small">For real estate agents and brokers, property developers, photographers, interior designers, furniture and accessory suppliers, and other professionals who work with home stagers.</div>
+      <div class="small">For real estate agents, property developers and managers, photographers, video makers, surveyors and other professionals who work with home stagers.</div>
       <ul><li>The Library, including the course for real estate agents</li><li>Members' forum and webinars</li><li>A network of trained stagers in every country</li><li>Events with stagers and real estate partners</li></ul>
       <div style="flex:1"></div>
       <a class="btn outline" href="{{ url_for('auth.signup', plan='member', billing=billing) }}">Join as an Associate</a>

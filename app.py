@@ -77,41 +77,60 @@ def _seed_demo_member():
 
 
 WELCOME_POSTS = {
-    "Introductions": ("Welcome to the GAPHS community", """Welcome to the members' forum of the Global Association of Professional Home Stagers. This is the place to say hello and let fellow members around the world get to know you.
+    "Introductions": ("Welcome to the GAPHS members' forum", """Welcome to the members' forum of the Global Association of Professional Home Stagers. This section is dedicated to introductions among members worldwide.
 
-Tell us:
-- Your name, your business and the country you work in
-- The kind of staging you do most
-- What you would like to get from being part of GAPHS
+When introducing yourself, you may wish to include:
+- Your name, your business and the country in which you practise
+- Your principal areas of activity
+- Your professional interests within the Association
 
-Everyone here started somewhere, and every introduction helps us connect and support each other across borders.
+Introductions help members connect and collaborate across borders.
 
-With warm regards,
+Kind regards,
 The GAPHS Board"""),
-    "Projects and ideas": ("Share what you're working on", """This is our space to celebrate projects, ask questions and swap what works.
+    "Projects and ideas": ("Projects and professional exchange", """This section is dedicated to sharing projects, raising questions and exchanging professional practice.
 
-You could share:
-- A recent staging, with before and after photos (with your client's permission)
-- A challenge you would like fresh eyes on
-- A product, supplier or method you can't live without
+Members are invited to share:
+- Recent projects, with before and after photographs (with the client's permission)
+- Professional questions on which they would value colleagues' views
+- Products, suppliers or methods they recommend
 
-Your experience could be exactly what another member needs today.
+Your experience may be of considerable value to fellow members.
 
-With warm regards,
+Kind regards,
 The GAPHS Board"""),
-    "Business and pricing": ("Let's talk business", """Running a staging business is easier when you can talk it through with peers.
+    "Business and pricing": ("Business practice and pricing", """This section is dedicated to the business side of the profession.
 
-Good topics to start with:
-- How you price your services
-- Finding and winning clients
+Suggested topics include:
+- Pricing of services
+- Business development and client acquisition
 - Working with real estate agents and developers
-- What works in your market, and what doesn't
+- Market conditions in your country
 
-Please be open, generous and kind, and keep to our Code of Ethics and Conduct.
+All contributions should be constructive and respectful, in accordance with the GAPHS Code of Ethics and Conduct.
 
-With warm regards,
+Kind regards,
 The GAPHS Board"""),
 }
+
+OLD_WELCOME_POSTS = {'Introductions': ('Welcome to the GAPHS community', "Welcome to the members' forum of the Global Association of Professional Home Stagers. This is the place to say hello and let fellow members around the world get to know you.\n\nTell us:\n- Your name, your business and the country you work in\n- The kind of staging you do most\n- What you would like to get from being part of GAPHS\n\nEveryone here started somewhere, and every introduction helps us connect and support each other across borders.\n\nWith warm regards,\nThe GAPHS Board"), 'Projects and ideas': ("Share what you're working on", "This is our space to celebrate projects, ask questions and swap what works.\n\nYou could share:\n- A recent staging, with before and after photos (with your client's permission)\n- A challenge you would like fresh eyes on\n- A product, supplier or method you can't live without\n\nYour experience could be exactly what another member needs today.\n\nWith warm regards,\nThe GAPHS Board"), 'Business and pricing': ("Let's talk business", "Running a staging business is easier when you can talk it through with peers.\n\nGood topics to start with:\n- How you price your services\n- Finding and winning clients\n- Working with real estate agents and developers\n- What works in your market, and what doesn't\n\nPlease be open, generous and kind, and keep to our Code of Ethics and Conduct.\n\nWith warm regards,\nThe GAPHS Board")}
+
+
+def _update_welcome_v2():
+    """One-time: bring the pinned welcome threads already posted into the formal wording."""
+    con = sqlite3.connect(db.DB_PATH)
+    try:
+        if con.execute("SELECT 1 FROM settings WHERE key = 'welcome_v2'").fetchone():
+            return
+        for cat, (old_subject, old_body) in OLD_WELCOME_POSTS.items():
+            new_subject, new_body = WELCOME_POSTS[cat]
+            for (tid,) in con.execute("SELECT id FROM threads WHERE title = ?", (old_subject,)).fetchall():
+                con.execute("UPDATE threads SET title = ? WHERE id = ?", (new_subject, tid))
+                con.execute("UPDATE posts SET body = ? WHERE thread_id = ? AND body = ?", (new_body, tid, old_body))
+        con.execute("INSERT INTO settings(key, value) VALUES ('welcome_v2', '1')")
+        con.commit()
+    finally:
+        con.close()
 
 
 def _seed_welcome():
@@ -264,6 +283,7 @@ def create_app():
     _seed_admin()
     _seed_demo_member()
     _seed_welcome()
+    _update_welcome_v2()
     _seed_library_v1()
     _seed_library_v2()
     site_url = os.environ.get("SITE_URL", "")
@@ -302,6 +322,8 @@ def create_app():
     blocklist.init(app)
     import seo
     seo.init(app)
+    import blog
+    blog.init(app)
     import fonts
     fonts.init(app)
 

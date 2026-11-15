@@ -553,3 +553,4 @@ import member_invites  # noqa: E402,F401  (adds Admin > Member invites; must sta
 import accreditation  # noqa: E402,F401  (adds Admin > Accreditation; must stay at the end of this file)
 import enquiries  # noqa: E402,F401  (adds Admin > Enquiries; must stay at the end of this file)
 import drive_import  # noqa: E402,F401  (adds Admin > Content > Import files from Google Drive; must stay at the end of this file)
+import blog  # noqa: E402,F401  (adds Admin > Blog; the public pages are registered in app.py with blog.init; must stay at the end of this file)

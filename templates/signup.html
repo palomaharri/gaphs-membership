@@ -3,11 +3,11 @@
 {% block body %}
 {% set acc = false %}
 <div class="page"><div class="medium">
-  <div class="eyebrow">Join the community</div>
-  <h1>{% if invite %}Welcome to the new GAPHS{% else %}{{ 'Accredited' if acc else plan_label(plan) }} membership{% endif %}</h1>
+  <div class="eyebrow">Membership application</div>
+  <h1>{% if invite %}Welcome to the new GAPHS{% else %}Application for {{ plan_label(plan) }} membership{% endif %}</h1>
   {% if invite %}<p class="lead" style="margin-top:12px">Your membership is free. Create your account and tell us about your business. Your details become your page in the directory, and you can change them any time.</p>{% else %}
   <p class="lead" style="margin-top:12px">
-    Tell us about you and your business. After you pay, your details become your business page{% if plan != 'professional' %} (where your plan includes one){% endif %}, and you can change them any time.
+    Please provide your personal and business details.{% if plan == 'professional' %} Once payment is received, these details form your business page in the directory, which you may update at any time.{% else %} You may update them at any time.{% endif %}
   </p>{% endif %}
 
   {% if not invite %}<div class="card sage" style="margin-bottom:32px">

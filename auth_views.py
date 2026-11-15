@@ -394,7 +394,7 @@ def directory_request():
                   "From: %s <%s>\n\n%s\n\nReply directly to %s." % (name or "(no name)", email, body, email))
     except Exception:
         pass
-    flash("Thank you. We have your request and will reply by email, usually within a few days.", "success")
+    flash("Thank you. Your request has been received and the Association will reply by email, normally within a few working days.", "success")
     return redirect(back + ("&" if "?" in back else "?") + "asked=1")
 
 

@@ -5,10 +5,10 @@
   <div class="eyebrow">Library</div>
   <h1>Courses, guides, video guides and tools</h1>
   {% if member %}
-    <p class="lead">Everything from GAPHS is free for you as a member.{% if user.billing == 'monthly' and not user.comped and not user.is_admin %} New course content opens up regularly throughout your membership.{% endif %}</p>
+    <p class="lead">All GAPHS resources are included in your membership.{% if user.billing == 'monthly' and not user.comped and not user.is_admin %} New course content opens up regularly throughout your membership.{% endif %}</p>
   {% else %}
   <div class="card sage" style="margin-top:24px;padding:18px 24px">
-    Everything from GAPHS below is free for members. Courses from the Home Staging Education Centre are bought on its own website. Not a member yet? <a href="{{ url_for('auth.join') }}"><strong>Join now</strong></a> and unlock access. Or purchase single items, no account needed.
+    All GAPHS resources below are included in membership. Courses offered by the Home Staging Education Centre are purchased on the Centre&rsquo;s website. Non-members may <a href="{{ url_for('auth.join') }}"><strong>apply for membership</strong></a> or purchase individual resources.
     {% if not user %}<br>Already a member? <a href="{{ url_for('auth.login', next=url_for('members.library')) }}">Log in</a>.{% endif %}
   </div>
   {% endif %}

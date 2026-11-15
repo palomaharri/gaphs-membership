@@ -199,3 +199,22 @@ table.t th{background:var(--sage);color:var(--brown);font-weight:600;font-size:1
 @media(max-width:800px){.dir-ask{grid-template-columns:1fr}}
 .member-note{margin-top:24px;padding:16px 18px;background:var(--sage);border-left:2px solid var(--gold);font-size:15px;line-height:1.6}
 .member-note a{font-weight:500;text-decoration:underline}
+/* GAPHS Journal (blog) */
+.blog-meta{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);font-weight:500}
+.blog-card h3{font-size:20px;line-height:1.3}
+.blog-lead{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;margin-top:36px;text-decoration:none;color:inherit;border-top:1px solid var(--sage-line);padding-top:36px}
+.blog-lead .cover{aspect-ratio:4/3;overflow:hidden;background:var(--sage)}
+.blog-lead .cover img{width:100%;height:100%;object-fit:cover;display:block}
+.blog-lead h2{margin:12px 0 0;font-size:34px;line-height:1.2}
+.blog-lead p{margin:16px 0 0;color:var(--muted);line-height:1.7}
+.blog-lead .more{display:inline-block;margin-top:18px;color:var(--gold-deep);font-weight:500;letter-spacing:.06em}
+.blog-lead:hover h2,.blog-card:hover h3{color:var(--gold-deep)}
+@media(max-width:800px){.blog-lead{grid-template-columns:1fr;gap:20px}.blog-lead h2{font-size:26px}}
+.blog-article h1{margin-top:10px}
+.blog-hero{width:100%;height:auto;max-height:440px;object-fit:cover;display:block;margin:28px 0 8px}
+.blog-body{font-size:17px;line-height:1.8}
+.blog-body p{margin:0 0 18px}
+.blog-body h2{font-size:24px;margin:36px 0 12px}
+.blog-body ul{margin:0 0 18px;padding-left:22px}
+.blog-body li{margin:6px 0}
+.blog-body a{color:var(--gold-deep);text-decoration:underline;word-break:break-word}
