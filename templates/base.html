@@ -1,5 +1,5 @@
 <!doctype html>
-{% set brand = brand|default({'name': 'GAPHS · Global Association of Professional Home Stagers', 'short': 'GAPHS', 'theme': '#1A1A1A'}) %}
+{% set brand = brand|default({'name': 'GAPHS · Global Association of Professional Home Stagers', 'short': 'GAPHS', 'theme': '#FFFFFF'}) %}
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -49,26 +49,9 @@
 {% else %}
 <header class="site-header">
 <div class="wrap">
-<a href="{{ url_for('auth.home') }}" aria-label="GAPHS home"><img src="{{ url_for('static', filename='img/gaphs-wordmark-white.svg') }}" alt="GAPHS"></a>
+<a href="{{ url_for('auth.home') }}" aria-label="GAPHS home"><img src="{{ url_for('static', filename='img/gaphs-wordmark-black.svg') }}" alt="GAPHS"></a>
 <nav class="nav" aria-label="Main">
-<a href="{{ url_for('auth.directory') }}">Find a stager</a>
-<a href="{{ url_for('members.courses') }}">Courses</a>
-<a href="{{ url_for('members.library') }}">Library</a>
-<a href="{{ url_for('blog.index') }}">Journal</a>
-{% if user and can_access(user) %}
-<a href="{{ url_for('members.forum') }}">Forum</a>
-{% endif %}
-{% if user %}
-<a href="{{ url_for('auth.dashboard') }}">My account</a>
-{% if user.is_admin %}<a href="{{ url_for('admin.index') }}">Admin</a>{% endif %}
-<form method="post" action="{{ url_for('auth.logout') }}" style="margin:0">
-<input type="hidden" name="csrf" value="{{ csrf() }}">
-<button class="linklike" type="submit">Log out</button>
-</form>
-{% else %}
-<a href="{{ url_for('auth.login') }}">Log in</a>
-<a class="btn light" href="{{ url_for('auth.join') }}">Join</a>
-{% endif %}
+{% include '_menu.html' %}
 </nav>
 </div>
 </header>
@@ -96,7 +79,6 @@
 <div class="wrap">
 <div>
 <img src="{{ url_for('static', filename='img/gaphs-logo-white.svg') }}" alt="GAPHS, Global Association of Professional Home Stagers">
-<div style="margin-top:14px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#888888">Knowledge partner of CEPI &middot; Member of FIABCI</div>
 </div>
 <div>
 <a href="{{ url_for('auth.terms') }}">Terms</a> &nbsp;

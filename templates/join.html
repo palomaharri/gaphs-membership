@@ -28,7 +28,7 @@
       <a class="btn outline" href="{{ url_for('auth.signup', plan='member', billing=billing) }}">Join as an Associate</a>
     </div>
   </div>
-  <p class="small muted" style="margin-top:24px">Already a member? <a href="{{ url_for('auth.login') }}">Log in</a>.</p>
+  <p class="small muted" style="margin-top:24px">Already a member? <a href="{{ url_for('auth.login') }}">Login</a>.</p>
   <form method="get" action="{{ url_for('auth.invite') }}" style="margin-top:28px;max-width:420px"><label for="havecode" class="small muted">Have a code?</label><div style="display:flex;gap:8px;margin-top:6px"><input id="havecode" name="code" type="text" placeholder="Enter your code" autocomplete="off" required style="flex:1"><button class="btn" type="submit">Use code</button></div></form>
 </div></div>
 {% endblock %}

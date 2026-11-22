@@ -15,7 +15,7 @@
     </div>
     <div class="field"><label for="body">Text</label><textarea id="body" name="body" style="min-height:420px">{{ v.body if v else '' }}</textarea>
       <div class="hint">Each line is a paragraph. A short line with no full stop becomes a heading. Lines starting with &bull; or - become a list. Web links work automatically.</div></div>
-    <div class="field"><label for="excerpt">Short summary <span class="muted small">(optional)</span></label><textarea id="excerpt" name="excerpt" style="min-height:70px">{{ v.excerpt if v else '' }}</textarea><div class="hint">Shown on the Journal page. Left empty, the first paragraph is used.</div></div>
+    <div class="field"><label for="excerpt">Short summary <span class="muted small">(optional)</span></label><textarea id="excerpt" name="excerpt" style="min-height:70px">{{ v.excerpt if v else '' }}</textarea><div class="hint">Shown on the Newsroom page. Left empty, the first paragraph is used.</div></div>
     <div class="two">
       <div class="field"><label for="cover">Cover picture</label>{% if p and p.cover %}<img src="{{ media_url(p.cover) }}" alt="" style="max-height:90px;display:block;margin-bottom:8px">{% endif %}<input id="cover" name="cover" type="file" accept="image/*"><div class="hint">JPG or PNG, landscape works best.</div></div>
       <div class="field"><label for="slug">Web address <span class="muted small">(optional)</span></label><input id="slug" name="slug" type="text" value="{{ v.slug if v else '' }}"><div class="hint">/blog/&hellip; Made from the title if left empty.</div></div>

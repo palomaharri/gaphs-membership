@@ -5,7 +5,7 @@
 {% if p.cover %}<meta property="og:image" content="{{ request.url_root.rstrip('/') }}{{ media_url(p.cover) }}">{% endif %}{% endblock %}
 {% block body %}
 <div class="page"><div class="medium blog-article">
-  <a class="small muted" href="{{ url_for('blog.index') }}">&larr; The GAPHS Journal</a>
+  <a class="small muted" href="{{ url_for('blog.index') }}">&larr; GAPHS Newsroom</a>
   {% if p.status != 'published' %}<p><span class="badge dark">Draft: only admins can see this</span></p>{% endif %}
   <div class="blog-meta" style="margin-top:24px">{{ p.category }} · {{ nice_date(p.published_on) }}</div>
   <h1>{{ p.title }}</h1>
@@ -19,7 +19,7 @@
 </div>
 {% if more %}
 <div class="wrap" style="margin-top:72px">
-  <h2>More from the Journal</h2>
+  <h2>More from the Newsroom</h2>
   <div class="grid cols-3" style="margin-top:20px">
     {% for m in more %}
     <a class="item-card blog-card" href="{{ url_for('blog.post', slug=m.slug) }}">

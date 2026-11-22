@@ -11,10 +11,12 @@ from flask import Response, abort, send_from_directory
 
 import db
 
-CSS_URL = ("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600"
-           "&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap")
+CSS_URL = ("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400"
+           "&family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;500&display=swap")
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
 KEEP = ("latin", "latin-ext")
+# the cached stylesheet is named after the font list, so a new font list is downloaded afresh
+CSS_FILE = "fonts-%s.css" % hashlib.sha1(CSS_URL.encode()).hexdigest()[:10]
 _lock = threading.Lock()
 _last_try = [0.0]
 
@@ -51,13 +53,13 @@ def _build():
         out.append(block.replace(u.group(1), "/fonts/" + name))
     if not out:
         return False
-    with open(os.path.join(_dir(), "fonts.css"), "w", encoding="utf-8") as fh:
+    with open(os.path.join(_dir(), CSS_FILE), "w", encoding="utf-8") as fh:
         fh.write("\n".join(out))
     return True
 
 
 def _ensure():
-    p = os.path.join(_dir(), "fonts.css")
+    p = os.path.join(_dir(), CSS_FILE)
     if os.path.exists(p):
         return True
     with _lock:
@@ -76,7 +78,7 @@ def init(app):
     @app.route("/fonts/fonts.css")
     def fonts_css():
         if _ensure():
-            with open(os.path.join(_dir(), "fonts.css"), encoding="utf-8") as fh:
+            with open(os.path.join(_dir(), CSS_FILE), encoding="utf-8") as fh:
                 body = fh.read()
             resp = Response(body, mimetype="text/css")
             resp.headers["Cache-Control"] = "public, max-age=604800"

@@ -8,7 +8,7 @@
   <div class="card sage" style="margin-top:24px;padding:18px 24px">
     {% if member_free %}Everything here is included with your membership. <a href="{{ url_for('members.library') }}">Go to your library</a>
     {% elif user %}All resources here are included in membership. Non-members may <a href="{{ url_for('auth.join') }}"><strong>apply for membership</strong></a>.
-    {% else %}All resources here are included in membership. Non-members may <a href="{{ url_for('auth.join') }}"><strong>apply for membership</strong></a>. Already a member? <a href="{{ url_for('auth.login') }}">Log in</a>.{% endif %}
+    {% else %}All resources here are included in membership. Non-members may <a href="{{ url_for('auth.join') }}"><strong>apply for membership</strong></a>. Already a member? <a href="{{ url_for('auth.login') }}">Login</a>.{% endif %}
   </div>
   <div class="row" style="margin-top:28px;gap:8px;flex-wrap:wrap">
     {% for k, l in [('', 'All'), ('course', 'Courses'), ('pdf', 'Guides and templates'), ('video', 'Classes')] %}

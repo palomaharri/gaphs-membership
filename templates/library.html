@@ -9,7 +9,7 @@
   {% else %}
   <div class="card sage" style="margin-top:24px;padding:18px 24px">
     All GAPHS resources below are included in membership. Courses offered by the Home Staging Education Centre are purchased on the Centre&rsquo;s website. Non-members may <a href="{{ url_for('auth.join') }}"><strong>apply for membership</strong></a> or purchase individual resources.
-    {% if not user %}<br>Already a member? <a href="{{ url_for('auth.login', next=url_for('members.library')) }}">Log in</a>.{% endif %}
+    {% if not user %}<br>Already a member? <a href="{{ url_for('auth.login', next=url_for('members.library')) }}">Login</a>.{% endif %}
   </div>
   {% endif %}
   <div class="row" style="margin-top:28px;gap:8px;flex-wrap:wrap">
@@ -45,7 +45,7 @@
   </section>
   {% endfor %}
   <div class="card" style="margin-top:64px;display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justify-content:space-between">
-    <div><h3 style="margin:0">Are you a home staging school?</h3><p class="muted" style="margin:4px 0 0">Enquire about having your course approved by GAPHS.</p></div>
+    <div><h3 style="margin:0">Are you a Home Staging school?</h3><p class="muted" style="margin:4px 0 0">Enquire about having your course approved by GAPHS.</p></div>
     <a class="btn" href="mailto:info@gaphs.org?subject=Course%20approval%20enquiry">Contact us</a>
   </div>
   {% if not sections %}<p class="muted" style="margin-top:32px">Content is on its way.</p>{% endif %}

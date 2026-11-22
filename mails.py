@@ -67,7 +67,7 @@ def welcome(user, site):
     pro = user["plan"] == "professional" or bool(user["founding"])
     inner = (_p("Dear %s," % first)
              + _p("On behalf of the Board, it is a pleasure to welcome you to the Global Association of Professional Home Stagers. "
-                  "You join an international network of professionals, educators and partners committed to upholding and advancing "
+                  "You join a global network of professionals, educators and partners committed to upholding and advancing "
                   "the standards of Home Staging worldwide.")
              + _h("What your membership includes") + _list(_plan_items(user))
              + _h("Recommended first steps")
@@ -80,7 +80,7 @@ def welcome(user, site):
              + _p("For any questions, please contact the Association at info@gaphs.org.")
              + _signature(site))
     text = ("Dear %s,\n\nOn behalf of the Board, it is a pleasure to welcome you to the Global Association of Professional Home Stagers. "
-            "You join an international network of professionals, educators and partners committed to upholding and advancing the standards of Home Staging worldwide.\n\n"
+            "You join a global network of professionals, educators and partners committed to upholding and advancing the standards of Home Staging worldwide.\n\n"
             "WHAT YOUR MEMBERSHIP INCLUDES\n%s\n\n"
             "RECOMMENDED FIRST STEPS\n1. Complete your profile page: %s/dashboard/profile\n2. Explore the Library: %s/library\n"
             "3. Introduce yourself in the members' forum: %s/forum\n\n"

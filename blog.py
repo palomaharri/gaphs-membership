@@ -1,4 +1,4 @@
-"""The GAPHS Journal: public blog at /blog, managed in Admin > Blog.
+"""The GAPHS Newsroom: public blog at /blog, managed in Admin > Blog.
 
 Posts live in the blog_posts table. On first start the published 2026 posts from the GAPHS
 "BLOG POST FOR WEBSITE" sheet are added from seed/blog_posts.json, with cover cards from seed/blog/.

@@ -1,0 +1,19 @@
+{% set ep = request.endpoint or '' %}
+<a href="{{ url_for('auth.home_staging') }}" class="{{ 'on' if ep == 'auth.home_staging' }}">Home Staging</a>
+<a href="{{ url_for('auth.about') }}" class="{{ 'on' if ep == 'auth.about' }}">About GAPHS</a>
+<a href="{{ url_for('members.courses') }}" class="{{ 'on' if ep.startswith('members.course') }}">Courses</a>
+<a href="{{ url_for('members.library') }}" class="{{ 'on' if ep == 'members.library' }}">Library</a>
+<a href="{{ url_for('blog.index') }}" class="{{ 'on' if ep.startswith('blog.') }}">Newsroom</a>
+<a href="{{ url_for('auth.directory') }}" class="{{ 'on' if ep.startswith('auth.directory') }}">Find a Stager</a>
+{% if user %}
+{% if can_access(user) %}<a href="{{ url_for('members.forum') }}">Forum</a>{% endif %}
+<a href="{{ url_for('auth.dashboard') }}">My account</a>
+{% if user.is_admin %}<a href="{{ url_for('admin.index') }}">Admin</a>{% endif %}
+<form method="post" action="{{ url_for('auth.logout') }}" style="margin:0">
+<input type="hidden" name="csrf" value="{{ csrf() }}">
+<button class="linklike" type="submit">Log out</button>
+</form>
+{% else %}
+<a href="{{ url_for('auth.join') }}" class="{{ 'on' if ep == 'auth.join' }}">Join</a>
+<a class="btn small" href="{{ url_for('auth.login') }}" style="color:#FFFFFF">Login</a>
+{% endif %}

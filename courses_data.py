@@ -136,8 +136,8 @@ COURSES = COURSES + EXTERNAL
 BY_SLUG = {c["slug"]: c for c in COURSES}
 
 ABOUT = ("GAPHS, the Global Association of Professional Home Stagers, unites professionals, key partners and affiliates across continents "
-         "to elevate the Home Staging industry through advocacy, education and collaboration. GAPHS is the exclusive home staging knowledge "
-         "partner of CEPI, the European Council of Real Estate Professions, and a direct member of FIABCI, the International Real Estate Federation.")
+         "to elevate the Home Staging industry through advocacy, education and collaboration. GAPHS is a non-profit association registered "
+         "in Switzerland and a direct member of FIABCI, the International Real Estate Federation.")
 
 ABOUT_HSEC = ("The Home Staging Education Centre teaches home staging online, from a first introduction to running a profitable "
               "business. It was founded by Paloma Harrington, an award-winning interior designer and home staging master, "

@@ -4,7 +4,7 @@
 <div class="page"><div class="wrap">
   <div class="eyebrow">Admin</div><h1>Blog</h1>
   {% include 'admin/_nav.html' %}
-  <p class="muted" style="max-width:760px">Posts for the GAPHS Journal at <a href="{{ url_for('blog.index') }}" target="_blank" rel="noopener">/blog</a>. A post with a future date appears on the website on that day. Drafts are only visible to admins.</p>
+  <p class="muted" style="max-width:760px">Posts for the GAPHS Newsroom at <a href="{{ url_for('blog.index') }}" target="_blank" rel="noopener">/blog</a>. A post with a future date appears on the website on that day. Drafts are only visible to admins.</p>
   <p><a class="btn" href="{{ url_for('admin.blog_edit') }}">Write a new post</a></p>
   <div class="table-wrap"><table class="t"><thead><tr><th>Date</th><th>Title</th><th>Category</th><th>Status</th><th></th></tr></thead>
   <tbody>{% for p in posts %}<tr>

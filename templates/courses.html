@@ -1,12 +1,21 @@
 {% extends 'base.html' %}
-{% block title %}Online home staging courses · {% endblock %}
+{% block title %}Courses · {% endblock %}
 {% block body %}
 <div class="page"><div class="wrap">
 <div class="eyebrow">GAPHS courses</div>
-<h1>Courses from the Global Association of Professional Home Stagers</h1>
-<p class="lead">GAPHS courses are included in membership. Courses offered by the Home Staging Education Centre are bought on its own website.</p>
+<h1>Courses from the Global Association of Professional Home Stagers.</h1>
+<p class="lead">GAPHS courses are included in membership. Courses offered by the Home Staging Education Centre are purchased on the Centre&rsquo;s website.</p>
 <div class="grid cols-3" style="margin-top:32px">
 {% for c in courses %}{% include '_course_card.html' %}{% endfor %}
 </div>
+<section class="card sage" style="margin-top:72px;border-top:2px solid var(--gold);display:flex;flex-wrap:wrap;gap:20px 40px;align-items:center;justify-content:space-between">
+  <div style="flex:1 1 520px;min-width:0">
+    <div class="eyebrow">For training providers</div>
+    <h2 style="margin:0">Are you a Home Staging school?</h2>
+    <p style="margin:12px 0 0;font-size:18px">Enquire about having your course approved by GAPHS.</p>
+    <p class="muted" style="margin:10px 0 0">Each course is reviewed for its content, teaching methods and standards. Approved courses are recognised for GAPHS membership, approval is granted for two years, and approved providers may contribute lessons to the GAPHS Library.</p>
+  </div>
+  <a class="btn" href="mailto:info@gaphs.org?subject=Course%20approval%20enquiry">Contact us</a>
+</section>
 </div></div>
 {% endblock %}

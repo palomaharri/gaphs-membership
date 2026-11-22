@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Journal · {% endblock %}
+{% block title %}Newsroom · {% endblock %}
 {% block meta %}<meta name="description" content="News, events and insights on home staging from the Global Association of Professional Home Stagers.">{% endblock %}
 {% block body %}
 <div class="page"><div class="wrap">
-  <div class="eyebrow">The GAPHS Journal</div>
+  <div class="eyebrow">GAPHS Newsroom</div>
   <h1>News, events and insights</h1>
-  <p class="lead" style="max-width:720px">From the association, our chapters and partners, and the home staging profession around the world.</p>
+  <p class="lead" style="max-width:720px">News from the Association, its chapters and partners, and the Home Staging profession worldwide.</p>
   {% if cats %}
   <div class="country-chips" style="margin-top:28px">
     <a class="chip {{ 'on' if not cat }}" href="{{ url_for('blog.index') }}">All</a>

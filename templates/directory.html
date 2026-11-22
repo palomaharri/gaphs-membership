@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}Find a stager{% if country %} in {{ country }}{% endif %} · {% endblock %}
+{% block title %}Find a Stager{% if country %} in {{ country }}{% endif %} · {% endblock %}
 {% block body %}
 <div class="page"><div class="wrap">
   <div class="eyebrow">The GAPHS global directory</div>
-  <h1>{% if country %}Home stagers in {{ country }}{% else %}Find a home stager in your country{% endif %}</h1>
-  <p class="lead" style="margin-top:12px">Every GAPHS Member has completed a home staging training course and agrees to our Code of Ethics and Conduct.</p>
+  <h1>{% if country %}GAPHS professionals in {{ country }}{% else %}Find a GAPHS Home Staging professional{% endif %}</h1>
+  <p class="lead" style="margin-top:12px">GAPHS Members have completed Home Staging education that meets the Association's requirements and commit to upholding the GAPHS Code of Ethics. Associates are professionals in related fields who work with Home Stagers.</p>
 
   <form method="get" class="dir-search" role="search">
     <div class="field" style="margin:0">
@@ -19,7 +19,7 @@
       <label for="dir-q">City, name or service <span class="muted small">(optional)</span></label>
       <input id="dir-q" type="search" name="q" value="{{ term }}" placeholder="e.g. Madrid, vacant staging">
     </div>
-    <button class="btn" type="submit">Find a stager</button>
+    <button class="btn" type="submit">Search our directory</button>
   </form>
 
   {% if counts %}
@@ -30,11 +30,12 @@
 
   {% if searched %}
     {% if listings %}
-    <p class="muted" style="margin:32px 0 16px">{{ listings|length }} stager{{ '' if listings|length == 1 else 's' }}{% if country %} in {{ country }}{% endif %}{% if term %} matching &ldquo;{{ term }}&rdquo;{% endif %}</p>
+    <p class="muted" style="margin:32px 0 16px">{{ listings|length }} professional{{ '' if listings|length == 1 else 's' }}{% if country %} in {{ country }}{% endif %}{% if term %} matching &ldquo;{{ term }}&rdquo;{% endif %}</p>
     <div class="grid cols-3">
       {% for l in listings %}
       <a class="card listing" href="{{ url_for('auth.business', slug=l.slug) }}">
         <div class="logo">{% if l.logo %}<img src="{{ media_url(l.logo) }}" alt="">{% endif %}</div>
+        <div class="small" style="color:var(--gold-deep);letter-spacing:.14em;text-transform:uppercase;font-size:11px;font-weight:600">{{ 'GAPHS Member' if l.plan == 'professional' else 'GAPHS Associate' }}</div>
         <h3>{{ l.business_name }}</h3>
         <div class="small" style="color:var(--gold-deep);letter-spacing:.14em;text-transform:uppercase;font-size:11px">{{ l.location }}{% if l.location and l.country %} &middot; {% endif %}{{ l.country }}</div>
         {% if l.tagline %}<div class="muted">{{ l.tagline }}</div>{% endif %}
@@ -47,7 +48,7 @@
       {% if request.args.get('asked') %}
       <p style="margin:10px 0 0">Thank you. Your request has been received and the Association will reply by email, normally within a few working days.</p>
       {% else %}
-      <p style="margin:10px 0 0">GAPHS continues to extend its presence internationally through its members and national chapters. Please provide the location of your property and the Association will refer you to a qualified professional in your area, or to the nearest GAPHS chapter.</p>
+      <p style="margin:10px 0 0">GAPHS continues to extend its presence globally through its members and national chapters. Please provide the location of your property and the Association will refer you to a qualified professional in your area, or to the nearest GAPHS chapter.</p>
       <form method="post" action="{{ url_for('auth.directory_request') }}" class="dir-ask">
         <input type="hidden" name="csrf" value="{{ csrf() }}">
         <input type="hidden" name="country" value="{{ country or typed }}">
@@ -69,8 +70,8 @@
   {% endif %}
 
   <div class="card" style="margin-top:56px;display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justify-content:space-between">
-    <div><h3 style="margin:0">Home staging professionals</h3><p class="muted" style="margin:4px 0 0">GAPHS Members are listed in the global directory.</p></div>
-    <a class="btn" href="{{ url_for('auth.join') }}">Become a Member</a>
+    <div><h3 style="margin:0">Join the global directory.</h3><p class="muted" style="margin:4px 0 0">GAPHS Members and Associates have a profile in the global directory.</p></div>
+    <a class="btn" href="{{ url_for('auth.join') }}">Join GAPHS</a>
   </div>
 </div></div>
 <script>

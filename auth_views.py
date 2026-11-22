@@ -264,6 +264,21 @@ def home():
                            founding_open=founding_open(), featured=featured, gift=gift)
 
 
+def _gift():
+    gid = db.setting("gift_content_id")
+    return db.q("SELECT * FROM content WHERE id = ? AND published = 1", (gid,), one=True) if gid.isdigit() else None
+
+
+@auth.route("/home-staging")
+def home_staging():
+    return render_template("home_staging.html", gift=_gift())
+
+
+@auth.route("/about")
+def about():
+    return render_template("about.html")
+
+
 @auth.route("/media/<path:name>")
 def media(name):
     resp = send_from_directory(db.PUBLIC_UPLOADS, os.path.basename(name), max_age=86400)

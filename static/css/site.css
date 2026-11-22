@@ -1,14 +1,16 @@
 :root{
-  /* GAPHS brand, Option 05 (The Roofmark, Sans): noir, burnished gold, parchment, stone */
-  --logo-brown:#1A1A1A;   /* noir: header, footer, dark bands */
-  --brown:#1A1A1A;        /* ink: headings, outlines, links */
-  --gold:#B8963E;         /* burnished gold: primary buttons and accents */
-  --gold-deep:#9C7D2F;
+  /* GAPHS look, option B "Balanced" (Board, November 2026): ivory and charcoal, gold only as an accent */
+  --logo-brown:#222222;   /* footer and the one dark closing band */
+  --brown:#1F1F1F;        /* headings */
+  --ink:#2B2B2B;          /* buttons, links on hover */
+  --gold:#9C7A43;         /* thin lines, card tops */
+  --gold-deep:#7E6131;    /* small gold labels, links */
+  --gold-dark-bg:#C9A96E; /* gold on charcoal only */
   --text:#4A4A4A;
   --muted:#6B6B6B;
   --cream:#FFFFFF;
-  --sage:#F5F1E8;         /* parchment: soft cards and bands */
-  --sage-line:#DDD6C6;
+  --sage:#F7F4EE;         /* ivory: alternating bands and soft cards */
+  --sage-line:#E4DED2;
   --white:#FFFFFF;
   --danger:#8A3B2E;
 }
@@ -218,3 +220,41 @@ table.t th{background:var(--sage);color:var(--brown);font-weight:600;font-size:1
 .blog-body ul{margin:0 0 18px;padding-left:22px}
 .blog-body li{margin:6px 0}
 .blog-body a{color:var(--gold-deep);text-decoration:underline;word-break:break-word}
+
+/* ---------- option B overrides ---------- */
+body{font-family:'Inter',system-ui,sans-serif;font-weight:400;font-size:16px;color:var(--text);background:#FFFFFF}
+strong,b{font-weight:600}
+h1,h2,h3{font-family:'Source Serif 4',Georgia,serif;font-weight:600;color:var(--brown);letter-spacing:0;line-height:1.2}
+h1{font-size:42px}h2{font-size:30px}h3{font-size:20px;font-weight:600}
+.lead{font-family:'Inter',system-ui,sans-serif;font-style:normal;font-weight:400;font-size:19px;line-height:1.6;color:var(--text)}
+.eyebrow{color:var(--gold-deep);font-weight:600;letter-spacing:.18em}
+a{color:var(--gold-deep)}a:hover{color:var(--ink)}
+.site-header{background:#FFFFFF;color:var(--ink);border-bottom:1px solid var(--sage-line)}
+.site-header img{width:140px}
+.nav a,.nav button.linklike{color:var(--ink);font-size:13px;letter-spacing:.04em;text-transform:none;font-weight:500}
+.nav a:hover,.nav button.linklike:hover{color:var(--gold-deep)}
+.nav a.on{color:var(--gold-deep)}
+.btn,button.btn{border-radius:0;background:var(--ink);border-color:var(--ink);color:#FFFFFF;letter-spacing:.08em;font-size:12.5px;font-weight:600}
+.btn:hover{background:#000000;border-color:#000000;color:#FFFFFF}
+.btn.light{background:var(--ink);border-color:var(--ink);color:#FFFFFF}
+.btn.outline{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn.outline:hover{background:var(--ink);color:#FFFFFF}
+.card,.item-card .cover{border-radius:0}
+.card.sage,.member-note{background:var(--sage)}
+.member-note{border-left-color:var(--gold)}
+.offered{color:var(--gold-deep)}
+.blog-meta{color:var(--gold-deep)}
+.chip.on span,.chip:hover span{color:var(--gold-dark-bg)}
+.site-footer{background:var(--logo-brown)}
+.site-footer a:hover{color:var(--gold-dark-bg)}
+.testbanner{background:var(--sage);color:var(--ink);border-bottom:1px solid var(--sage-line)}
+.badge.dark{background:var(--ink);color:var(--gold-dark-bg)}
+.split{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:start}
+@media(max-width:860px){.split{grid-template-columns:1fr;gap:32px}}
+.gold-rule{width:48px;height:2px;background:var(--gold);border:0;margin:24px 0}
+.line-list{list-style:none;padding:0;margin:16px 0 0}
+.line-list li{position:relative;padding:9px 0 9px 24px;border-top:1px solid var(--sage-line)}
+.line-list li:before{content:'';position:absolute;left:0;top:21px;width:12px;height:1px;background:var(--gold)}
+.band-ivory{background:var(--sage)}
+.nav a.btn,.hdr .nav a.btn{background:var(--ink,#2B2B2B);border:1px solid var(--ink,#2B2B2B);color:#FFFFFF;padding:9px 20px;min-height:0;text-transform:none;letter-spacing:.04em;font-size:13px}
+.nav a.btn:hover,.hdr .nav a.btn:hover{background:#000000;color:#FFFFFF}

@@ -137,7 +137,7 @@ DEFAULT_SETTINGS = {
     "founding_limit": "0",     # GAPHS: no founding rate
     "reminder_days": "30,7",   # days before renewal to email members
     "founding_code": "",     # link code for existing members: /join?founding=CODE
-    "public_plans": "professional",   # which plans get a public business page
+    "public_plans": "professional,member",   # which plans get a public business page (Members and Associates)
     "terms_text": "[Draft site: paste the GAPHS Terms and Conditions in Admin > Terms and wording]",
     "code_text": "[Draft site: paste the GAPHS Code of Ethics and Conduct in Admin > Terms and wording]",
     "privacy_text": "[Draft site: paste the GAPHS Privacy Policy in Admin > Terms and wording]",
@@ -228,6 +228,10 @@ def init_db():
         # GAPHS tiers: Member (stager) and Associate (industry partner); no founding rate, no Accredited tier
         con.execute("INSERT OR REPLACE INTO settings(key, value) VALUES ('founding_limit', '0')")
         con.execute("INSERT INTO settings(key, value) VALUES ('gaphs_tiers_v1', '1')")
+    if not con.execute("SELECT 1 FROM settings WHERE key='gaphs_dir_v2'").fetchone():
+        # Board, November 2026: Associates also have a profile in the global directory
+        con.execute("INSERT OR REPLACE INTO settings(key, value) VALUES ('public_plans', 'professional,member')")
+        con.execute("INSERT INTO settings(key, value) VALUES ('gaphs_dir_v2', '1')")
     if not con.execute("SELECT 1 FROM settings WHERE key='gaphs_prices_v2'").fetchone():
         # Board prices, November 2026: Member EUR 200, Associate EUR 160 a year, no monthly option
         for k, v in (("pro_annual", "20000"), ("member_annual", "16000"), ("pro_monthly", "0"), ("member_monthly", "0")):
