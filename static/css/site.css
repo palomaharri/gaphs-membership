@@ -258,3 +258,8 @@ a{color:var(--gold-deep)}a:hover{color:var(--ink)}
 .band-ivory{background:var(--sage)}
 .nav a.btn,.hdr .nav a.btn{background:var(--ink,#2B2B2B);border:1px solid var(--ink,#2B2B2B);color:#FFFFFF;padding:9px 20px;min-height:0;text-transform:none;letter-spacing:.04em;font-size:13px}
 .nav a.btn:hover,.hdr .nav a.btn:hover{background:#000000;color:#FFFFFF}
+.about-pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.about-pillar{background:var(--sage);border-top:2px solid var(--gold);padding:28px}
+.about-pillar h3{margin:0 0 10px}
+.about-pillar p{margin:0;line-height:1.7}
+h1,h2{font-weight:500}

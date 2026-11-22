@@ -14,6 +14,6 @@
 <button class="linklike" type="submit">Log out</button>
 </form>
 {% else %}
-<a href="{{ url_for('auth.join') }}" class="{{ 'on' if ep == 'auth.join' }}">Join</a>
-<a class="btn small" href="{{ url_for('auth.login') }}" style="color:#FFFFFF">Login</a>
+<a class="btn small" href="{{ url_for('auth.join') }}" style="color:#FFFFFF">Join</a>
+<a href="{{ url_for('auth.login') }}" class="{{ 'on' if ep == 'auth.login' }}">Login</a>
 {% endif %}
