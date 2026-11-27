@@ -1,4 +1,5 @@
 """Public site, sign-up and payment, member dashboard, business pages."""
+import re
 import json
 import os
 import secrets
@@ -463,6 +464,17 @@ def join():
         founding_limit=db.int_setting("founding_limit"))
 
 
+def _link(value):
+    """A web link typed in a form: adds https:// when left out. Returns None when empty or not a link."""
+    v = (value or "").strip()[:500]
+    if not v or " " in v:
+        return None
+    if not re.match(r"(?i)^https?://", v):
+        v = "https://" + v
+    host = re.sub(r"(?i)^https?://", "", v).split("/")[0]
+    return v if "." in host else None
+
+
 @auth.route("/signup", methods=["GET", "POST"])
 def signup():
     me = current_user()
@@ -509,6 +521,8 @@ def signup():
         email = (request.form.get("email") or "").strip().lower()[:200]
         pw = request.form.get("password") or ""
         qual = (request.form.get("qualifying_course") or "").strip()[:300]
+        cert_url = _link(request.form.get("certificate_url"))
+        port_url = _link(request.form.get("portfolio_url"))
         if not name:
             errors.append("Please enter your name.")
         if "@" not in email or "." not in email.split("@")[-1]:
@@ -535,6 +549,11 @@ def signup():
                     errors.append("Please fill in: %s." % label.lower())
         if plan == "professional" and not qual and not inv:
             errors.append("Please tell us which home staging training course you have completed.")
+        if plan == "professional" and not inv:
+            if cert_url is None:
+                errors.append("Please add a link to your training certificate or diploma.")
+            if port_url is None:
+                errors.append("Please add a link to your portfolio.")
         if acc:
             errors.extend(_acc.validate(request.form))
         for field, label in (("agree_terms", "Terms and Conditions"), ("agree_code", "Code of Ethics and Conduct"),
@@ -561,14 +580,16 @@ def signup():
             if me:
                 uid = me["id"]
                 db.run("""UPDATE users SET name=?, plan=?, billing=?, founding=?, qualifying_course=?, agreed_at=?,
-                          terms_version=?, code_version=?, privacy_version=? WHERE id=?""",
-                       (name, plan, billing, 1 if can_found else 0, qual, now, terms_v, code_v, priv_v, uid))
+                          terms_version=?, code_version=?, privacy_version=?, certificate_url=?, portfolio_url=? WHERE id=?""",
+                       (name, plan, billing, 1 if can_found else 0, qual, now, terms_v, code_v, priv_v,
+                        cert_url or "", port_url or "", uid))
             else:
                 uid = db.run("""INSERT INTO users(email, pw_hash, name, created_at, plan, billing, founding,
-                                qualifying_course, agreed_at, terms_version, code_version, privacy_version)
-                                VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
+                                qualifying_course, agreed_at, terms_version, code_version, privacy_version,
+                                certificate_url, portfolio_url)
+                                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                              (email, db.hash_password(pw), name, now, plan, billing, 1 if can_found else 0,
-                              qual, now, terms_v, code_v, priv_v))
+                              qual, now, terms_v, code_v, priv_v, cert_url or "", port_url or ""))
             prof = db.q("SELECT * FROM profiles WHERE user_id = ?", (uid,), one=True)
             slug = prof["slug"] if prof and prof["slug"] else db.unique_slug(v["business_name"], uid)
             if prof:

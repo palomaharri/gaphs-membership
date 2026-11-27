@@ -220,6 +220,10 @@ def init_db():
         con.execute("ALTER TABLE lessons ADD COLUMN body TEXT NOT NULL DEFAULT ''")
     if "drive_id" not in lcols:
         con.execute("ALTER TABLE lessons ADD COLUMN drive_id TEXT NOT NULL DEFAULT ''")
+    ucols = [r[1] for r in con.execute("PRAGMA table_info(users)")]
+    for col in ("certificate_url", "portfolio_url"):   # Member applications: links to the training certificate and portfolio
+        if col not in ucols:
+            con.execute("ALTER TABLE users ADD COLUMN %s TEXT NOT NULL DEFAULT ''" % col)
     pcols = [r[1] for r in con.execute("PRAGMA table_info(profiles)")]
     for col in ("address", "country"):
         if col not in pcols:

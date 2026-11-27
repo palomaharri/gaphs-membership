@@ -57,6 +57,18 @@
       <input id="qualifying_course" name="qualifying_course" type="text" value="{{ form.get('qualifying_course', '') }}" placeholder="Course name, provider and year">
       <div class="hint">GAPHS membership is open to professionals who have completed a home staging training course. We check this before your directory listing goes live.</div>
     </div>
+    <div class="two">
+      <div class="field">
+        <label for="certificate_url">Link to your training certificate</label>
+        <input id="certificate_url" name="certificate_url" type="url" inputmode="url" required value="{{ form.get('certificate_url', '') }}" placeholder="https://">
+        <div class="hint">A link to your certificate or diploma, for example in Google Drive or Dropbox, shared so that anyone with the link can view it.</div>
+      </div>
+      <div class="field">
+        <label for="portfolio_url">Link to your portfolio</label>
+        <input id="portfolio_url" name="portfolio_url" type="url" inputmode="url" required value="{{ form.get('portfolio_url', '') }}" placeholder="https://">
+        <div class="hint">Your website, Instagram or a shared folder showing completed Home Staging projects.</div>
+      </div>
+    </div>
     {% endif %}
 
     <hr class="rule">

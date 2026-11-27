@@ -28,7 +28,7 @@
     {% for u in rows %}
     <tr>
       <td><strong>{{ u.name }}</strong>{% if u.is_admin %} <span class="badge dark">Admin</span>{% endif %}<br>{{ u.email }}{% if u.business_name %}<br><span class="muted">{{ u.business_name }}</span>{% endif %}</td>
-      <td>{{ plan_label(u.plan) if u.plan else '–' }}<br><span class="muted small">{{ u.billing or '' }}{% if u.founding %} · founding rate{% endif %}{% if u.comped %} · complimentary{% endif %}</span></td>
+      <td>{{ plan_label(u.plan) if u.plan else '–' }}<br><span class="muted small">{{ u.billing or '' }}{% if u.founding %} · founding rate{% endif %}{% if u.comped %} · complimentary{% endif %}</span>{% if u.certificate_url or u.portfolio_url %}<br><span class="small">{% if u.certificate_url %}<a href="{{ u.certificate_url }}" target="_blank" rel="noopener">Certificate</a>{% endif %}{% if u.certificate_url and u.portfolio_url %} · {% endif %}{% if u.portfolio_url %}<a href="{{ u.portfolio_url }}" target="_blank" rel="noopener">Portfolio</a>{% endif %}</span>{% endif %}</td>
       <td>{{ u.status }}<br><span class="muted small">{{ fmt_date(u.started_at) if u.started_at else '' }}</span></td>
       <td>{% if u.business_name %}{{ 'Online' if u.approved else 'Taken offline' }}{% if u.approved and u.slug %}<br><a href="{{ url_for('auth.business', slug=u.slug) }}">View</a>{% endif %}{% else %}–{% endif %}</td>
       <td>
