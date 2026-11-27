@@ -554,8 +554,8 @@ def signup():
         if plan == "professional" and not inv:
             if cert_url is None:
                 errors.append("Please add a link to your training certificate or diploma.")
-            if port_url is None:
-                errors.append("Please add a link to your portfolio.")
+            if port_url is None and (request.form.get("portfolio_url") or "").strip():
+                errors.append("The portfolio link does not look like a web address. Please check it or leave it empty.")
         if acc:
             errors.extend(_acc.validate(request.form))
         for field, label in (("agree_terms", "Terms and Conditions"), ("agree_code", "Code of Ethics and Conduct"),

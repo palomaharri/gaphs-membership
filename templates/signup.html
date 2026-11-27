@@ -64,8 +64,8 @@
         <div class="hint">A link to your certificate or diploma, for example in Google Drive or Dropbox, shared so that anyone with the link can view it.</div>
       </div>
       <div class="field">
-        <label for="portfolio_url">Link to your portfolio</label>
-        <input id="portfolio_url" name="portfolio_url" type="url" inputmode="url" required value="{{ form.get('portfolio_url', '') }}" placeholder="https://">
+        <label for="portfolio_url">Link to your portfolio <span class="muted small">(optional)</span></label>
+        <input id="portfolio_url" name="portfolio_url" type="url" inputmode="url" value="{{ form.get('portfolio_url', '') }}" placeholder="https://">
         <div class="hint">Your website, Instagram or a shared folder showing completed Home Staging projects.</div>
       </div>
     </div>
