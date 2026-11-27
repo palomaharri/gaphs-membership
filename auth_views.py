@@ -493,8 +493,14 @@ def signup():
     can_found = False if inv else (want_founding and founding_ok(plan, billing, code))
     if want_founding and not can_found:
         flash("The founding rate places have all been taken, so the standard price applies.", "info")
+    preview = False
     if me and has_access(me):
-        return redirect(url_for("auth.dashboard"))
+        if me["is_admin"] and request.method == "GET":
+            preview = True   # admins can look at the application form; it cannot be sent while logged in
+        else:
+            flash("You are logged in as %s, so the membership application form is not shown. "
+                  "Please log out first to apply as a new member." % me["email"], "info")
+            return redirect(url_for("auth.dashboard"))
     form = request.form if request.method == "POST" else (_mi.prefill(mi) if mi else {})
     errors = []
     if request.method == "POST":
@@ -592,7 +598,7 @@ def signup():
                 flash("Welcome! Your membership is active. Please complete your business page so it appears in the directory.", "success")
                 return redirect(url_for("auth.profile_edit"))
             return start_checkout(db.q("SELECT * FROM users WHERE id = ?", (uid,), one=True))
-    return render_template("signup.html", plan=plan, billing=billing, amount=amount, form=form, errors=errors,
+    return render_template("signup.html", preview=preview, plan=plan, billing=billing, amount=amount, form=form, errors=errors,
                            founding=can_found, gets_page=gets_page(plan, can_found), code=code, then_amount=amount, invite=inv,
                            founding_price=db.int_setting("founding"),
                            terms_text=db.setting("terms_text"), code_text=db.setting("code_text"), me=me)

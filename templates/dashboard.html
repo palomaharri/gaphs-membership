@@ -122,7 +122,8 @@
   {% endif %}
 
   <hr class="rule">
-  <h2 style="margin-bottom:20px">Account details</h2>
+  <h2 style="margin-bottom:6px">Your account details</h2>
+  <p class="muted" style="margin:0 0 20px">The name and email you log in with. Changing them here updates your own account.</p>
   <form method="post" action="{{ url_for('auth.account_update') }}" class="card" style="max-width:640px">
     <input type="hidden" name="csrf" value="{{ csrf() }}">
     <div class="two">

@@ -5,6 +5,7 @@
 <div class="page"><div class="medium">
   <div class="eyebrow">Membership application</div>
   <h1>{% if invite %}Welcome to the new GAPHS{% else %}Application for {{ plan_label(plan) }} membership{% endif %}</h1>
+  {% if preview %}<p class="member-note" style="margin-top:12px"><strong>Preview:</strong> this is the form new applicants see. You are logged in, so it cannot be sent from here.</p>{% endif %}
   {% if invite %}<p class="lead" style="margin-top:12px">Your membership is free. Create your account and tell us about your business. Your details become your page in the directory, and you can change them any time.</p>{% else %}
   <p class="lead" style="margin-top:12px">
     Please provide your personal and business details.{% if plan == 'professional' %} Once payment is received, these details form your business page in the directory, which you may update at any time.{% else %} You may update them at any time.{% endif %}
@@ -99,7 +100,11 @@
     <label class="check"><input type="checkbox" name="agree_privacy" value="1" {% if form.get('agree_privacy') %}checked{% endif %}>
       <span>I have read the <a href="{{ url_for('auth.privacy') }}" target="_blank" rel="noopener">Privacy Policy</a>.</span></label>
 
+    {% if preview %}
+    <div class="member-note" style="margin-top:28px"><strong>Preview only.</strong> You are logged in as {{ user.email }} (admin), so this form cannot be sent. Log out to apply as a new member.</div>
+    {% else %}
     <div style="margin-top:28px"><button class="btn" type="submit">{{ 'Create my free account' if invite else 'Continue to payment' }}</button></div>
+    {% endif %}
     {% if not invite %}<p class="small muted" style="margin-top:12px">Payment is taken on a secure page. Your membership renews automatically and you can cancel from your account.</p>{% endif %}
   </form>
 </div></div>
