@@ -4,11 +4,11 @@
 {% set acc = false %}
 <div class="page"><div class="medium">
   <div class="eyebrow">Membership application</div>
-  <h1>{% if invite %}Welcome to the new GAPHS{% else %}Application for {{ plan_label(plan) }} membership{% endif %}</h1>
+  <h1>{% if invite %}Welcome to the new GAPHS{% else %}Application: {{ plan_label(plan) }}{% endif %}</h1>
   {% if preview %}<p class="member-note" style="margin-top:12px"><strong>Preview:</strong> this is the form new applicants see. You are logged in, so it cannot be sent from here.</p>{% endif %}
   {% if invite %}<p class="lead" style="margin-top:12px">Your membership is free. Create your account and tell us about your business. Your details become your page in the directory, and you can change them any time.</p>{% else %}
   <p class="lead" style="margin-top:12px">
-    Please provide your personal and business details.{% if plan == 'professional' %} Once payment is received, these details form your business page in the directory, which you may update at any time.{% else %} You may update them at any time.{% endif %}
+    Please provide your personal and professional details. Once payment is received, they form your profile page in the GAPHS global directory, which you may update at any time.
   </p>{% endif %}
 
   {% if not invite %}<div class="card sage" style="margin-bottom:32px">
@@ -72,27 +72,30 @@
     {% endif %}
 
     <hr class="rule">
-    <h2 style="margin-bottom:20px">Your business page</h2>
+    <h2 style="margin-bottom:20px">Your profile page</h2>
     {% if invite %}<p class="muted" style="margin-top:-8px">Add as much as you like now. Your page appears in the directory once the details are complete.</p>{% elif gets_page %}<p class="muted" style="margin-top:-8px">Your page goes live automatically once your payment is received. Please fill in everything below.</p>{% endif %}
-    <div class="field"><label for="business_name">Business name</label><input id="business_name" name="business_name" type="text" required value="{{ form.get('business_name', '') }}"></div>
+    <div class="field"><label for="photo">Profile photo</label><input id="photo" name="photo" type="file" {% if gets_page and not invite %}required{% endif %} accept="image/png,image/jpeg,image/webp"><div class="hint">A portrait of you, the professional. JPG, PNG or WebP, up to 5 MB.</div></div>
+    <div class="field"><label for="business_name">Business or trading name</label><input id="business_name" name="business_name" type="text" required value="{{ form.get('business_name', '') }}"></div>
     <div class="field"><label for="tagline">One-line description</label><input id="tagline" name="tagline" type="text" maxlength="160" value="{{ form.get('tagline', '') }}"></div>
-    <div class="field"><label for="bio">About your business</label><textarea id="bio" name="bio" {% if gets_page and not invite %}required{% endif %}>{{ form.get('bio', '') }}</textarea></div>
+    <div class="field"><label for="bio">About you</label><textarea id="bio" name="bio" {% if gets_page and not invite %}required{% endif %}>{{ form.get('bio', '') }}</textarea></div>
     <div class="two">
       <div class="field"><label for="location">Where you work</label><input id="location" name="location" type="text" {% if gets_page and not invite %}required{% endif %} value="{{ form.get('location', '') }}" placeholder="Town, region or country"></div>
       <div class="field"><label for="address">Business address</label><input id="address" name="address" type="text" required value="{{ form.get('address', '') }}" placeholder="Street, town, postcode"><div class="small muted" style="margin-top:4px">For our records only. It is never shown on the public directory.</div></div>
       <div class="field"><label for="country">Country</label><select id="country" name="country" required><option value="">Choose your country</option>{% for c in country_names %}<option value="{{ c }}" {% if form.get('country', '') == c %}selected{% endif %}>{{ c }}</option>{% endfor %}</select></div>
-      <div class="field"><label for="logo">Logo</label><input id="logo" name="logo" type="file" {% if gets_page and not invite %}required{% endif %} accept="image/png,image/jpeg,image/webp"></div>
+      <div class="field"><label for="logo">Business logo <span class="muted small">(optional)</span></label><input id="logo" name="logo" type="file" accept="image/png,image/jpeg,image/webp"><div class="hint">Up to 5 MB.</div></div>
     </div>
     <div class="field"><label for="services">Services</label><textarea id="services" name="services" style="min-height:90px" {% if gets_page and not invite %}required{% endif %}>{{ form.get('services', '') }}</textarea></div>
+    {% if gets_page %}
+    <div class="field"><label for="work_photos">Photos of your work <span class="muted small">(optional, up to 6)</span></label><input id="work_photos" name="work_photos" type="file" multiple accept="image/png,image/jpeg,image/webp"><div class="hint">Shown on your page. Up to 6 photos, each up to 5 MB. You can change them at any time in My profile page.</div></div>
+    {% endif %}
     <div class="two">
       <div class="field"><label for="contact_email">Contact email on your page</label><input id="contact_email" name="contact_email" type="email" value="{{ form.get('contact_email', '') }}"></div>
       <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" value="{{ form.get('phone', '') }}"></div>
       <div class="field"><label for="website">Website</label><input id="website" name="website" type="text" value="{{ form.get('website', '') }}"></div>
-      <div class="field"><label for="instagram">Instagram</label><input id="instagram" name="instagram" type="text" value="{{ form.get('instagram', '') }}" placeholder="@yourbusiness"></div>
+      <div class="field"><label for="instagram">Instagram</label><input id="instagram" name="instagram" type="text" value="{{ form.get('instagram', '') }}" placeholder="@yourname"></div>
       <div class="field"><label for="facebook">Facebook</label><input id="facebook" name="facebook" type="text" value="{{ form.get('facebook', '') }}"></div>
       <div class="field"><label for="linkedin">LinkedIn</label><input id="linkedin" name="linkedin" type="text" value="{{ form.get('linkedin', '') }}"></div>
     </div>
-    <p class="small muted">You can add your photo gallery from your account once you have joined.</p>
 
     {% if acc %}
     <hr class="rule">

@@ -52,7 +52,7 @@
         <p style="margin:0"><a href="{{ url_for('members.library') }}">Library</a></p>
         <p style="margin:0"><a href="{{ url_for('members.forum') }}">Discussion forum</a></p>
       {% endif %}
-      <p style="margin:0"><a href="{{ url_for('auth.profile_edit') }}">Edit my business page</a></p>
+      <p style="margin:0"><a href="{{ url_for('auth.profile_edit') }}">Edit my profile page</a></p>
       {% if profile and profile.slug %}<p style="margin:0">Enquiries received through your page: <strong>{{ enquiry_count(user.id) }}</strong></p>{% endif %}
       {% if profile and profile.slug and listing == 'live' %}
         <p style="margin:0"><a href="{{ url_for('auth.business', slug=profile.slug) }}">View my public page</a></p>

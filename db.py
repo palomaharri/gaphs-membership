@@ -225,7 +225,7 @@ def init_db():
         if col not in ucols:
             con.execute("ALTER TABLE users ADD COLUMN %s TEXT NOT NULL DEFAULT ''" % col)
     pcols = [r[1] for r in con.execute("PRAGMA table_info(profiles)")]
-    for col in ("address", "country"):
+    for col in ("address", "country", "photo"):   # photo: the professional's own portrait
         if col not in pcols:
             con.execute("ALTER TABLE profiles ADD COLUMN %s TEXT NOT NULL DEFAULT ''" % col)
     if not con.execute("SELECT 1 FROM settings WHERE key='gaphs_tiers_v1'").fetchone():

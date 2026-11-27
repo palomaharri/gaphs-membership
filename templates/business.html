@@ -1,22 +1,24 @@
 {% extends 'base.html' %}
-{% block title %}{{ p.business_name }} · {% endblock %}
+{% block title %}{{ p.person or p.business_name }} · {% endblock %}
 {% block body %}
 <div class="page"><div class="medium">
   {% if preview %}<div class="flash" style="margin-bottom:24px">Preview: only you and the team can see this page right now. </div>{% endif %}
   <p class="small"><a href="{{ url_for('auth.directory') }}">&larr; Directory</a></p>
-  <div {% if not p.logo %}class="biz-head" {% endif %}style="margin-top:12px{% if p.logo %};display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px 48px;align-items:center{% endif %}">
-    {% if p.logo %}<div><img class="logo" src="{{ media_url(p.logo) }}" alt="{{ p.business_name }} logo" style="max-width:220px;width:auto;height:auto;max-height:140px"></div>{% endif %}
+  <div class="pro-head">
+    {% if p.photo %}<img class="pro-photo" src="{{ media_url(p.photo) }}" alt="{{ p.person }}">{% endif %}
     <div>
-      <h1>{{ p.business_name }}</h1>
-      {% if acc_status(p.uid) == 'accredited' %}<p style="margin:8px 0 0"><span class="badge dark">GAPHS Accredited</span></p>{% endif %}
+      <div class="pro-kind">{{ 'GAPHS Member' if p.plan == 'professional' else 'GAPHS Associate' }}</div>
+      <h1>{{ p.person or p.business_name }}</h1>
+      {% if p.person and p.business_name %}<p class="pro-biz">{{ p.business_name }}</p>{% endif %}
       {% if p.tagline %}<p class="lead" style="margin:8px 0 0">{{ p.tagline }}</p>{% endif %}
-      {% if p.location %}<p class="muted" style="margin:6px 0 0">{{ p.location }}</p>{% endif %}
+      {% if p.location or p.country %}<p class="muted" style="margin:6px 0 0">{{ p.location }}{% if p.location and p.country %} &middot; {% endif %}{{ p.country }}</p>{% endif %}
     </div>
+    {% if p.logo %}<img class="pro-logo" src="{{ media_url(p.logo) }}" alt="{{ p.business_name }} logo">{% endif %}
   </div>
 
   <div class="grid" style="margin-top:40px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:48px">
     <div class="stack">
-      {% if p.bio %}<h2>About</h2><div class="prewrap">{{ p.bio }}</div>{% endif %}
+      {% if p.bio %}<h2>About {{ (p.person or "").split(" ")[0] or "" }}</h2><div class="prewrap">{{ p.bio }}</div>{% endif %}
       {% if p.services %}<h2 style="margin-top:32px">Services</h2><div class="prewrap">{{ p.services }}</div>{% endif %}
     </div>
     <div>
@@ -52,7 +54,7 @@
   </div>
 
   {% if photos %}
-  <h2 style="margin:48px 0 20px">Gallery</h2>
+  <h2 style="margin:48px 0 20px">Work</h2>
   <div class="gallery">{% for ph in photos %}<div class="item"><img src="{{ media_url(ph.path) }}" alt="" loading="lazy"></div>{% endfor %}</div>
   {% endif %}
 

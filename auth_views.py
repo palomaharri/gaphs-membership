@@ -25,12 +25,14 @@ PLAN_KEYS = {
 ELIGIBLE_SQL = """
   (u.status IN ('active','past_due') OR u.comped = 1 OR u.is_admin = 1)
   AND p.published = 1 AND p.approved = 1 AND p.business_name != ''
-  AND p.bio != '' AND p.location != '' AND p.services != '' AND p.logo != ''
+  AND p.bio != '' AND p.location != '' AND p.services != '' AND p.photo != ''
   AND (p.contact_email != '' OR p.phone != '')
 """
 
-REQUIRED_FIELDS = (("bio", "About your business"), ("location", "Where you work"), ("services", "Services"),
-                   ("logo", "Logo"))
+REQUIRED_FIELDS = (("bio", "About you"), ("location", "Where you work"), ("services", "Services"),
+                   ("photo", "Profile photo"))
+MAX_WORK_PHOTOS = 6
+MAX_PHOTO_BYTES = 5 * 1024 * 1024   # 5 MB per photo; photos are also resized on upload
 
 
 def missing_fields(p):
@@ -341,7 +343,7 @@ def directory():
               if r["country"]}
     listings = []
     if country or term:
-        sql, a2 = "SELECT p.*, u.plan " + base, list(args)
+        sql, a2 = "SELECT p.*, u.plan, u.name AS person " + base, list(args)
         if country:
             sql += " AND p.country = ?"
             a2.append(country)
@@ -416,7 +418,7 @@ def directory_request():
 
 @auth.route("/directory/<slug>")
 def business(slug):
-    row = db.q("""SELECT p.*, u.plan, u.founding, u.status, u.comped, u.is_admin, u.id AS uid FROM profiles p
+    row = db.q("""SELECT p.*, u.plan, u.founding, u.status, u.comped, u.is_admin, u.id AS uid, u.name AS person FROM profiles p
                   JOIN users u ON u.id = p.user_id WHERE p.slug = ?""", (slug,), one=True)
     if not row:
         abort(404)
@@ -540,11 +542,11 @@ def signup():
             errors.append("Please choose your country.")
         if gets_page(plan, can_found) and not inv:
             for key, label in REQUIRED_FIELDS:
-                if key == "logo":
-                    has_logo = bool(request.files.get("logo") and request.files["logo"].filename) or \
-                        bool(me and db.q("SELECT logo FROM profiles WHERE user_id = ? AND logo != ''", (me["id"],), one=True))
-                    if not has_logo:
-                        errors.append("Please add your logo.")
+                if key == "photo":
+                    has_photo = bool(request.files.get("photo") and request.files["photo"].filename) or \
+                        bool(me and db.q("SELECT photo FROM profiles WHERE user_id = ? AND photo != ''", (me["id"],), one=True))
+                    if not has_photo:
+                        errors.append("Please add your profile photo.")
                 elif not v[key]:
                     errors.append("Please fill in: %s." % label.lower())
         if plan == "professional" and not qual and not inv:
@@ -566,10 +568,12 @@ def signup():
                 errors.append("There is already a member with that email. Please log in instead.")
             else:
                 errors.append("There is already an account with that email. Please log in to finish joining.")
-        logo = None
+        logo = photo = None
+        work = [f for f in request.files.getlist("work_photos") if f and f.filename][:MAX_WORK_PHOTOS]
         if not errors:
             try:
-                logo = save_image(request.files.get("logo"), 800, keep_alpha=True)
+                logo = save_image(request.files.get("logo"), 800, keep_alpha=True, max_bytes=MAX_PHOTO_BYTES)
+                photo = save_image(request.files.get("photo"), 800, quality=84, max_bytes=MAX_PHOTO_BYTES)
             except ValueError as exc:
                 errors.append(str(exc))
         if not errors:
@@ -601,6 +605,9 @@ def signup():
                 if logo:
                     delete_public(prof["logo"])
                     db.run("UPDATE profiles SET logo = ? WHERE user_id = ?", (logo, uid))
+                if photo:
+                    delete_public(prof["photo"])
+                    db.run("UPDATE profiles SET photo = ? WHERE user_id = ?", (photo, uid))
             else:
                 db.run("""INSERT INTO profiles(user_id, business_name, slug, tagline, bio, logo, location, address, country, services,
                           contact_email, phone, website, instagram, facebook, linkedin)
@@ -608,6 +615,9 @@ def signup():
                        (uid, v["business_name"], slug, v["tagline"], v["bio"], logo or "", v["location"], v["address"], v["country"],
                         v["services"], v["contact_email"] or email, v["phone"], v["website"], v["instagram"],
                         v["facebook"], v["linkedin"]))
+                if photo:
+                    db.run("UPDATE profiles SET photo = ? WHERE user_id = ?", (photo, uid))
+            _add_work_photos(uid, work)
             if acc:
                 _acc.save(uid, request.form)
             login_user(uid)
@@ -885,10 +895,11 @@ def profile_edit():
             errors.append("Please enter your business address.")
         if not v["country"]:
             errors.append("Please choose your country.")
-        logo = None
+        logo = photo = None
         if not errors:
             try:
-                logo = save_image(request.files.get("logo"), 800, keep_alpha=True)
+                logo = save_image(request.files.get("logo"), 800, keep_alpha=True, max_bytes=MAX_PHOTO_BYTES)
+                photo = save_image(request.files.get("photo"), 800, quality=84, max_bytes=MAX_PHOTO_BYTES)
             except ValueError as exc:
                 errors.append(str(exc))
         if not errors:
@@ -905,6 +916,9 @@ def profile_edit():
             elif request.form.get("remove_logo"):
                 delete_public(prof["logo"])
                 db.run("UPDATE profiles SET logo = '' WHERE user_id = ?", (user["id"],))
+            if photo:
+                delete_public(prof["photo"])
+                db.run("UPDATE profiles SET photo = ? WHERE user_id = ?", (photo, user["id"]))
             fresh = db.q("SELECT * FROM profiles WHERE user_id = ?", (user["id"],), one=True)
             gaps = missing_fields(fresh)
             if gaps and gets_page(user["plan"], user["founding"]):
@@ -918,6 +932,22 @@ def profile_edit():
                            public=gets_page(user["plan"], user["founding"]), missing=missing_fields(prof))
 
 
+def _add_work_photos(uid, files):
+    """Photos of work chosen on the application form: up to MAX_WORK_PHOTOS, each up to MAX_PHOTO_BYTES."""
+    have = db.q("SELECT COUNT(*) AS n FROM gallery WHERE user_id = ?", (uid,), one=True)["n"]
+    for f in files:
+        if have >= MAX_WORK_PHOTOS:
+            break
+        try:
+            name = save_image(f, 1400, quality=80, max_bytes=MAX_PHOTO_BYTES)
+        except ValueError as exc:
+            flash("A photo of your work was not added: %s You can add it later in My profile page." % exc, "info")
+            continue
+        if name:
+            db.run("INSERT INTO gallery(user_id, path, sort) VALUES (?,?,?)", (uid, name, have))
+            have += 1
+
+
 @auth.route("/dashboard/gallery", methods=["POST"])
 @login_required
 def gallery_add():
@@ -927,11 +957,11 @@ def gallery_add():
     for f in request.files.getlist("photos"):
         if not f or not f.filename:
             continue
-        if count + added >= 6:
-            flash("You can have up to 6 photos. Remove one to add another.", "info")
+        if count + added >= MAX_WORK_PHOTOS:
+            flash("You can have up to %d photos. Remove one to add another." % MAX_WORK_PHOTOS, "info")
             break
         try:
-            name = save_image(f, 1200, quality=78, max_bytes=15 * 1024 * 1024)
+            name = save_image(f, 1400, quality=80, max_bytes=MAX_PHOTO_BYTES)
         except ValueError as exc:
             flash(str(exc), "error")
             continue

@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block title %}My business page · {% endblock %}
+{% block title %}My profile page · {% endblock %}
 {% block body %}
 {% set f = form if form else p %}
 <div class="page"><div class="medium">
-  <div class="eyebrow">My business page</div>
+  <div class="eyebrow">My profile page</div>
   <h1>Edit your page</h1>
   <p class="lead" style="margin-top:12px">
     {% if not public %}Your plan does not include a public directory page, but you can keep your details up to date here.
@@ -18,14 +18,17 @@
 
   <form method="post" enctype="multipart/form-data">
     <input type="hidden" name="csrf" value="{{ csrf() }}">
-    <div class="field"><label for="business_name">Business name</label><input id="business_name" name="business_name" type="text" required value="{{ f.get('business_name') or '' }}"></div>
+    <div class="field"><label for="photo">Profile photo</label>
+      {% if p.photo %}<div style="margin-bottom:8px"><img src="{{ media_url(p.photo) }}" alt="Your current profile photo" style="width:88px;height:88px;border-radius:50%;object-fit:cover"></div>{% endif %}
+      <input id="photo" name="photo" type="file" accept="image/png,image/jpeg,image/webp"><div class="hint">A portrait of you, the professional. Up to 5 MB.</div></div>
+    <div class="field"><label for="business_name">Business or trading name</label><input id="business_name" name="business_name" type="text" required value="{{ f.get('business_name') or '' }}"></div>
     <div class="field"><label for="tagline">One-line description</label><input id="tagline" name="tagline" type="text" maxlength="160" value="{{ f.get('tagline') or '' }}"></div>
-    <div class="field"><label for="bio">About your business</label><textarea id="bio" name="bio">{{ f.get('bio') or '' }}</textarea></div>
+    <div class="field"><label for="bio">About you</label><textarea id="bio" name="bio">{{ f.get('bio') or '' }}</textarea></div>
     <div class="two">
       <div class="field"><label for="location">Where you work</label><input id="location" name="location" type="text" value="{{ f.get('location') or '' }}"></div>
       <div class="field"><label for="address">Business address</label><input id="address" name="address" type="text" required value="{{ f.get('address') or '' }}" placeholder="Street, town, postcode"><div class="small muted" style="margin-top:4px">For our records only. It is never shown on the public directory.</div></div>
       <div class="field"><label for="country">Country</label><select id="country" name="country" required><option value="">Choose your country</option>{% for c in country_names %}<option value="{{ c }}" {% if f.get('country') == c %}selected{% endif %}>{{ c }}</option>{% endfor %}</select></div>
-      <div class="field"><label for="logo">Logo</label>
+      <div class="field"><label for="logo">Business logo <span class="muted small">(optional)</span></label>
         {% if p.logo %}<div style="margin-bottom:8px"><img src="{{ media_url(p.logo) }}" alt="Current logo" style="max-height:64px"></div>{% endif %}
         <input id="logo" name="logo" type="file" accept="image/png,image/jpeg,image/webp">
         {% if p.logo %}<label class="check" style="margin-top:8px;font-weight:400"><input type="checkbox" name="remove_logo" value="1"><span>Remove my logo</span></label>{% endif %}
@@ -45,8 +48,8 @@
   </form>
 
   <hr class="rule" id="gallery">
-  <h2 style="margin-bottom:8px">Photo gallery</h2>
-  <p class="muted" style="margin-top:0">Up to 6 photos of your work. Large photos are shrunk automatically.</p>
+  <h2 style="margin-bottom:8px">Photos of your work</h2>
+  <p class="muted" style="margin-top:0">Up to 6 photos, shown on your page. JPG, PNG or WebP, each up to 5 MB; large photos are resized automatically.</p>
   {% if photos %}
   <div class="gallery" style="margin:20px 0">
     {% for ph in photos %}

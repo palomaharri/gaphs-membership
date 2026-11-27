@@ -34,9 +34,10 @@
     <div class="grid cols-3">
       {% for l in listings %}
       <a class="card listing" href="{{ url_for('auth.business', slug=l.slug) }}">
-        <div class="logo">{% if l.logo %}<img src="{{ media_url(l.logo) }}" alt="">{% endif %}</div>
+        <div class="pro-thumb">{% if l.photo %}<img src="{{ media_url(l.photo) }}" alt="">{% endif %}</div>
         <div class="small" style="color:var(--gold-deep);letter-spacing:.14em;text-transform:uppercase;font-size:11px;font-weight:600">{{ 'GAPHS Member' if l.plan == 'professional' else 'GAPHS Associate' }}</div>
-        <h3>{{ l.business_name }}</h3>
+        <h3>{{ l.person or l.business_name }}</h3>
+        {% if l.person %}<div class="muted small">{{ l.business_name }}</div>{% endif %}
         <div class="small" style="color:var(--gold-deep);letter-spacing:.14em;text-transform:uppercase;font-size:11px">{{ l.location }}{% if l.location and l.country %} &middot; {% endif %}{{ l.country }}</div>
         {% if l.tagline %}<div class="muted">{{ l.tagline }}</div>{% endif %}
       </a>
